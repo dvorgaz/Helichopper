@@ -9,6 +9,8 @@ public class MoveProjectile : MonoBehaviour
 
     public float acceleration;
 
+    public bool turnTowardsVelocity;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -16,8 +18,14 @@ public class MoveProjectile : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
-    {
+    void FixedUpdate()
+    {               
         rb.AddForce(transform.forward * acceleration, ForceMode.Acceleration);
+        
+        if (turnTowardsVelocity && rb.velocity.magnitude > 10)
+        {
+            Vector3 dir = rb.velocity.normalized;
+            transform.rotation = Quaternion.LookRotation(dir, transform.up);
+        }
     }
 }
