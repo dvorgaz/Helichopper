@@ -38,6 +38,7 @@ public class HeliController : MonoBehaviour
     void Start()
     {
         rb = GetComponent<Rigidbody>();
+        rb.centerOfMass = Vector3.zero;
     }
 
     void ToggleCyclicContorl()

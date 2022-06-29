@@ -282,7 +282,9 @@ GameObject:
   - component: {fileID: 3856494494415502110}
   - component: {fileID: 3856494494415502109}
   - component: {fileID: 3856494494415502108}
+  - component: {fileID: 230868943077319931}
   - component: {fileID: 3856494494415502111}
+  - component: {fileID: -6727588473569729473}
   - component: {fileID: 3153181826752507277}
   m_Layer: 0
   m_Name: Player
@@ -337,6 +339,20 @@ CapsuleCollider:
   m_Height: 16.192936
   m_Direction: 2
   m_Center: {x: 0, y: 0.1, z: -2.6253016}
+--- !u!114 &230868943077319931
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3856494494415502105}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6de36ecd6c250794b937416d9fac71da, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxHealth: 10
+  deathEffectPrefab: {fileID: 1000011797152326, guid: acf39d9f4addf294d93fa56fa373961b, type: 3}
 --- !u!114 &3856494494415502111
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -407,6 +423,21 @@ MonoBehaviour:
   cameraTransform: {fileID: 0}
   tail: {fileID: 8242695004949375046}
   tailDrag: 100
+  dampenFactor: 0.8
+  adjustFactor: 0.5
+--- !u!114 &-6727588473569729473
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3856494494415502105}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 689e9c8412b73e448a5783b5c6315f29, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  weapon: {fileID: 0}
 --- !u!82 &3153181826752507277
 AudioSource:
   m_ObjectHideFlags: 0
