@@ -10,19 +10,25 @@ public class Health : MonoBehaviour
 
     public GameObject deathEffectPrefab;
 
+    private uint lastDamageID = 0;
+
     // Start is called before the first frame update
     void Start()
     {
         health = maxHealth;
     }
 
-    public void Damage(int dmg)
+    public void Damage(DamageParams dp)
     {
-        health -= dmg;
-
-        if(health <= 0)
+        if (lastDamageID < dp.damageID)
         {
-            Kill();
+            lastDamageID = dp.damageID;
+            health -= dp.damage;
+
+            if (health <= 0)
+            {
+                Kill();
+            }
         }
     }
 

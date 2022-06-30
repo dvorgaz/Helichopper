@@ -162,36 +162,6 @@ public class HeliController : MonoBehaviour
         //Vector3 t = Vector3.Cross(tail.position - rb.worldCenterOfMass, tail.right * tailDragForce);
         //rb.AddTorque(t, ForceMode.Force);
 
-        //Vector3 torque = ForceToTorque(tail.right * tailDragForce, tail.position, ForceMode.Force);
-        //rb.AddTorque(torque, ForceMode.VelocityChange);
-
         speed = rb.velocity.magnitude * 60 * 60 / 1000;
-    }
-
-    ///////////////////
-    public Vector3 ForceToTorque(Vector3 force, Vector3 position, ForceMode forceMode = ForceMode.Force) {
-    Vector3 t = Vector3.Cross(position - rb.worldCenterOfMass, force);
-    ToDeltaTorque(ref t, forceMode);
- 
-        return t;
-    }
-
-    private void ToDeltaTorque(ref Vector3 torque, ForceMode forceMode)
-    {
-        bool continuous = forceMode == ForceMode.Force || forceMode == ForceMode.Acceleration;
-        bool useMass = forceMode == ForceMode.Force || forceMode == ForceMode.Impulse;
-
-        if (continuous) torque *= Time.fixedDeltaTime;
-        if (useMass) ApplyInertiaTensor(ref torque);
-    }
-
-    private void ApplyInertiaTensor(ref Vector3 v)
-    {
-        v = rb.rotation * Div(Quaternion.Inverse(rb.rotation) * v, rb.inertiaTensor);
-    }
-
-    private static Vector3 Div(Vector3 v, Vector3 v2)
-    {
-        return new Vector3(v.x / v2.x, v.y / v2.y, v.z / v2.z);
     }
 }

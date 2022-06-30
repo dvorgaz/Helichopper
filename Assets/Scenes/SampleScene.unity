@@ -1344,6 +1344,14 @@ PrefabInstance:
       propertyPath: weapon
       value: 
       objectReference: {fileID: 5671370844663203030}
+    - target: {fileID: -6727588473569729473, guid: 33202d7934620b74d9ae4bd110bddad0, type: 3}
+      propertyPath: targetingAngle
+      value: 30
+      objectReference: {fileID: 0}
+    - target: {fileID: -6727588473569729473, guid: 33202d7934620b74d9ae4bd110bddad0, type: 3}
+      propertyPath: targetingRange
+      value: 100
+      objectReference: {fileID: 0}
     - target: {fileID: 3856494494415502105, guid: 33202d7934620b74d9ae4bd110bddad0, type: 3}
       propertyPath: m_Name
       value: Player
@@ -1366,7 +1374,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3856494494415502110, guid: 33202d7934620b74d9ae4bd110bddad0, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 6.41
+      value: 14.55
       objectReference: {fileID: 0}
     - target: {fileID: 3856494494415502110, guid: 33202d7934620b74d9ae4bd110bddad0, type: 3}
       propertyPath: m_LocalPosition.z
