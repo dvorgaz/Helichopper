@@ -13,6 +13,9 @@ public class WeaponController : MonoBehaviour
 
     private Vector3 targetingPoint = Vector3.zero;
 
+    public RectTransform crosshairTransform;
+    public Camera mainCamera;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -22,6 +25,26 @@ public class WeaponController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if(targetingPoint != Vector3.zero)
+        {
+            crosshairTransform.gameObject.SetActive(true);
+
+            Vector3 dir = targetingPoint - transform.position;
+
+            Vector3 flatDir = Vector3.ProjectOnPlane(dir, Vector3.up).normalized;
+            Vector3 flatForward = Vector3.ProjectOnPlane(transform.forward, Vector3.up).normalized;
+
+            float angle = Vector3.SignedAngle(flatDir, flatForward, Vector3.up);
+
+            dir = Quaternion.AngleAxis(angle, Vector3.up) * dir;
+
+            crosshairTransform.position = mainCamera.WorldToScreenPoint(dir + transform.position);
+        }
+        else
+        {
+            crosshairTransform.gameObject.SetActive(false);
+        }
+
         if (Input.GetMouseButtonDown(0))
         {
             if (targetingPoint != Vector3.zero)
@@ -57,6 +80,9 @@ public class WeaponController : MonoBehaviour
             if (target.gameObject == gameObject)
                 continue;
 
+            if (!target.Alive)
+                continue;
+
             Vector3 pos = target.transform.position - transform.position;
 
             if (Vector3.Dot(planeR, pos) < 0)
@@ -80,7 +106,17 @@ public class WeaponController : MonoBehaviour
         }
         else
         {
-            targetingPoint = Vector3.zero;
+            Vector3 idleDir = Quaternion.AngleAxis(15.0f, Vector3.Cross(Vector3.up, dir)) * dir;
+
+            RaycastHit hit;
+            if (Physics.Raycast(transform.position, idleDir, out hit, 200.0f, LayerMask.GetMask("Default")))
+            {
+                targetingPoint = hit.point;
+            }
+            else
+            {
+                targetingPoint = Vector3.zero;
+            }
         }
     }
 }

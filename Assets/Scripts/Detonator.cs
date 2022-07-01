@@ -16,8 +16,11 @@ public class Detonator : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
+        float d = rb.velocity.magnitude * Time.fixedDeltaTime;
+        Vector3 dir = rb.velocity.normalized;
+
         RaycastHit hitInfo;
-        if(Physics.Raycast(transform.position, rb.velocity.normalized, out hitInfo, rb.velocity.magnitude * Time.fixedDeltaTime, LayerMask.GetMask("Default")))
+        if(Physics.Raycast(transform.position - dir * d, dir, out hitInfo, d * 2.0f, LayerMask.GetMask("Default")))
         {
             gameObject.SendMessage("TriggerDamage", hitInfo.collider);
         }

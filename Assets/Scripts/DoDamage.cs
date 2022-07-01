@@ -53,9 +53,8 @@ public class DoDamage : MonoBehaviour
                 Instantiate(explosionPrefab, transform.position, Quaternion.identity);
             }
 
-            Destroy(gameObject);
-
-            Debug.Log("Destroyed");
+            gameObject.BroadcastMessage("OnDeath");
+            Destroy(gameObject);            
         }
     }
 }

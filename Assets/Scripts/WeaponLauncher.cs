@@ -7,6 +7,8 @@ public class WeaponLauncher : MonoBehaviour
     public GameObject weaponPrefab;
     private GameObject weaponModel;
 
+    public float spread;
+
     private bool canFire = true;
 
     public bool CanFire
@@ -68,6 +70,8 @@ public class WeaponLauncher : MonoBehaviour
             float angle = Vector3.SignedAngle(flatDir, flatForward, Vector3.up);
 
             dir = Quaternion.AngleAxis(angle, Vector3.up) * dir;
+
+            dir += Vector3.ProjectOnPlane(Random.insideUnitSphere * spread, dir);
 
             Quaternion rot = Quaternion.LookRotation(dir, Vector3.up);
 

@@ -9,8 +9,14 @@ public class Health : MonoBehaviour
     int health;
 
     public GameObject deathEffectPrefab;
+    public GameObject smokeEffectPrefab;
 
     private uint lastDamageID = 0;
+
+    public bool Alive
+    {
+        get { return health > 0; }
+    }
 
     // Start is called before the first frame update
     void Start()
@@ -20,6 +26,9 @@ public class Health : MonoBehaviour
 
     public void Damage(DamageParams dp)
     {
+        if (!Alive)
+            return;
+
         if (lastDamageID < dp.damageID)
         {
             lastDamageID = dp.damageID;
@@ -39,6 +48,13 @@ public class Health : MonoBehaviour
             Instantiate(deathEffectPrefab, transform.position, Quaternion.identity);
         }
 
-        Destroy(gameObject);
+        if (smokeEffectPrefab != null)
+        {
+            Instantiate(smokeEffectPrefab, transform);
+        }
+
+        gameObject.BroadcastMessage("OnDeath", SendMessageOptions.DontRequireReceiver);
+
+        //Destroy(gameObject);
     }
 }
