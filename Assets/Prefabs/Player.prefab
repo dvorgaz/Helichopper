@@ -457,7 +457,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 689e9c8412b73e448a5783b5c6315f29, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  weapon: {fileID: 9111716053456804890}
+  weapons:
+  - {fileID: 9111716053456804890}
+  - {fileID: 8825952684653634704}
   targetingRange: 100
   targetingAngle: 20
   crosshairTransform: {fileID: 0}
@@ -1470,3 +1472,14 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 7901879363373883155, guid: 8a5736bf5371091469f9eefc07ed2bd1, type: 3}
   m_PrefabInstance: {fileID: 8125954342310278985}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &8825952684653634704 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 772689904233419737, guid: 8a5736bf5371091469f9eefc07ed2bd1, type: 3}
+  m_PrefabInstance: {fileID: 8125954342310278985}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 59ffb06c90006cf4cb3467af99a424c5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

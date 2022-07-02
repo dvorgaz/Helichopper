@@ -4,7 +4,8 @@ using UnityEngine;
 
 public class WeaponController : MonoBehaviour
 {
-    public WeaponLauncher weapon;
+    public List<WeaponLauncher> weapons;
+    private int currWeaponIdx = 0;
 
     private Rigidbody rb;
 
@@ -15,6 +16,11 @@ public class WeaponController : MonoBehaviour
 
     public RectTransform crosshairTransform;
     public Camera mainCamera;
+
+    public WeaponLauncher Weapon
+    {
+        get { return currWeaponIdx < weapons.Count ? weapons[currWeaponIdx] : null; }
+    }
 
     // Start is called before the first frame update
     void Start()
@@ -49,17 +55,30 @@ public class WeaponController : MonoBehaviour
         {
             if (targetingPoint != Vector3.zero)
             {
-                weapon.Launch(targetingPoint);
+                Weapon?.Launch(targetingPoint);
             }
             else
             {
-                weapon.Launch(rb);
+                Weapon?.Launch(rb);
             }
         }
 
         if (Input.GetKeyDown(KeyCode.R))
         {
-            weapon.Reload();
+            Weapon?.Reload();
+        }
+
+        if (Input.GetKeyDown(KeyCode.Alpha1))
+        {
+            currWeaponIdx = 0;
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha2))
+        {
+            currWeaponIdx = 1;
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha3))
+        {
+            currWeaponIdx = 2;
         }
     }
 
