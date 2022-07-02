@@ -34,6 +34,8 @@ public class HeliController : MonoBehaviour
     public float dampenFactor = 0.8f; // this value requires tuning
     public float adjustFactor = 0.5f; // this value requires tuning
 
+    private bool controlEnabled = true;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -48,6 +50,18 @@ public class HeliController : MonoBehaviour
         Cursor.lockState = controllingCyclic ? CursorLockMode.Locked : CursorLockMode.None;
     }
 
+    public void OnDeath()
+    {
+        ShutDown();
+    }
+
+    public void ShutDown()
+    {
+        controlEnabled = false;
+        thrustEnabled = false;
+        rb.drag = 0.0f;
+    }
+
     // Update is called once per frame
     void Update()
     {
@@ -57,7 +71,7 @@ public class HeliController : MonoBehaviour
         }
         if (Input.GetMouseButtonUp(2))
         {
-            thrustEnabled = !thrustEnabled;
+            thrustEnabled = !thrustEnabled && controlEnabled;
         }
 
         Vector3 mouseDelta = new Vector3(Input.GetAxis("Mouse X"), Input.GetAxis("Mouse Y"), 0);
@@ -108,14 +122,17 @@ public class HeliController : MonoBehaviour
 
         float vertical = 0.0f;
 
-        if (Input.GetKey(KeyCode.W))
+        if (controlEnabled)
         {
-            vertical += 1;
-        }
+            if (Input.GetKey(KeyCode.W))
+            {
+                vertical += 1;
+            }
 
-        if (Input.GetKey(KeyCode.S))
-        {
-            vertical -= 1;
+            if (Input.GetKey(KeyCode.S))
+            {
+                vertical -= 1;
+            }
         }
 
         //rb.AddForce(Vector3.up * vertical * maxThrust, ForceMode.Force);
@@ -130,14 +147,17 @@ public class HeliController : MonoBehaviour
 
         float horizontal = 0.0f;
 
-        if (Input.GetKey(KeyCode.A))
+        if (controlEnabled)
         {
-            horizontal += 1;
-        }
+            if (Input.GetKey(KeyCode.A))
+            {
+                horizontal += 1;
+            }
 
-        if (Input.GetKey(KeyCode.D))
-        {
-            horizontal -= 1;
+            if (Input.GetKey(KeyCode.D))
+            {
+                horizontal -= 1;
+            }
         }
 
         rb.AddForceAtPosition(tail.right * turnRate * horizontal, tail.position, ForceMode.Force);

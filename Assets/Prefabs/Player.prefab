@@ -286,6 +286,7 @@ GameObject:
   - component: {fileID: -6356865481521858092}
   - component: {fileID: 3856494494415502111}
   - component: {fileID: -6727588473569729473}
+  - component: {fileID: 1931832463046917380}
   - component: {fileID: 3153181826752507277}
   m_Layer: 0
   m_Name: Player
@@ -464,6 +465,20 @@ MonoBehaviour:
   targetingAngle: 20
   crosshairTransform: {fileID: 0}
   mainCamera: {fileID: 0}
+--- !u!114 &1931832463046917380
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3856494494415502105}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 34f203f7d4a08be45ac6fbb9e27b7910, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  soundClip: {fileID: 8300000, guid: 84a9f305379763641afa3f163b331ff8, type: 3}
+  impulseThreshold: 200
 --- !u!82 &3153181826752507277
 AudioSource:
   m_ObjectHideFlags: 0

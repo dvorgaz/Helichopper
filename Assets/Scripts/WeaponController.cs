@@ -17,6 +17,8 @@ public class WeaponController : MonoBehaviour
     public RectTransform crosshairTransform;
     public Camera mainCamera;
 
+    private Health health;
+
     public WeaponLauncher Weapon
     {
         get { return currWeaponIdx < weapons.Count ? weapons[currWeaponIdx] : null; }
@@ -26,11 +28,14 @@ public class WeaponController : MonoBehaviour
     void Start()
     {
         rb = GetComponent<Rigidbody>();
+        health = GetComponent<Health>();
     }
 
     // Update is called once per frame
     void Update()
     {
+        Vector3 adjustedTargetingPoint = targetingPoint;
+
         if(targetingPoint != Vector3.zero)
         {
             crosshairTransform.gameObject.SetActive(true);
@@ -43,42 +48,46 @@ public class WeaponController : MonoBehaviour
             float angle = Vector3.SignedAngle(flatDir, flatForward, Vector3.up);
 
             dir = Quaternion.AngleAxis(angle, Vector3.up) * dir;
+            adjustedTargetingPoint = dir + transform.position;
 
-            crosshairTransform.position = mainCamera.WorldToScreenPoint(dir + transform.position);
+            crosshairTransform.position = mainCamera.WorldToScreenPoint(adjustedTargetingPoint);
         }
         else
         {
             crosshairTransform.gameObject.SetActive(false);
         }
 
-        if (Input.GetMouseButton(0))
+        if (health.Alive)
         {
-            if (targetingPoint != Vector3.zero)
+            if (Input.GetMouseButton(0))
             {
-                Weapon?.Launch(targetingPoint);
+                if (targetingPoint != Vector3.zero)
+                {
+                    Weapon?.Launch(adjustedTargetingPoint);
+                }
+                else
+                {
+                    Weapon?.Launch(rb);
+                }
             }
-            else
+
+            if (Input.GetKeyDown(KeyCode.R))
             {
-                Weapon?.Launch(rb);
+                Weapon?.Reload();
             }
-        }
 
-        if (Input.GetKeyDown(KeyCode.R))
-        {
-            Weapon?.Reload();
-        }
-
-        if (Input.GetKeyDown(KeyCode.Alpha1))
-        {
-            currWeaponIdx = 0;
-        }
-        if (Input.GetKeyDown(KeyCode.Alpha2))
-        {
-            currWeaponIdx = 1;
-        }
-        if (Input.GetKeyDown(KeyCode.Alpha3))
-        {
-            currWeaponIdx = 2;
+            if (Input.GetKeyDown(KeyCode.Alpha1))
+            {
+                currWeaponIdx = 0;
+            }
+            if (Input.GetKeyDown(KeyCode.Alpha2))
+            {
+                currWeaponIdx = 1;
+            }
+            if (Input.GetKeyDown(KeyCode.Alpha3))
+            {
+                currWeaponIdx = 2;
+            }
         }
     }
 
