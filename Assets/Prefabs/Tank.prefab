@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 8874666123344823050}
   - component: {fileID: -5774643348978397186}
   - component: {fileID: 7279809926057842064}
+  - component: {fileID: 6805622612285451328}
   - component: {fileID: 6316656433530471809}
   m_Layer: 0
   m_Name: Tank
@@ -96,6 +97,24 @@ MonoBehaviour:
   hitEffects:
   - type: 0
     effectPrefab: {fileID: 5052711917731508930, guid: 0749804699f757145833edd8dd9d1bc5, type: 3}
+--- !u!114 &6805622612285451328
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5649590878468105725}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ff10f873e74875647a370e9174107b2e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  detectionRange: 150
+  losRangeOffset: 5
+  losSizeOffset: 20
+  tickDelayRange: {x: 1, y: 1}
+  attackDelayRange: {x: 3, y: 6}
+  attackAxisLength: 0
 --- !u!114 &6316656433530471809
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -228,3 +247,60 @@ CapsuleCollider:
   m_Height: 6.0546646
   m_Direction: 2
   m_Center: {x: 0.00000029802322, y: -0.030000001, z: 2.7150893}
+--- !u!1001 &6382568855643242729
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 655167300060390001}
+    m_Modifications:
+    - target: {fileID: 1617629103290466067, guid: 2b31bd0cba334214bbb892b48e6a5b05, type: 3}
+      propertyPath: m_Name
+      value: StrelaLauncher
+      objectReference: {fileID: 0}
+    - target: {fileID: 8083698461322001534, guid: 2b31bd0cba334214bbb892b48e6a5b05, type: 3}
+      propertyPath: m_RootOrder
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8083698461322001534, guid: 2b31bd0cba334214bbb892b48e6a5b05, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -1.24
+      objectReference: {fileID: 0}
+    - target: {fileID: 8083698461322001534, guid: 2b31bd0cba334214bbb892b48e6a5b05, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.07
+      objectReference: {fileID: 0}
+    - target: {fileID: 8083698461322001534, guid: 2b31bd0cba334214bbb892b48e6a5b05, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -0.08
+      objectReference: {fileID: 0}
+    - target: {fileID: 8083698461322001534, guid: 2b31bd0cba334214bbb892b48e6a5b05, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.9762326
+      objectReference: {fileID: 0}
+    - target: {fileID: 8083698461322001534, guid: 2b31bd0cba334214bbb892b48e6a5b05, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0.21672553
+      objectReference: {fileID: 0}
+    - target: {fileID: 8083698461322001534, guid: 2b31bd0cba334214bbb892b48e6a5b05, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8083698461322001534, guid: 2b31bd0cba334214bbb892b48e6a5b05, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8083698461322001534, guid: 2b31bd0cba334214bbb892b48e6a5b05, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: -25.034
+      objectReference: {fileID: 0}
+    - target: {fileID: 8083698461322001534, guid: 2b31bd0cba334214bbb892b48e6a5b05, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8083698461322001534, guid: 2b31bd0cba334214bbb892b48e6a5b05, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 2b31bd0cba334214bbb892b48e6a5b05, type: 3}

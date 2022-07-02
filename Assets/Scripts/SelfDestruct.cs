@@ -26,6 +26,7 @@ public class SelfDestruct : MonoBehaviour
             }
             else
             {
+                gameObject.BroadcastMessage("OnDeath", SendMessageOptions.DontRequireReceiver);
                 Destroy(gameObject);
             }
         }

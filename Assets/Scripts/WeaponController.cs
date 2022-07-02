@@ -7,6 +7,9 @@ public class WeaponController : MonoBehaviour
     public List<WeaponLauncher> weapons;
     private int currWeaponIdx = 0;
 
+    public List<Transform> flareLaunchers;
+    public GameObject flarePrefab;
+
     private Rigidbody rb;
 
     public float targetingRange;
@@ -74,6 +77,11 @@ public class WeaponController : MonoBehaviour
             if (Input.GetKeyDown(KeyCode.R))
             {
                 Weapon?.Reload();
+            }
+
+            if (Input.GetKeyDown(KeyCode.F))
+            {
+                StartCoroutine(LaunchFlareCoroutine());
             }
 
             if (Input.GetKeyDown(KeyCode.Alpha1))
@@ -145,6 +153,23 @@ public class WeaponController : MonoBehaviour
             {
                 targetingPoint = Vector3.zero;
             }
+        }
+    }
+
+    void LaunchFlares()
+    {
+        foreach(Transform launcher in flareLaunchers)
+        {
+            Instantiate(flarePrefab, transform.position, launcher.rotation);
+        }
+    }
+
+    IEnumerator LaunchFlareCoroutine()
+    {
+        for(int i = 0; i < 3; ++i)
+        {
+            LaunchFlares();
+            yield return new WaitForSeconds(0.2f);
         }
     }
 }

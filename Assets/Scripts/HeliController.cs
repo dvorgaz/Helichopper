@@ -60,6 +60,7 @@ public class HeliController : MonoBehaviour
         controlEnabled = false;
         thrustEnabled = false;
         rb.drag = 0.0f;
+        rb.angularDrag = 0.02f;
     }
 
     // Update is called once per frame
