@@ -11,7 +11,12 @@ public class CameraController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        if (target != null)
+        {
+            Vector3 dir = target.forward;
+            dir.y = 0;
+            transform.position = target.position + dir.normalized * offset;
+        }
     }
 
     // Update is called once per frame

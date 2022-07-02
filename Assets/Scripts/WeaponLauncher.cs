@@ -19,6 +19,8 @@ public class WeaponLauncher : MonoBehaviour
     public float rateOfFire; // rounds per minute
     public int burstCount;
 
+    private ParticleSystem[] particleSystems;
+
     public float ShotInterval
     {
         get { return 1 / (rateOfFire / 60); }
@@ -49,7 +51,7 @@ public class WeaponLauncher : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        particleSystems = transform.GetComponentsInChildren<ParticleSystem>();
     }
 
     // Update is called once per frame
@@ -87,6 +89,11 @@ public class WeaponLauncher : MonoBehaviour
             {
                 //rb.velocity = launchPlatform.velocity;
             }
+
+            foreach (ParticleSystem ps in particleSystems)
+            {
+                ps.Emit(1);
+            }
         }
     }
 
@@ -112,7 +119,11 @@ public class WeaponLauncher : MonoBehaviour
             Quaternion rot = Quaternion.LookRotation(dir, Vector3.up);
 
             GameObject obj = Instantiate(weaponPrefab, transform.position, rot);
-            Rigidbody rb = obj.GetComponent<Rigidbody>();
+
+            foreach(ParticleSystem ps in particleSystems)
+            {
+                ps.Emit(1);
+            }
         }
     }
 }
