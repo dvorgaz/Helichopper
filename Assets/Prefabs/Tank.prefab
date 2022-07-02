@@ -12,10 +12,11 @@ GameObject:
   - component: {fileID: 579163946920107492}
   - component: {fileID: 8874666123344823050}
   - component: {fileID: -5774643348978397186}
+  - component: {fileID: 7279809926057842064}
   - component: {fileID: 6316656433530471809}
   m_Layer: 0
   m_Name: Tank
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -80,6 +81,21 @@ MonoBehaviour:
   maxHealth: 30
   deathEffectPrefab: {fileID: 1000011797152326, guid: 754f37ed93f92ec4887f482466830e31, type: 3}
   smokeEffectPrefab: {fileID: 4111725265502828604, guid: 4905fa2205bde7d4398af112d659d45a, type: 3}
+--- !u!114 &7279809926057842064
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5649590878468105725}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 35e59d33759341441804374daa943e5c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  hitEffects:
+  - type: 0
+    effectPrefab: {fileID: 5052711917731508930, guid: 0749804699f757145833edd8dd9d1bc5, type: 3}
 --- !u!114 &6316656433530471809
 MonoBehaviour:
   m_ObjectHideFlags: 0

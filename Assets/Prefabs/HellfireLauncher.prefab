@@ -46,7 +46,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   weaponPrefab: {fileID: 6226923990949560321, guid: 2db4ccf229945c84c85ca0facc339da8, type: 3}
-  visualNode: {fileID: 0}
+  firingMode: 0
+  spread: 0
+  rateOfFire: 100
+  burstCount: 0
 --- !u!1 &7158312112252728201
 GameObject:
   m_ObjectHideFlags: 0

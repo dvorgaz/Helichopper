@@ -45,7 +45,7 @@ public class WeaponController : MonoBehaviour
             crosshairTransform.gameObject.SetActive(false);
         }
 
-        if (Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButton(0))
         {
             if (targetingPoint != Vector3.zero)
             {

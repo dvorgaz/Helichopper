@@ -136,9 +136,10 @@ GameObject:
   - component: {fileID: 8957830337925208074}
   - component: {fileID: 3988734200450738113}
   - component: {fileID: -8262701793843961808}
+  - component: {fileID: 1062751719020503921}
   m_Layer: 0
   m_Name: Humvee
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -207,6 +208,21 @@ MonoBehaviour:
   maxHealth: 10
   deathEffectPrefab: {fileID: 1000011797152326, guid: 754f37ed93f92ec4887f482466830e31, type: 3}
   smokeEffectPrefab: {fileID: 4111725265502828604, guid: 4905fa2205bde7d4398af112d659d45a, type: 3}
+--- !u!114 &1062751719020503921
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5311080604931683873}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 35e59d33759341441804374daa943e5c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  hitEffects:
+  - type: 0
+    effectPrefab: {fileID: 5052711917731508930, guid: 0749804699f757145833edd8dd9d1bc5, type: 3}
 --- !u!1 &5676759522191759845
 GameObject:
   m_ObjectHideFlags: 0

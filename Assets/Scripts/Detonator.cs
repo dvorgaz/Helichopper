@@ -22,7 +22,7 @@ public class Detonator : MonoBehaviour
         RaycastHit hitInfo;
         if(Physics.Raycast(transform.position - dir * d, dir, out hitInfo, d * 2.0f, LayerMask.GetMask("Default")))
         {
-            gameObject.SendMessage("TriggerDamage", hitInfo.collider);
+            gameObject.SendMessage("TriggerDamage", hitInfo);
         }
     }
 }

@@ -8,6 +8,7 @@ public class MoveProjectile : MonoBehaviour
     private Rigidbody rb;
 
     public float acceleration;
+    public float impulse;
 
     public bool turnTowardsVelocity;
 
@@ -15,11 +16,12 @@ public class MoveProjectile : MonoBehaviour
     void Start()
     {
         rb = GetComponent<Rigidbody>();
+        rb.AddForce(transform.forward * impulse, ForceMode.Impulse);
     }
 
     // Update is called once per frame
     void FixedUpdate()
-    {               
+    {        
         rb.AddForce(transform.forward * acceleration, ForceMode.Acceleration);
         
         if (turnTowardsVelocity && rb.velocity.magnitude > 10)

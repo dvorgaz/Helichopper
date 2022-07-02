@@ -2,20 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class DamageParams
-{
-    public int damage;
-    public uint damageID;
-
-    public DamageParams(int damage, uint damageID)
-    {
-        this.damage = damage;
-        this.damageID = damageID;
-    }
-}
-
 public class DoDamage : MonoBehaviour
 {
+    public DamageType type;
     public int damage;
     public GameObject explosionPrefab;
 
@@ -25,36 +14,35 @@ public class DoDamage : MonoBehaviour
 
     static uint damageID = 0;
 
-    public void TriggerDamage(Collider other)
+    public void TriggerDamage(RaycastHit hitInfo)
     {
-        if (true)
+        damageID++;
+
+        DamageParams dmgParams = new DamageParams(type, damage, damageID, hitInfo);
+
+        if (splashDamage)
         {
-            damageID++;
-
-            if (splashDamage)
+            Collider[] colliders = Physics.OverlapSphere(transform.position, blastRadius, LayerMask.GetMask("Default"));
+            foreach (Collider coll in colliders)
             {
-                Collider[] colliders = Physics.OverlapSphere(transform.position, blastRadius, LayerMask.GetMask("Default"));
-                foreach (Collider coll in colliders)
-                {
-                    Rigidbody rb = coll.gameObject.GetComponent<Rigidbody>();
-                    if (rb != null) rb.AddExplosionForce(blastForce, transform.position, blastRadius, 4);
+                Rigidbody rb = coll.gameObject.GetComponent<Rigidbody>();
+                if (rb != null) rb.AddExplosionForce(blastForce, transform.position, blastRadius, 4);
 
-                    Debug.Log("Blast collider hit: " + coll.name);
-                    coll.gameObject.SendMessageUpwards("Damage", new DamageParams(damage, damageID), SendMessageOptions.DontRequireReceiver);
-                }
+                Debug.Log("Blast collider hit: " + coll.name);
+                coll.gameObject.SendMessageUpwards("Damage", dmgParams, SendMessageOptions.DontRequireReceiver);
             }
-            else
-            {
-                other.gameObject.SendMessageUpwards("Damage", new DamageParams(damage, damageID), SendMessageOptions.DontRequireReceiver);
-            }
-
-            if (explosionPrefab != null)
-            {
-                Instantiate(explosionPrefab, transform.position, Quaternion.identity);
-            }
-
-            gameObject.BroadcastMessage("OnDeath");
-            Destroy(gameObject);            
         }
+        else
+        {
+            hitInfo.collider.gameObject.SendMessageUpwards("Damage", dmgParams, SendMessageOptions.DontRequireReceiver);
+        }
+
+        if (explosionPrefab != null)
+        {
+            Instantiate(explosionPrefab, transform.position, Quaternion.LookRotation(hitInfo.normal));
+        }
+
+        gameObject.BroadcastMessage("OnDeath", SendMessageOptions.DontRequireReceiver);
+        Destroy(gameObject);            
     }
 }
