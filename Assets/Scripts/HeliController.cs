@@ -74,26 +74,6 @@ public class HeliController : MonoBehaviour
             thrustEnabled = !thrustEnabled && controlEnabled;
         }
 
-        //Vector3 mouseDelta = new Vector3(Input.GetAxis("Mouse X"), Input.GetAxis("Mouse Y"), 0);
-
-        //if (controllingCyclic)
-        //{            
-        //    rotorTilt += mouseDelta * mouseRate;
-
-        //    if(rotorTilt.magnitude > maxRotorTilt)
-        //    {
-        //        rotorTilt = rotorTilt.normalized * maxRotorTilt;
-        //    }            
-        //}
-
-        if(Input.GetKeyDown(KeyCode.Space))
-        {
-            rotorTilt = Vector3.zero;
-        }
-    }
-
-    private void FixedUpdate()
-    {
         Vector3 mouseDelta = new Vector3(Input.GetAxis("Mouse X"), Input.GetAxis("Mouse Y"), 0);
 
         if (controllingCyclic)
@@ -106,6 +86,14 @@ public class HeliController : MonoBehaviour
             }
         }
 
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            rotorTilt = Vector3.zero;
+        }
+    }
+
+    private void FixedUpdate()
+    {
         Vector3 worldForward = cameraTransform != null ? cameraTransform.forward : Vector3.forward;
         worldForward.y = 0;
         worldForward.Normalize();
@@ -114,12 +102,6 @@ public class HeliController : MonoBehaviour
         Vector3 worldTiltDir = worldRight * rotorTilt.x + worldForward * rotorTilt.y;
         Vector3 tiltAxis = Vector3.Cross(Vector3.up, worldTiltDir).normalized;
         Vector3 tiltVector = Quaternion.AngleAxis(rotorTilt.magnitude, tiltAxis) * Vector3.up;
-
-        Vector3 newRight = Vector3.Cross(tiltVector, transform.forward);
-        Vector3 newForward = Vector3.Cross(newRight, tiltVector);
-        Quaternion targetRotation = Quaternion.LookRotation(newForward, tiltVector);
-
-        
 
         if (thrustEnabled)
         {
@@ -138,6 +120,10 @@ public class HeliController : MonoBehaviour
             }
             else
             {
+                Vector3 newRight = Vector3.Cross(tiltVector, transform.forward);
+                Vector3 newForward = Vector3.Cross(newRight, tiltVector);
+                Quaternion targetRotation = Quaternion.LookRotation(newForward, tiltVector);
+
                 if (useSmoothing)
                 {
                     transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, tiltSmooth * Time.fixedDeltaTime);

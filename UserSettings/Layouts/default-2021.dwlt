@@ -19,7 +19,7 @@ MonoBehaviour:
     width: 1920
     height: 997
   m_ShowMode: 4
-  m_Title: Game
+  m_Title: Hierarchy
   m_RootView: {fileID: 2}
   m_MinSize: {x: 875, y: 300}
   m_MaxSize: {x: 10000, y: 10000}
@@ -120,7 +120,7 @@ MonoBehaviour:
   m_MinSize: {x: 300, y: 200}
   m_MaxSize: {x: 24288, y: 16192}
   vertical: 0
-  controlID: 14189
+  controlID: 12752
 --- !u!114 &6
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -145,7 +145,7 @@ MonoBehaviour:
   m_MinSize: {x: 100, y: 200}
   m_MaxSize: {x: 8096, y: 16192}
   vertical: 1
-  controlID: 14190
+  controlID: 12778
 --- !u!114 &7
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -165,8 +165,8 @@ MonoBehaviour:
     y: 0
     width: 1222
     height: 665
-  m_MinSize: {x: 201, y: 221}
-  m_MaxSize: {x: 4001, y: 4021}
+  m_MinSize: {x: 200, y: 200}
+  m_MaxSize: {x: 4000, y: 4000}
   m_ActualView: {fileID: 13}
   m_Panes:
   - {fileID: 14}
@@ -193,8 +193,8 @@ MonoBehaviour:
     y: 665
     width: 1222
     height: 282
-  m_MinSize: {x: 101, y: 121}
-  m_MaxSize: {x: 4001, y: 4021}
+  m_MinSize: {x: 100, y: 100}
+  m_MaxSize: {x: 4000, y: 4000}
   m_ActualView: {fileID: 16}
   m_Panes:
   - {fileID: 16}
@@ -224,7 +224,7 @@ MonoBehaviour:
   m_MinSize: {x: 100, y: 200}
   m_MaxSize: {x: 8096, y: 16192}
   vertical: 1
-  controlID: 14212
+  controlID: 12753
 --- !u!114 &10
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -244,8 +244,8 @@ MonoBehaviour:
     y: 0
     width: 346
     height: 579
-  m_MinSize: {x: 201, y: 221}
-  m_MaxSize: {x: 4001, y: 4021}
+  m_MinSize: {x: 202, y: 221}
+  m_MaxSize: {x: 4002, y: 4021}
   m_ActualView: {fileID: 17}
   m_Panes:
   - {fileID: 17}
@@ -672,7 +672,7 @@ MonoBehaviour:
   m_Rotation:
     m_Target: {x: 0.19458973, y: 0.3071397, z: -0.0643052, w: 0.9293532}
     speed: 2
-    m_Value: {x: -0.19458973, y: -0.3071397, z: 0.0643052, w: -0.92935324}
+    m_Value: {x: 0.19458658, y: 0.30713472, z: -0.06430416, w: 0.9293381}
   m_Size:
     m_Target: 9.563185
     speed: 2
@@ -788,9 +788,9 @@ MonoBehaviour:
   m_SceneHierarchy:
     m_TreeViewState:
       scrollPos: {x: 0, y: 0}
-      m_SelectedIDs: 
-      m_LastClickedID: 0
-      m_ExpandedIDs: 58f5fffff8faffff
+      m_SelectedIDs: 5c5b0300
+      m_LastClickedID: 219996
+      m_ExpandedIDs: b604efffcc05efff640befffa60befff4615efff5c80efffe899efff2a9aefff7ca2efffcca7efff0ea8efffaeb1efff18c4efff5ac4effffacdeffffe33fbff4e34fbffee3dfbff58f5fffff8faffff
       m_RenameOverlay:
         m_UserAcceptedRename: 0
         m_Name: 
@@ -855,21 +855,21 @@ MonoBehaviour:
     m_SkipHidden: 0
     m_SearchArea: 1
     m_Folders:
-    - Assets/StoreAssets/EffectExamples/FireExplosionEffects/Materials
+    - Assets/Prefabs
     m_Globs: []
     m_OriginalText: 
   m_ViewMode: 1
   m_StartGridSize: 16
   m_LastFolders:
-  - Assets/StoreAssets/EffectExamples/FireExplosionEffects/Materials
+  - Assets/Prefabs
   m_LastFoldersGridSize: 16
   m_LastProjectPath: C:\Users\Dvorgaz\Random crap\Unity Projects\Helichopper
   m_LockTracker:
     m_IsLocked: 0
   m_FolderTreeState:
     scrollPos: {x: 0, y: 57}
-    m_SelectedIDs: 38660000
-    m_LastClickedID: 26168
+    m_SelectedIDs: 0e660000
+    m_LastClickedID: 26126
     m_ExpandedIDs: 0000000006660000086600000a6600000c6600000e660000106600001266000014660000166600001866000000ca9a3b
     m_RenameOverlay:
       m_UserAcceptedRename: 0
@@ -989,7 +989,7 @@ MonoBehaviour:
     m_ControlHash: -371814159
     m_PrefName: Preview_InspectorPreview
   m_LastInspectedObjectInstanceID: -1
-  m_LastVerticalScrollValue: 324
+  m_LastVerticalScrollValue: 705
   m_GlobalObjectId: 
   m_InspectorMode: 0
   m_LockTracker:
