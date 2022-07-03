@@ -22,6 +22,9 @@ public class WeaponController : MonoBehaviour
 
     private Health health;
 
+    public int flareCount;
+    public float flareInterval;
+
     public WeaponLauncher Weapon
     {
         get { return currWeaponIdx < weapons.Count ? weapons[currWeaponIdx] : null; }
@@ -160,16 +163,16 @@ public class WeaponController : MonoBehaviour
     {
         foreach(Transform launcher in flareLaunchers)
         {
-            Instantiate(flarePrefab, transform.position, launcher.rotation);
+            Instantiate(flarePrefab, launcher.position, launcher.rotation).GetComponent<Rigidbody>().velocity = rb.velocity;
         }
     }
 
     IEnumerator LaunchFlareCoroutine()
     {
-        for(int i = 0; i < 3; ++i)
+        for(int i = 0; i < flareCount; ++i)
         {
             LaunchFlares();
-            yield return new WaitForSeconds(0.2f);
+            yield return new WaitForSeconds(flareInterval);
         }
     }
 }
