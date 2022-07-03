@@ -20,6 +20,8 @@ public class HeliController : MonoBehaviour
     public float maxRotorTilt;
     public float tiltSmooth;
     public float tiltTorque;
+    public bool useAngularVelocity;
+    public bool useSmoothing;
 
     public float maxSpeedKPH;
     public AnimationCurve dragCurve;
@@ -30,9 +32,6 @@ public class HeliController : MonoBehaviour
 
     bool controllingCyclic = false;
     bool thrustEnabled = true;
-
-    public float dampenFactor = 0.8f; // this value requires tuning
-    public float adjustFactor = 0.5f; // this value requires tuning
 
     private bool controlEnabled = true;
 
@@ -75,17 +74,17 @@ public class HeliController : MonoBehaviour
             thrustEnabled = !thrustEnabled && controlEnabled;
         }
 
-        Vector3 mouseDelta = new Vector3(Input.GetAxis("Mouse X"), Input.GetAxis("Mouse Y"), 0);
+        //Vector3 mouseDelta = new Vector3(Input.GetAxis("Mouse X"), Input.GetAxis("Mouse Y"), 0);
 
-        if (controllingCyclic)
-        {            
-            rotorTilt += mouseDelta * mouseRate;
+        //if (controllingCyclic)
+        //{            
+        //    rotorTilt += mouseDelta * mouseRate;
 
-            if(rotorTilt.magnitude > maxRotorTilt)
-            {
-                rotorTilt = rotorTilt.normalized * maxRotorTilt;
-            }            
-        }
+        //    if(rotorTilt.magnitude > maxRotorTilt)
+        //    {
+        //        rotorTilt = rotorTilt.normalized * maxRotorTilt;
+        //    }            
+        //}
 
         if(Input.GetKeyDown(KeyCode.Space))
         {
@@ -95,6 +94,18 @@ public class HeliController : MonoBehaviour
 
     private void FixedUpdate()
     {
+        Vector3 mouseDelta = new Vector3(Input.GetAxis("Mouse X"), Input.GetAxis("Mouse Y"), 0);
+
+        if (controllingCyclic)
+        {
+            rotorTilt += mouseDelta * mouseRate;
+
+            if (rotorTilt.magnitude > maxRotorTilt)
+            {
+                rotorTilt = rotorTilt.normalized * maxRotorTilt;
+            }
+        }
+
         Vector3 worldForward = cameraTransform != null ? cameraTransform.forward : Vector3.forward;
         worldForward.y = 0;
         worldForward.Normalize();
@@ -108,17 +119,34 @@ public class HeliController : MonoBehaviour
         Vector3 newForward = Vector3.Cross(newRight, tiltVector);
         Quaternion targetRotation = Quaternion.LookRotation(newForward, tiltVector);
 
-        Quaternion deltaQuat = Quaternion.FromToRotation(transform.up, tiltVector);
-        Vector3 axis;
-        float angle;
-        deltaQuat.ToAngleAxis(out angle, out axis);
+        
 
         if (thrustEnabled)
         {
-            //rb.AddTorque(-rb.angularVelocity * dampenFactor, ForceMode.Acceleration);
-            //rb.AddTorque(axis.normalized * angle * adjustFactor, ForceMode.Acceleration);
+            if (useAngularVelocity)
+            {
+                Vector3 targetTilt = useSmoothing ? Vector3.Slerp(transform.up, tiltVector, tiltSmooth * Time.fixedDeltaTime) : tiltVector;
+                Quaternion deltaQuat = Quaternion.FromToRotation(transform.up, targetTilt);
+                Vector3 axis;
+                float angle;
+                deltaQuat.ToAngleAxis(out angle, out axis);
 
-            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, tiltSmooth * Time.fixedDeltaTime);
+                Vector3 yAngVel = transform.up * Vector3.Dot(transform.up, rb.angularVelocity);
+                float tiltRate = angle * Mathf.Deg2Rad / Time.fixedDeltaTime;
+                rb.maxAngularVelocity = 70;
+                rb.angularVelocity = axis * tiltRate + yAngVel;
+            }
+            else
+            {
+                if (useSmoothing)
+                {
+                    transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, tiltSmooth * Time.fixedDeltaTime);
+                }
+                else
+                {
+                    transform.rotation = targetRotation;
+                }
+            }
         }
 
         float vertical = 0.0f;

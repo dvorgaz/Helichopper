@@ -2119,9 +2119,17 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3856494494415502111, guid: 33202d7934620b74d9ae4bd110bddad0, type: 3}
+      propertyPath: useSmoothing
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3856494494415502111, guid: 33202d7934620b74d9ae4bd110bddad0, type: 3}
       propertyPath: cameraTransform
       value: 
       objectReference: {fileID: 963194228}
+    - target: {fileID: 3856494494415502111, guid: 33202d7934620b74d9ae4bd110bddad0, type: 3}
+      propertyPath: useAngularVelocity
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 33202d7934620b74d9ae4bd110bddad0, type: 3}
 --- !u!1001 &4155273116340160354
