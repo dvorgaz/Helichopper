@@ -24,12 +24,12 @@ public class DoDamage : MonoBehaviour
         {
             Collider[] colliders = Physics.OverlapSphere(transform.position, blastRadius, LayerMask.GetMask("Default"));
             foreach (Collider coll in colliders)
-            {
-                Rigidbody rb = coll.gameObject.GetComponent<Rigidbody>();
-                if (rb != null) rb.AddExplosionForce(blastForce, transform.position, blastRadius, 4);
-
+            {                
                 Debug.Log("Blast collider hit: " + coll.name);
                 coll.gameObject.SendMessageUpwards("Damage", dmgParams, SendMessageOptions.DontRequireReceiver);
+
+                Rigidbody rb = coll.gameObject.GetComponent<Rigidbody>();
+                if (rb != null) rb.AddExplosionForce(blastForce, transform.position, blastRadius, 4);
             }
         }
         else

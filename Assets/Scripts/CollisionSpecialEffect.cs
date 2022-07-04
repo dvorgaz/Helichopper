@@ -6,21 +6,21 @@ using UnityEngine;
 public class CollisionSpecialEffect : MonoBehaviour
 {
     public AudioClip soundClip;
-    private AudioSource audio;
+    private AudioSource audioSrc;
 
     public float impulseThreshold;
 
     // Start is called before the first frame update
     void Start()
     {
-        audio = GetComponent<AudioSource>();
+        audioSrc = GetComponent<AudioSource>();
     }
 
     private void OnCollisionEnter(Collision collision)
     {
         if(collision.impulse.magnitude > impulseThreshold)
         {
-            audio.PlayOneShot(soundClip);
+            audioSrc.PlayOneShot(soundClip);
         }
     }
 }
