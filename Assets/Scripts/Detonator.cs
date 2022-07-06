@@ -20,7 +20,7 @@ public class Detonator : MonoBehaviour
         Vector3 dir = rb.velocity.normalized;
 
         RaycastHit hitInfo;
-        if(Physics.Raycast(transform.position - dir * d, dir, out hitInfo, d * 2.0f, LayerMask.GetMask("Default")))
+        if(Physics.Raycast(transform.position - dir * d, dir, out hitInfo, d * 2.0f, LayerMask.GetMask("Default", "Vehicle")))
         {
             gameObject.SendMessage("TriggerDamage", hitInfo);
         }

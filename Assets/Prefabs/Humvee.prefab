@@ -1,5 +1,36 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &1821372732898343930
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7422093415525683823}
+  m_Layer: 9
+  m_Name: WheelOffsetRear
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7422093415525683823
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1821372732898343930}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: -0.67, z: -1.15}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 7294564245613270325}
+  m_RootOrder: 7
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2022817971913185438
 GameObject:
   m_ObjectHideFlags: 0
@@ -10,7 +41,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7160844061115095506}
   - component: {fileID: 5416007907693611047}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Weapon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -58,8 +89,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8925680176331237699}
-  m_Layer: 0
-  m_Name: Bottom
+  m_Layer: 9
+  m_Name: WheelOffsetFront
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -73,7 +104,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3459422372275216878}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -0.67, z: 0}
+  m_LocalPosition: {x: 0, y: -0.67, z: 1.26}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -90,7 +121,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6522271770182159440}
   - component: {fileID: 1757420990144422658}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: WheelFL
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -152,7 +183,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8507081612266177857}
   - component: {fileID: 720272880054475600}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: WheelRL
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -220,7 +251,7 @@ GameObject:
   - component: {fileID: 6618610823074843831}
   - component: {fileID: 4830643628421659533}
   - component: {fileID: 3948792590781238218}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Humvee
   m_TagString: Enemy
   m_Icon: {fileID: 0}
@@ -246,6 +277,7 @@ Transform:
   - {fileID: 9179358142649150608}
   - {fileID: 7160844061115095506}
   - {fileID: 8925680176331237699}
+  - {fileID: 7422093415525683823}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -340,7 +372,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rotSpeed: 2
   patrolRoute: []
-  bottomPosition: {fileID: 8925680176331237699}
+  tiltDampTime: 0.1
+  turnDampTime: 0.4
 --- !u!195 &3948792590781238218
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -351,7 +384,7 @@ NavMeshAgent:
   m_Enabled: 1
   m_AgentTypeID: 0
   m_Radius: 2
-  m_Speed: 7
+  m_Speed: 13
   m_Acceleration: 8
   avoidancePriority: 50
   m_AngularSpeed: 200
@@ -373,7 +406,7 @@ GameObject:
   m_Component:
   - component: {fileID: 9179358142649150608}
   - component: {fileID: 6895721027442753247}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: WheelRR
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -435,7 +468,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4815193326237670082}
   - component: {fileID: 6672377519553423717}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: WheelFR
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -494,9 +527,37 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 7294564245613270325}
     m_Modifications:
+    - target: {fileID: 100000, guid: 2dabd7a53b5a97445b5a23887b4fc4ce, type: 3}
+      propertyPath: m_Layer
+      value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: 100002, guid: 2dabd7a53b5a97445b5a23887b4fc4ce, type: 3}
+      propertyPath: m_Layer
+      value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: 100004, guid: 2dabd7a53b5a97445b5a23887b4fc4ce, type: 3}
+      propertyPath: m_Layer
+      value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: 100006, guid: 2dabd7a53b5a97445b5a23887b4fc4ce, type: 3}
+      propertyPath: m_Layer
+      value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: 100008, guid: 2dabd7a53b5a97445b5a23887b4fc4ce, type: 3}
+      propertyPath: m_Layer
+      value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: 100010, guid: 2dabd7a53b5a97445b5a23887b4fc4ce, type: 3}
+      propertyPath: m_Layer
+      value: 9
+      objectReference: {fileID: 0}
     - target: {fileID: 100012, guid: 2dabd7a53b5a97445b5a23887b4fc4ce, type: 3}
       propertyPath: m_Name
       value: Military_Vehicle
+      objectReference: {fileID: 0}
+    - target: {fileID: 100012, guid: 2dabd7a53b5a97445b5a23887b4fc4ce, type: 3}
+      propertyPath: m_Layer
+      value: 9
       objectReference: {fileID: 0}
     - target: {fileID: 400012, guid: 2dabd7a53b5a97445b5a23887b4fc4ce, type: 3}
       propertyPath: m_RootOrder

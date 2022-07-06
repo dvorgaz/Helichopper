@@ -148,7 +148,7 @@ public class WeaponController : MonoBehaviour
             Vector3 idleDir = Quaternion.AngleAxis(15.0f, Vector3.Cross(Vector3.up, dir)) * dir;
 
             RaycastHit hit;
-            if (Physics.Raycast(transform.position, idleDir, out hit, 200.0f, LayerMask.GetMask("Default")))
+            if (Physics.Raycast(transform.position, idleDir, out hit, 200.0f, LayerMask.GetMask("Default", "Vehicle")))
             {
                 targetingPoint = hit.point;
             }

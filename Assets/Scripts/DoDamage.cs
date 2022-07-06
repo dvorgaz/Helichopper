@@ -22,7 +22,7 @@ public class DoDamage : MonoBehaviour
 
         if (splashDamage)
         {
-            Collider[] colliders = Physics.OverlapSphere(transform.position, blastRadius, LayerMask.GetMask("Default"));
+            Collider[] colliders = Physics.OverlapSphere(transform.position, blastRadius, LayerMask.GetMask("Default", "Vehicle"));
             foreach (Collider coll in colliders)
             {                
                 Debug.Log("Blast collider hit: " + coll.name);
