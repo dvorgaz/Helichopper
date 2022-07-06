@@ -4,36 +4,36 @@ using UnityEngine;
 
 public class HeliController : MonoBehaviour
 {
-    Rigidbody rb;
+    private Rigidbody rb;
 
     public float mouseRate;
-
-    public float thrustChangeRate;
     public float maxThrust;
     public float maxVerticalThrust;
     public float turnRate;
-    public float mouseTurnRate;
 
-    [SerializeField] float speed;
+    [SerializeField] private float speed; // Speed in km/h
 
-    [SerializeField] Vector3 rotorTilt = Vector3.zero;
+    [SerializeField] private Vector3 rotorTilt = Vector3.zero;
     public float maxRotorTilt;
     public float tiltSmooth;
-    public float tiltTorque;
     public bool useAngularVelocity;
     public bool useSmoothing;
 
-    public float maxSpeedKPH;
-    public AnimationCurve dragCurve;
-    public float drag;
     public Transform cameraTransform;
-    public Transform tail;
+    private Transform tailOffset;
     public float tailDrag;
 
-    bool controllingCyclic = false;
-    bool thrustEnabled = true;
+    private bool controllingCyclic = false;
+    private bool thrustEnabled = true;
 
     private bool controlEnabled = true;
+
+    private void Awake()
+    {
+        tailOffset = transform.Find("TailOffset");
+        if (tailOffset == null)
+            Debug.LogError("Object: " + gameObject.name + " missing TailOffset node");
+    }
 
     // Start is called before the first frame update
     void Start()
@@ -150,15 +150,15 @@ public class HeliController : MonoBehaviour
             }
         }
 
-        //rb.AddForce(Vector3.up * vertical * maxThrust, ForceMode.Force);
         if (thrustEnabled)
+        {
             rb.AddForce(rb.mass * -Physics.gravity + (Vector3.up * vertical * maxVerticalThrust), ForceMode.Force);
 
-        Vector3 dir = transform.up - Vector3.up;
-        dir.y = 0;
+            Vector3 dir = transform.up - Vector3.up;
+            dir.y = 0;
 
-        if (thrustEnabled)
             rb.AddForce(dir * maxThrust, ForceMode.Force);
+        }
 
         float horizontal = 0.0f;
 
@@ -175,27 +175,11 @@ public class HeliController : MonoBehaviour
             }
         }
 
-        rb.AddForceAtPosition(tail.right * turnRate * horizontal, tail.position, ForceMode.Force);
-
-        //float p = 1.225f;
-        //float cd = 0.45f;
-        //float a = 4 * Mathf.Abs(Vector3.Dot(tail.right, -rb.velocity.normalized)) * 8;
-        //float v = rb.velocity.magnitude;
-
-        Vector3 direction = -rb.velocity.normalized;
-        //float forceAmount = (p * v * v * cd * a) / 2;
-        //rb.AddForceAtPosition(direction * forceAmount, tail.position, ForceMode.Force);
-        //rb.AddForce(direction * (rb.velocity.sqrMagnitude * drag), ForceMode.Force);
-        float maxVelocity = (maxSpeedKPH * 1000) / (60 * 60);
-        float dragForce = (maxThrust * Mathf.Sin(maxRotorTilt)) * dragCurve.Evaluate(rb.velocity.magnitude / maxVelocity);
-        //rb.AddForce(direction * dragForce, ForceMode.Force);
+        rb.AddForceAtPosition(tailOffset.right * turnRate * horizontal, tailOffset.position, ForceMode.Force);
 
         Vector3 flow = -rb.velocity.normalized;
-        float tailDragForce = Vector3.Dot(tail.right, flow) * tailDrag * rb.velocity.sqrMagnitude;
-        rb.AddForceAtPosition(tail.right * tailDragForce, tail.position, ForceMode.Force);
-
-        //Vector3 t = Vector3.Cross(tail.position - rb.worldCenterOfMass, tail.right * tailDragForce);
-        //rb.AddTorque(t, ForceMode.Force);
+        float tailDragForce = Vector3.Dot(tailOffset.right, flow) * tailDrag * rb.velocity.sqrMagnitude;
+        rb.AddForceAtPosition(tailOffset.right * tailDragForce, tailOffset.position, ForceMode.Force);
 
         speed = rb.velocity.magnitude * 60 * 60 / 1000;
     }

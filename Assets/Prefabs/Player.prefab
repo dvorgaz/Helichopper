@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7653459614429111135}
   - component: {fileID: 1618788111262197713}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: WheelT
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -30,7 +30,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 8142421821555035182}
-  m_RootOrder: 4
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!146 &1618788111262197713
 WheelCollider:
@@ -71,7 +71,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7804490746638085701}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: FlareLauncherR
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -91,7 +91,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 3856494494415502110}
-  m_RootOrder: 6
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
 --- !u!1 &1442021685033635259
 GameObject:
@@ -103,7 +103,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8480047657788854207}
   - component: {fileID: 7841970956259046909}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: WheelR
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -123,7 +123,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 8142421821555035182}
-  m_RootOrder: 3
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!146 &7841970956259046909
 WheelCollider:
@@ -165,7 +165,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1795829716921820376}
   - component: {fileID: 9132466139821260477}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: WheelL
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -185,7 +185,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 8142421821555035182}
-  m_RootOrder: 2
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!146 &9132466139821260477
 WheelCollider:
@@ -228,7 +228,7 @@ GameObject:
   - component: {fileID: 2515960903430413313}
   - component: {fileID: 190865173221160661}
   - component: {fileID: 8664955816379170916}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Gunship
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -319,7 +319,7 @@ GameObject:
   - component: {fileID: -6727588473569729473}
   - component: {fileID: 1931832463046917380}
   - component: {fileID: 3153181826752507277}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Player
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -339,6 +339,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 8142421821555035182}
+  - {fileID: 8242695004949375046}
   - {fileID: 2120119010888624218}
   - {fileID: 9111716053456804891}
   - {fileID: 2174230932735693120}
@@ -421,66 +422,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8e3e8dd9266d605489a7ba9352b7d7a3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mouseRate: 3
-  thrustChangeRate: 100000
+  mouseRate: 2.5
   maxThrust: 550000
   maxVerticalThrust: 270000
   turnRate: 80000
-  mouseTurnRate: 6
   speed: 0
   rotorTilt: {x: 0, y: 0, z: 0}
   maxRotorTilt: 45
   tiltSmooth: 10
-  tiltTorque: 1000
-  maxSpeedKPH: 170
-  dragCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 0
-      inSlope: 0.12843877
-      outSlope: 0.12843877
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0.10690455
-    - serializedVersion: 3
-      time: 0.70450675
-      value: 0.21466368
-      inSlope: 0.8673179
-      outSlope: 0.8673179
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.24678595
-    - serializedVersion: 3
-      time: 0.9718453
-      value: 0.73067886
-      inSlope: 4.466251
-      outSlope: 4.466251
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.083500236
-      outWeight: 1
-    - serializedVersion: 3
-      time: 1
-      value: 1
-      inSlope: 21.28866
-      outSlope: 21.28866
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.25597408
-      outWeight: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  drag: 100
+  useAngularVelocity: 1
+  useSmoothing: 1
   cameraTransform: {fileID: 0}
   tail: {fileID: 8242695004949375046}
   tailDrag: 100
-  dampenFactor: 0.8
-  adjustFactor: 0.5
 --- !u!114 &-6727588473569729473
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -625,8 +579,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8242695004949375046}
-  m_Layer: 0
-  m_Name: Tail
+  m_Layer: 9
+  m_Name: TailOffset
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -639,12 +593,12 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3863879243092107703}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 2.58, z: -10.31}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0.13999939, z: -10.31}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 8142421821555035182}
+  m_Father: {fileID: 3856494494415502110}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &4954572429786961711
@@ -657,7 +611,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2174230932735693120}
   - component: {fileID: 3980662385404493535}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: RotorWash
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -677,7 +631,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 3856494494415502110}
-  m_RootOrder: 3
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!330 &3980662385404493535
 ParticleSystemForceField:
@@ -1193,7 +1147,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8142421821555035182}
   - component: {fileID: 373589238672175541}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Gunship
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1213,7 +1167,6 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 2515960903430413313}
-  - {fileID: 8242695004949375046}
   - {fileID: 1795829716921820376}
   - {fileID: 8480047657788854207}
   - {fileID: 7653459614429111135}
@@ -1245,7 +1198,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8009607187752633109}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: FlareLauncherR (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1265,7 +1218,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 3856494494415502110}
-  m_RootOrder: 7
+  m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 60, z: 0}
 --- !u!1 &7450320864739399712
 GameObject:
@@ -1276,7 +1229,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 879672473522450956}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: FlareLauncherL (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1296,7 +1249,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 3856494494415502110}
-  m_RootOrder: 5
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: -60, z: 0}
 --- !u!1 &7548768417841485051
 GameObject:
@@ -1307,7 +1260,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7761241850980442255}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: FlareLauncherL
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1327,7 +1280,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 3856494494415502110}
-  m_RootOrder: 4
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: -90, z: 0}
 --- !u!1 &7609322522290315891
 GameObject:
@@ -1340,7 +1293,7 @@ GameObject:
   - component: {fileID: 6480112235634705366}
   - component: {fileID: 131231527809096356}
   - component: {fileID: 8149249491324911269}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Back_Rotor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1423,7 +1376,7 @@ GameObject:
   - component: {fileID: 6379573561395373629}
   - component: {fileID: 8473042836685267086}
   - component: {fileID: 1760664718886955362}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Rotor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1502,6 +1455,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 9111716053456804891}
     m_Modifications:
+    - target: {fileID: 3259206086972255551, guid: 1a0692757e4e4254099f40090d6f0354, type: 3}
+      propertyPath: m_Layer
+      value: 9
+      objectReference: {fileID: 0}
     - target: {fileID: 8968732989287264527, guid: 1a0692757e4e4254099f40090d6f0354, type: 3}
       propertyPath: m_RootOrder
       value: 0
@@ -1550,6 +1507,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: MuzzleFlashEffect
       objectReference: {fileID: 0}
+    - target: {fileID: 8969744797543878093, guid: 1a0692757e4e4254099f40090d6f0354, type: 3}
+      propertyPath: m_Layer
+      value: 9
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1a0692757e4e4254099f40090d6f0354, type: 3}
 --- !u!1001 &2752592615589624749
@@ -1562,6 +1523,14 @@ PrefabInstance:
     - target: {fileID: 3184735717886277683, guid: ea4009cec4190404bbee3ef897027832, type: 3}
       propertyPath: m_Name
       value: CartridgeEjectEffect
+      objectReference: {fileID: 0}
+    - target: {fileID: 3184735717886277683, guid: ea4009cec4190404bbee3ef897027832, type: 3}
+      propertyPath: m_Layer
+      value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: 3184735718023011793, guid: ea4009cec4190404bbee3ef897027832, type: 3}
+      propertyPath: m_Layer
+      value: 9
       objectReference: {fileID: 0}
     - target: {fileID: 3188491635800533995, guid: ea4009cec4190404bbee3ef897027832, type: 3}
       propertyPath: m_RootOrder
@@ -1618,7 +1587,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 6143022479097744384, guid: a92ca98691ead83418ffedfb8330095e, type: 3}
       propertyPath: m_RootOrder
-      value: 2
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 6143022479097744384, guid: a92ca98691ead83418ffedfb8330095e, type: 3}
       propertyPath: m_LocalPosition.x
@@ -1664,6 +1633,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: MachineGun
       objectReference: {fileID: 0}
+    - target: {fileID: 6143022479097744414, guid: a92ca98691ead83418ffedfb8330095e, type: 3}
+      propertyPath: m_Layer
+      value: 9
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a92ca98691ead83418ffedfb8330095e, type: 3}
 --- !u!114 &9111716053456804890 stripped
@@ -1693,9 +1666,17 @@ PrefabInstance:
       propertyPath: m_Name
       value: HellfireLauncher
       objectReference: {fileID: 0}
+    - target: {fileID: 861582365266140286, guid: 8a5736bf5371091469f9eefc07ed2bd1, type: 3}
+      propertyPath: m_Layer
+      value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: 7158312112252728201, guid: 8a5736bf5371091469f9eefc07ed2bd1, type: 3}
+      propertyPath: m_Layer
+      value: 9
+      objectReference: {fileID: 0}
     - target: {fileID: 7901879363373883155, guid: 8a5736bf5371091469f9eefc07ed2bd1, type: 3}
       propertyPath: m_RootOrder
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 7901879363373883155, guid: 8a5736bf5371091469f9eefc07ed2bd1, type: 3}
       propertyPath: m_LocalPosition.x
