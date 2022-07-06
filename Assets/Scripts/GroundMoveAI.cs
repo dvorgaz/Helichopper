@@ -59,7 +59,7 @@ public class GroundMoveAI : MonoBehaviour
             newUp = Vector3.RotateTowards(transform.up, hit.normal, rotSpeed * Time.fixedDeltaTime, 1.0f);
         }
 
-        Vector3 targetDir = (agent.steeringTarget - transform.position).normalized;
+        Vector3 targetDir = agent.desiredVelocity.normalized;// (agent.steeringTarget - transform.position).normalized;
         targetDir = Vector3.ProjectOnPlane(targetDir, transform.up);
         targetDir = Vector3.RotateTowards(transform.forward, targetDir, agent.angularSpeed * Mathf.Deg2Rad * Time.fixedDeltaTime, 1.0f);
 
