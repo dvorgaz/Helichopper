@@ -10,8 +10,8 @@ public class GroundMoveAI : MonoBehaviour
     private NavMeshAgent agent;
     private Rigidbody rb;
 
-    int patrolIdx = 0;
-    public List<Transform> patrolRoute;
+    [SerializeField] private PatrolRoute patrolRoute;
+    private PatrolRoute.Tracker patrol;
 
     private bool moveEnabled = true;
 
@@ -19,8 +19,8 @@ public class GroundMoveAI : MonoBehaviour
     private Vector3 tiltVelocity = Vector3.zero;
     private Vector3 turnVelocity = Vector3.zero;
 
-    public float tiltDampTime;
-    public float turnDampTime;
+    [SerializeField] private float tiltDampTime;
+    [SerializeField] private float turnDampTime;
 
     private void Awake()
     {
@@ -48,8 +48,11 @@ public class GroundMoveAI : MonoBehaviour
         agent.updatePosition = false;
         agent.updateUpAxis = false;
 
-        if (patrolRoute.Count > 0 )
-            agent.SetDestination(patrolRoute[patrolIdx].position);
+        if (patrolRoute != null)
+        {
+            patrol = patrolRoute.GetTracker();
+            agent.SetDestination(patrol.SteerPoint);
+        }
     }
 
     // Update is called once per frame
@@ -58,16 +61,16 @@ public class GroundMoveAI : MonoBehaviour
         if (!moveEnabled)
             return;
 
-        if (patrolRoute.Count > 0 && agent.isActiveAndEnabled)
+        if (patrolRoute != null && agent.isActiveAndEnabled)
         {
-            Vector3 dist = patrolRoute[patrolIdx].position - transform.position;
+            Vector3 dist = patrol.SteerPoint - transform.position;
             bool inRangeHorizontal = Vector3.ProjectOnPlane(dist, Vector3.up).sqrMagnitude < agent.stoppingDistance * agent.stoppingDistance;
             bool inRangeVertical = Mathf.Abs(dist.y) < agent.stoppingDistance * 4;
 
             if (inRangeHorizontal && inRangeVertical)
             {
-                patrolIdx = (patrolIdx + 1) % patrolRoute.Count;
-                agent.SetDestination(patrolRoute[patrolIdx].position);
+                patrol.Next();
+                agent.SetDestination(patrol.SteerPoint);
             }
         }
     }
@@ -102,9 +105,9 @@ public class GroundMoveAI : MonoBehaviour
             }
         }
 
-        Vector3 targetDir = agent.desiredVelocity.normalized;
-        targetDir = Vector3.ProjectOnPlane(targetDir, transform.up);
-        targetDir = Vector3.SmoothDamp(transform.forward, targetDir, ref turnVelocity, turnDampTime); //Vector3.RotateTowards(transform.forward, targetDir, agent.angularSpeed * Mathf.Deg2Rad * Time.fixedDeltaTime, 1.0f);
+        Vector3 targetDir = Vector3.ProjectOnPlane(agent.desiredVelocity, transform.up).normalized;
+        //targetDir = Vector3.RotateTowards(transform.forward, targetDir, agent.angularSpeed * Mathf.Deg2Rad * Time.fixedDeltaTime, 1.0f);
+        targetDir = Vector3.SmoothDamp(transform.forward, targetDir, ref turnVelocity, turnDampTime);
 
         rb.MoveRotation(Quaternion.FromToRotation(transform.forward, targetDir) * Quaternion.FromToRotation(transform.up, newUp) * transform.rotation);
         rb.MovePosition(newPos);
