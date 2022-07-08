@@ -55,8 +55,7 @@ public class PatrolRoute : MonoBehaviour
         return new Tracker(this);
     }
 
-    // Start is called before the first frame update
-    void Start()
+    private void Awake()
     {
         pathPoints = new List<Transform>();
 

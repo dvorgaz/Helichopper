@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class OnDamageTaken : MonoBehaviour
 {
-    public List<DamageHitEffect> hitEffects;
+    [SerializeField] private List<DamageHitEffect> hitEffects;
 
     public void Damage(DamageParams dp)
     {

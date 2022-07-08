@@ -5,10 +5,10 @@ using UnityEngine;
 [RequireComponent(typeof(AudioSource))]
 public class CollisionSpecialEffect : MonoBehaviour
 {
-    public AudioClip soundClip;
+    [SerializeField] private AudioClip soundClip;
     private AudioSource audioSrc;
 
-    public float impulseThreshold;
+    [SerializeField] private float impulseThreshold;
 
     // Start is called before the first frame update
     void Start()

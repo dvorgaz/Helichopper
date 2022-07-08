@@ -4,12 +4,11 @@ using UnityEngine;
 
 public class Health : MonoBehaviour
 {
-    public int maxHealth;
+    [SerializeField] private int maxHealth;
+    private int health;
 
-    int health;
-
-    public GameObject deathEffectPrefab;
-    public GameObject smokeEffectPrefab;
+    [SerializeField] private GameObject deathEffectPrefab;
+    [SerializeField] private GameObject smokeEffectPrefab;
 
     private uint lastDamageID = 0;
 

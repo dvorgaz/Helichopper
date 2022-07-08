@@ -7,10 +7,9 @@ public class MoveProjectile : MonoBehaviour
 {
     private Rigidbody rb;
 
-    public float acceleration;
-    public float impulse;
-
-    public bool turnTowardsVelocity;
+    [SerializeField] private float acceleration;
+    [SerializeField] private float impulse;
+    [SerializeField] private bool turnTowardsVelocity;
 
     // Start is called before the first frame update
     void Start()

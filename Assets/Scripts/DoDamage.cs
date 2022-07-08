@@ -4,13 +4,13 @@ using UnityEngine;
 
 public class DoDamage : MonoBehaviour
 {
-    public DamageType type;
-    public int damage;
-    public GameObject explosionPrefab;
+    [SerializeField] private DamageType type;
+    [SerializeField] private int damage;
+    [SerializeField] private GameObject explosionPrefab;
 
-    public bool splashDamage;
-    public float blastRadius;
-    public float blastForce;
+    [SerializeField] private bool splashDamage;
+    [SerializeField] private float blastRadius;
+    [SerializeField] private float blastForce;
 
     static uint damageID = 0;
 

@@ -2,28 +2,26 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent(typeof(Rigidbody))]
+[RequireComponent(typeof(Health))]
 public class WeaponController : MonoBehaviour
 {
-    public List<WeaponLauncher> weapons;
-    private int currWeaponIdx = 0;
-
-    public List<Transform> flareLaunchers;
-    public GameObject flarePrefab;
-
     private Rigidbody rb;
-
-    public float targetingRange;
-    public float targetingAngle;
-
-    private Vector3 targetingPoint = Vector3.zero;
-
-    public RectTransform crosshairTransform;
-    public Camera mainCamera;
-
     private Health health;
 
-    public int flareCount;
-    public float flareInterval;
+    [SerializeField] private float targetingRange;
+    [SerializeField] private float targetingAngle;
+    private List<WeaponLauncher> weapons;
+    private int currWeaponIdx = 0;
+    private Vector3 targetingPoint = Vector3.zero;
+
+    private List<Transform> flareLaunchers;
+    [SerializeField] private GameObject flarePrefab;
+    [SerializeField] private int flareCount;
+    [SerializeField] private float flareInterval;    
+
+    [SerializeField] private RectTransform crosshairTransform;
+    [SerializeField] private Camera mainCamera;    
 
     public WeaponLauncher Weapon
     {
@@ -35,6 +33,27 @@ public class WeaponController : MonoBehaviour
     {
         rb = GetComponent<Rigidbody>();
         health = GetComponent<Health>();
+
+        weapons = new List<WeaponLauncher>();
+        foreach (WeaponLauncher weapon in GetComponentsInChildren<WeaponLauncher>())
+        {
+            weapons.Add(weapon);
+        }
+
+        flareLaunchers = new List<Transform>();
+        Transform fl = transform.Find("FlareLaunchers");
+        if(fl != null)
+        {
+            foreach(Transform tr in fl)
+            {
+                if(tr.gameObject.activeSelf)
+                    flareLaunchers.Add(tr);
+            }
+        }
+        else
+        {
+            Debug.LogError("Game object: " + gameObject.name + " missing FlareLaunchers node");
+        }
     }
 
     // Update is called once per frame
