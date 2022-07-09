@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class WeaponLauncher : MonoBehaviour
@@ -11,15 +9,17 @@ public class WeaponLauncher : MonoBehaviour
         Auto
     }
 
-    public GameObject weaponPrefab;
+    [SerializeField] private GameObject weaponPrefab;    
+    [SerializeField] private FiringMode firingMode;
+    [SerializeField] private float spread;
+    [SerializeField] private float rateOfFire; // rounds per minute
+    [SerializeField] private int burstLength;
+    [SerializeField] private int shotsMax = 0;
+    private int shotsLeft;
+
     private GameObject weaponModel;
-
-    public FiringMode firingMode;
-    public float spread;
-    public float rateOfFire; // rounds per minute
-    public int burstCount;
-
     private ParticleSystem[] particleSystems;
+    private AudioSource audioSrc;
 
     public float ShotInterval
     {
@@ -29,16 +29,19 @@ public class WeaponLauncher : MonoBehaviour
     private float lastShotTime;
     private int burstCounter;
     private bool isFiring = false;
-    private Vector3 targetPoint;
-    private bool canFire = true;
+    private bool wasFiring = false;
 
-    public bool CanFire
+    public bool CanFire()
     {
-        get
+        bool hasShots = shotsMax == 0 || shotsLeft > 0;
+        bool isOnCooldown = (Time.time - lastShotTime) < ShotInterval;
+        bool burstEnded = false;
+        if (firingMode == FiringMode.Single || firingMode == FiringMode.Burst)
         {
-            bool isOnCooldown = (Time.time - lastShotTime) < ShotInterval;
-            return canFire && !isOnCooldown; 
+            burstEnded = burstCounter <= 0;
         }
+
+        return hasShots && !isOnCooldown && !burstEnded; 
     }
 
     private void Awake()
@@ -52,78 +55,98 @@ public class WeaponLauncher : MonoBehaviour
     void Start()
     {
         particleSystems = transform.GetComponentsInChildren<ParticleSystem>();
+        audioSrc = GetComponent<AudioSource>();
+        Reload();
     }
 
     // Update is called once per frame
     void Update()
     {
-        if(isFiring && CanFire)
-        {
-            Launch(targetPoint);
-        }
+
     }
 
-    public void SetFiring(bool firing, Vector3 targetPoint)
+    private void LateUpdate()
     {
-        isFiring = firing;
-        this.targetPoint = targetPoint;
+        if(wasFiring && !isFiring)
+        {
+            // Trigger released
+            ResetBurstCounter();
+        }
+
+        wasFiring = isFiring;
+        isFiring = false;
     }
 
     public void Reload()
     {
-        weaponModel?.SetActive(true);
-        canFire = true;
+        if(weaponModel != null)
+            weaponModel.SetActive(true);
+
+        shotsLeft = shotsMax;
+        ResetBurstCounter();
     }
 
-    public void Launch(Rigidbody launchPlatform = null)
+    private void ResetBurstCounter()
     {
-        if (CanFire)
+        switch (firingMode)
         {
-            lastShotTime = Time.time;
-            weaponModel?.SetActive(false);
-            //canFire = false;
-
-            GameObject obj = Instantiate(weaponPrefab, transform.position, transform.rotation);
-            Rigidbody rb = obj.GetComponent<Rigidbody>();
-            if (rb != null && launchPlatform != null)
-            {
-                //rb.velocity = launchPlatform.velocity;
-            }
-
-            foreach (ParticleSystem ps in particleSystems)
-            {
-                ps.Emit(1);
-            }
+            case FiringMode.Single:
+                burstCounter = 1;
+                break;
+            case FiringMode.Burst:
+                burstCounter = burstLength;
+                break;
         }
     }
 
-    public void Launch(Vector3 targetPoint)
+    public void Fire(Vector3 targetPoint, Rigidbody launchPlatform = null)
     {
-        if (CanFire)
+        isFiring = true;
+
+        if (CanFire())
+        {           
+            FireProjectile(targetPoint, launchPlatform);
+        }
+    }
+
+    public void Fire(Rigidbody launchPlatform = null)
+    {
+        Fire(transform.position + transform.forward, launchPlatform);
+    }
+
+    private void FireProjectile(Vector3 targetPoint, Rigidbody launchPlatform)
+    {
+        lastShotTime = Time.time;
+
+        if (shotsMax != 0)
+            shotsLeft--;
+
+        if (burstCounter > 0)
+            burstCounter--;
+
+        if (weaponModel != null)
+            weaponModel.SetActive(false);
+
+        Vector3 dir = (targetPoint - transform.position).normalized;
+        dir += Vector3.ProjectOnPlane(Random.insideUnitSphere * spread, dir);
+        Quaternion rot = Quaternion.LookRotation(dir, Vector3.up);
+        GameObject obj = Instantiate(weaponPrefab, transform.position, rot);
+
+        if (launchPlatform != null)
         {
-            lastShotTime = Time.time;
-            weaponModel?.SetActive(false);
-            //canFire = false;
-
-            Vector3 dir = (targetPoint - transform.position).normalized;
-
-            //Vector3 flatDir = Vector3.ProjectOnPlane(dir, Vector3.up).normalized;
-            //Vector3 flatForward = Vector3.ProjectOnPlane(transform.forward, Vector3.up).normalized;
-
-            //float angle = Vector3.SignedAngle(flatDir, flatForward, Vector3.up);
-
-            //dir = Quaternion.AngleAxis(angle, Vector3.up) * dir;
-
-            dir += Vector3.ProjectOnPlane(Random.insideUnitSphere * spread, dir);
-
-            Quaternion rot = Quaternion.LookRotation(dir, Vector3.up);
-
-            GameObject obj = Instantiate(weaponPrefab, transform.position, rot);
-
-            foreach(ParticleSystem ps in particleSystems)
+            Rigidbody rb = obj.GetComponent<Rigidbody>();
+            if (rb != null)
             {
-                ps.Emit(1);
+                rb.velocity = launchPlatform.velocity;
             }
+        }
+
+        if (audioSrc)
+            audioSrc.Play();
+
+        foreach (ParticleSystem ps in particleSystems)
+        {
+            ps.Emit(1);
         }
     }
 }

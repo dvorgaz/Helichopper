@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent(typeof(Health))]
 public class EnemyAI : MonoBehaviour
 {
     private Health health;    
@@ -11,15 +12,14 @@ public class EnemyAI : MonoBehaviour
     private Health targetHealth;
     private bool isTargetValid = false;
 
-    public float detectionRange;
-    public float losRangeOffset = 5.0f;
-    public float losSizeOffset = 20.0f;
-    public Vector2 tickDelayRange = new Vector2(1, 1);
-    public Vector2 attackDelayRange = new Vector2(1, 1);
-    public float attackAxisLength;
+    [SerializeField] private float detectionRange;
+    [SerializeField] private float losRangeOffset = 5.0f;
+    [SerializeField] private float losSizeOffset = 20.0f;
+    [SerializeField] private Vector2 tickDelayRange = new Vector2(1, 1);
+    [SerializeField] private Vector2 attackDelayRange = new Vector2(1, 1);
+    [SerializeField] private float attackAxisLength;
 
     private bool isAttacking = false;
-
     private bool horizontalAttack;
 
     // Start is called before the first frame update
@@ -121,7 +121,7 @@ public class EnemyAI : MonoBehaviour
         {
             Vector3 startPoint = target.transform.position + attackAxis;
             Vector3 endPoint = target.transform.position - attackAxis;
-            weapon.Launch(Vector3.Lerp(startPoint, endPoint, t / attackDuration));
+            weapon.Fire(Vector3.Lerp(startPoint, endPoint, t / attackDuration));
             yield return null;
         }
 

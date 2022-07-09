@@ -63,8 +63,6 @@ public class WeaponController : MonoBehaviour
 
         if(targetingPoint != Vector3.zero)
         {
-            crosshairTransform.gameObject.SetActive(true);
-
             Vector3 dir = targetingPoint - transform.position;
 
             Vector3 flatDir = Vector3.ProjectOnPlane(dir, Vector3.up).normalized;
@@ -77,10 +75,6 @@ public class WeaponController : MonoBehaviour
 
             crosshairTransform.position = mainCamera.WorldToScreenPoint(adjustedTargetingPoint);
         }
-        else
-        {
-            crosshairTransform.gameObject.SetActive(false);
-        }
 
         if (health.Alive)
         {
@@ -88,17 +82,20 @@ public class WeaponController : MonoBehaviour
             {
                 if (targetingPoint != Vector3.zero)
                 {
-                    Weapon?.Launch(adjustedTargetingPoint);
+                    if (Weapon)
+                        Weapon.Fire(adjustedTargetingPoint);
                 }
                 else
                 {
-                    Weapon?.Launch(rb);
+                    if (Weapon)
+                        Weapon.Fire();
                 }
             }
 
             if (Input.GetKeyDown(KeyCode.R))
             {
-                Weapon?.Reload();
+                if (Weapon)
+                    Weapon.Reload();
             }
 
             if (Input.GetKeyDown(KeyCode.F))
@@ -151,6 +148,9 @@ public class WeaponController : MonoBehaviour
 
             float dist = Vector3.Magnitude(target.transform.position - transform.position);
 
+            if (dist > targetingRange)
+                continue;
+
             if (dist < closestDist)
             {
                 closestDist = dist;
@@ -161,13 +161,18 @@ public class WeaponController : MonoBehaviour
         if(closestTarget != null)
         {
             targetingPoint = closestTarget.transform.position;
+            crosshairTransform.gameObject.SetActive(true);
         }
         else
         {
-            Vector3 idleDir = Quaternion.AngleAxis(15.0f, Vector3.Cross(Vector3.up, dir)) * dir;
+            //Vector3 idleDir = Quaternion.AngleAxis(15.0f, Vector3.Cross(Vector3.up, dir)) * dir;
+            Vector3 idleDir = Vector3.ProjectOnPlane(transform.forward, Vector3.up).normalized;
+            float idleDist = targetingRange / 2.0f;
+            Vector3 groundPoint = transform.position + idleDir * idleDist;
 
             RaycastHit hit;
-            if (Physics.Raycast(transform.position, idleDir, out hit, 200.0f, LayerMask.GetMask("Default", "Vehicle")))
+            //if (Physics.Raycast(transform.position, idleDir, out hit, 200.0f, LayerMask.GetMask("Default", "Vehicle")))
+            if (Physics.Raycast(groundPoint, -Vector3.up, out hit, 200.0f, LayerMask.GetMask("Default", "Vehicle")))
             {
                 targetingPoint = hit.point;
             }
@@ -175,6 +180,8 @@ public class WeaponController : MonoBehaviour
             {
                 targetingPoint = Vector3.zero;
             }
+
+            crosshairTransform.gameObject.SetActive(false);
         }
     }
 
