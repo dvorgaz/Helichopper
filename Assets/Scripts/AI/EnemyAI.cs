@@ -74,7 +74,7 @@ public class EnemyAI : MonoBehaviour
         if (dist > detectionRange)
             return false;
 
-        if (Physics.Raycast(transform.position + dir * losRangeOffset, dir, out hitInfo, dist, LayerMask.GetMask("Default", "Vehicle")))
+        if (Physics.Raycast(transform.position + dir * losRangeOffset, dir, out hitInfo, dist, LayerMask.GetMask("Default", "Vehicle"), QueryTriggerInteraction.Ignore))
         {
             if (hitInfo.distance < dist - losSizeOffset)
                 return false;

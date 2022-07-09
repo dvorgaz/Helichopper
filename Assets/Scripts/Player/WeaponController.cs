@@ -171,8 +171,8 @@ public class WeaponController : MonoBehaviour
             Vector3 groundPoint = transform.position + idleDir * idleDist;
 
             RaycastHit hit;
-            //if (Physics.Raycast(transform.position, idleDir, out hit, 200.0f, LayerMask.GetMask("Default", "Vehicle")))
-            if (Physics.Raycast(groundPoint, -Vector3.up, out hit, 200.0f, LayerMask.GetMask("Default", "Vehicle")))
+            //if (Physics.Raycast(transform.position, idleDir, out hit, 200.0f, LayerMask.GetMask("Default", "Vehicle"), QueryTriggerInteraction.Ignore))
+            if (Physics.Raycast(groundPoint, -Vector3.up, out hit, 200.0f, LayerMask.GetMask("Default", "Vehicle"), QueryTriggerInteraction.Ignore))
             {
                 targetingPoint = hit.point;
             }
@@ -200,5 +200,11 @@ public class WeaponController : MonoBehaviour
             LaunchFlares();
             yield return new WaitForSeconds(flareInterval);
         }
+    }
+
+    public void OnItemPickedUp(Pickup pickup)
+    {
+        Debug.Log("Item processed: " + pickup.gameObject.name);
+        Destroy(pickup.gameObject);
     }
 }

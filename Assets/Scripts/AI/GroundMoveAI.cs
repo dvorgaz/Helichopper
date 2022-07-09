@@ -91,10 +91,10 @@ public class GroundMoveAI : MonoBehaviour
             int mask = LayerMask.GetMask("Default");
 
             RaycastHit hit1;
-            if (Physics.Raycast(wheelOffsets[0].position + Vector3.up * yOffset, -Vector3.up, out hit1, maxDist, mask))
+            if (Physics.Raycast(wheelOffsets[0].position + Vector3.up * yOffset, -Vector3.up, out hit1, maxDist, mask, QueryTriggerInteraction.Ignore))
             {
                 RaycastHit hit2;
-                if (Physics.Raycast(wheelOffsets[1].position + Vector3.up * yOffset, -Vector3.up, out hit2, maxDist, mask))
+                if (Physics.Raycast(wheelOffsets[1].position + Vector3.up * yOffset, -Vector3.up, out hit2, maxDist, mask, QueryTriggerInteraction.Ignore))
                 {
                     Vector3 axis = (hit1.point - hit2.point).normalized;
 

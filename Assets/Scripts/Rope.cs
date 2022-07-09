@@ -1,0 +1,202 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+[RequireComponent(typeof(LineRenderer))]
+public class Rope : MonoBehaviour
+{
+    private struct RopeSegment
+    {
+        public Vector3 position;
+        public Vector3 lastPosition;
+
+        public RopeSegment(Vector3 pos)
+        {
+            lastPosition = position = pos;
+        }
+    }
+
+    [SerializeField] private float length;
+    private float segmentLength;
+    [Range(3, 20)] [SerializeField] private int numSegments;    
+    [SerializeField] private float thickness;
+    [Range(10, 50)] [SerializeField] private int iterations;
+    private List<RopeSegment> ropeSegments = new List<RopeSegment>();
+    private LineRenderer lineRenderer;
+    private Transform ropeEndNode;
+    private float ropePosition = 0.0f;
+    private float targetPosition;
+    [SerializeField] private float speed;
+
+    public delegate void RopeDelegate();
+    public RopeDelegate OnRetracted;
+    public RopeDelegate OnExtended;
+
+    public float TargetPosition
+    {
+        get { return targetPosition; }
+        set { targetPosition = Mathf.Clamp(value, 0.0f, 1.0f); }
+    }
+
+    public Transform GetEndNode()
+    {
+        return ropeEndNode;
+    }
+
+    private void Awake()
+    {
+        segmentLength = length / (numSegments - 1);
+
+        Vector3 ropeStartPoint = transform.position;
+        for (int i = 0; i < numSegments; i++)
+        {
+            ropeSegments.Add(new RopeSegment(ropeStartPoint));
+            ropeStartPoint.y -= segmentLength;
+        }
+
+        GameObject obj = new GameObject("RopeEnd");
+        ropeEndNode = obj.transform;
+        ropeEndNode.parent = transform;
+        ropeEndNode.position = ropeSegments[ropeSegments.Count - 1].position;
+    }
+
+    // Start is called before the first frame update
+    void Start()
+    {
+        lineRenderer = GetComponent<LineRenderer>();
+        targetPosition = ropePosition;
+    }
+
+    // Update is called once per frame
+    void LateUpdate()
+    {
+        if(Input.GetKey(KeyCode.T))
+        {
+            TargetPosition -= speed * Time.deltaTime;
+        }
+        else if (Input.GetKey(KeyCode.G))
+        {
+            TargetPosition += speed * Time.deltaTime;
+        }
+
+        bool wasRetracted = ropePosition == 0.0f;
+        bool wasExtended = ropePosition == 1.0f;
+
+        ropePosition = Mathf.MoveTowards(ropePosition, TargetPosition, speed * Time.deltaTime);
+        ropePosition = Mathf.Clamp(ropePosition, 0.0f, 1.0f);
+
+        if(!wasRetracted && ropePosition == 0.0f && OnRetracted != null)
+        {
+            OnRetracted();
+        }
+
+        if (!wasExtended && ropePosition == 1.0f && OnExtended != null)
+        {
+            OnExtended();
+        }
+
+        DrawRope();
+    }
+
+    private void FixedUpdate()
+    {
+        Simulate();
+
+        Vector3 dir = ropeSegments[ropeSegments.Count - 2].position - ropeSegments[ropeSegments.Count - 1].position;
+        dir.Normalize();
+        ropeEndNode.rotation = Quaternion.FromToRotation(ropeEndNode.up, dir) * ropeEndNode.rotation;
+        ropeEndNode.position = ropeSegments[ropeSegments.Count - 1].position;
+    }
+
+    private void DrawRope()
+    {
+        Vector3 offset = transform.position - ropeSegments[0].position;
+
+        lineRenderer.startWidth = thickness;
+        lineRenderer.endWidth = thickness;
+
+        Vector3[] ropePositions = new Vector3[numSegments];
+        for (int i = 0; i < numSegments; i++)
+        {
+            ropePositions[i] = ropeSegments[i].position + offset;
+        }
+
+        lineRenderer.positionCount = ropePositions.Length;
+        lineRenderer.SetPositions(ropePositions);
+        ropeEndNode.position = ropeSegments[ropeSegments.Count - 1].position + offset;
+    }
+
+    private void Simulate()
+    {
+        for (int i = 1; i < numSegments; i++)
+        {
+            RopeSegment firstSegment = ropeSegments[i];
+            Vector3 velocity = firstSegment.position - firstSegment.lastPosition;
+            firstSegment.lastPosition = firstSegment.position;
+            firstSegment.position += velocity;
+            firstSegment.position += Physics.gravity * Time.fixedDeltaTime;
+            ropeSegments[i] = firstSegment;
+        }
+
+        for (int i = 0; i < iterations; i++)
+        {
+            ApplyConstraints();
+        }
+    }
+
+    private void ApplyConstraints()
+    {
+        RopeSegment firstSegment = ropeSegments[0];
+        firstSegment.position = transform.position;
+        ropeSegments[0] = firstSegment;
+
+        float invPos = 1.0f - ropePosition;
+        float s = 1.0f / (numSegments - 1);
+        int sectionIdx = Mathf.FloorToInt(invPos / s);
+        float sectionFraction = 1.0f - (Mathf.Repeat(invPos, s) / s);
+
+        for (int i = 0; i < numSegments - 1; i++)
+        {
+            RopeSegment firstSeg = ropeSegments[i];
+            RopeSegment secondSeg = ropeSegments[i + 1];
+
+            if(i <= sectionIdx)
+            {
+                firstSeg.position = transform.position;
+            }
+
+            float desiredDist = segmentLength;
+            if (i == sectionIdx)
+            {
+                desiredDist *= sectionFraction;
+            }
+
+            float dist = (firstSeg.position - secondSeg.position).magnitude;
+            float error = Mathf.Abs(dist - desiredDist);
+            Vector3 changeDir = Vector3.zero;
+
+            if (dist > desiredDist)
+            {
+                changeDir = (firstSeg.position - secondSeg.position).normalized;
+            }
+            else if (dist < desiredDist)
+            {
+                changeDir = (secondSeg.position - firstSeg.position).normalized;
+            }
+
+            Vector3 changeAmount = changeDir * error;
+            if (i != 0)
+            {
+                firstSeg.position -= changeAmount * 0.5f;
+                ropeSegments[i] = firstSeg;
+                secondSeg.position += changeAmount * 0.5f;
+                ropeSegments[i + 1] = secondSeg;
+            }
+            else
+            {
+                secondSeg.position += changeAmount;
+                ropeSegments[i + 1] = secondSeg;
+            }
+        }
+    }
+}

@@ -6,8 +6,8 @@ using UnityEngine;
 public class TargetHoming : MonoBehaviour
 {
     [HideInInspector] public Transform target;
-    public float turnRate;
-    public float fov;
+    [SerializeField] private float turnRate;
+    [SerializeField] private float fov;
 
     private Rigidbody rb;
 
@@ -36,9 +36,9 @@ public class TargetHoming : MonoBehaviour
         }
     }
 
-    bool IsInFov(Vector3 pos)
+    public bool IsInFov(Vector3 pos)
     {
-        Vector3 toTarget = target.position - transform.position;
+        Vector3 toTarget = pos - transform.position;
         float angle = Vector3.Angle(transform.forward, toTarget);
         if (angle > fov / 2.0f)
             return false;
