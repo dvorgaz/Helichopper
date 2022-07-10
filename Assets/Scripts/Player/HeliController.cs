@@ -19,7 +19,7 @@ public class HeliController : MonoBehaviour
     public bool useAngularVelocity;
     public bool useSmoothing;
 
-    public Transform cameraTransform;
+    private Transform cameraTransform;
     private Transform tailOffset;
     public float tailDrag;
 
@@ -40,6 +40,7 @@ public class HeliController : MonoBehaviour
     {
         rb = GetComponent<Rigidbody>();
         rb.centerOfMass = Vector3.zero;
+        cameraTransform = Camera.main.transform;
     }
 
     void ToggleCyclicContorl()

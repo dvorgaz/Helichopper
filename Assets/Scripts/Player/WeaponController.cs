@@ -20,8 +20,8 @@ public class WeaponController : MonoBehaviour
     [SerializeField] private int flareCount;
     [SerializeField] private float flareInterval;    
 
-    [SerializeField] private RectTransform crosshairTransform;
-    [SerializeField] private Camera mainCamera;    
+    private RectTransform crosshairTransform;
+    private Camera mainCamera;    
 
     public WeaponLauncher Weapon
     {
@@ -33,6 +33,8 @@ public class WeaponController : MonoBehaviour
     {
         rb = GetComponent<Rigidbody>();
         health = GetComponent<Health>();
+        mainCamera = Camera.main;
+        crosshairTransform = GameController.Instance.GameUI.Crosshair;
 
         weapons = new List<WeaponLauncher>();
         foreach (WeaponLauncher weapon in GetComponentsInChildren<WeaponLauncher>())
@@ -116,6 +118,17 @@ public class WeaponController : MonoBehaviour
                 currWeaponIdx = 2;
             }
         }
+    }
+
+    private void LateUpdate()
+    {
+        GameUI ui = GameController.Instance.GameUI;
+        for (int i = 0; i < 3 && i < weapons.Count; ++i)
+        {
+            ui.SetUIText(GameUI.UIElement.Gun + i, weapons[i].ShotsLeft);
+        }
+
+        ui.SetUIText(GameUI.UIElement.Armor, health.Hp);
     }
 
     private void FixedUpdate()

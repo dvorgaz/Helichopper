@@ -5,7 +5,7 @@ using UnityEngine;
 public class Health : MonoBehaviour
 {
     [SerializeField] private int maxHealth;
-    private int health;
+    public int Hp { get; private set; }
 
     [SerializeField] private GameObject deathEffectPrefab;
     [SerializeField] private GameObject smokeEffectPrefab;
@@ -14,13 +14,13 @@ public class Health : MonoBehaviour
 
     public bool Alive
     {
-        get { return health > 0; }
+        get { return Hp > 0; }
     }
 
     // Start is called before the first frame update
     void Start()
     {
-        health = maxHealth;
+        Hp = maxHealth;
     }
 
     public void Damage(DamageParams dp)
@@ -31,9 +31,9 @@ public class Health : MonoBehaviour
         if (lastDamageID < dp.damageID)
         {
             lastDamageID = dp.damageID;
-            health -= dp.damage;
+            Hp -= dp.damage;
 
-            if (health <= 0)
+            if (Hp <= 0)
             {
                 Kill();
             }
