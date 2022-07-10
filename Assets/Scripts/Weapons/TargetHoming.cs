@@ -8,18 +8,31 @@ public class TargetHoming : MonoBehaviour
     [HideInInspector] public Transform target;
     [SerializeField] private float turnRate;
     [SerializeField] private float fov;
+    [SerializeField] private bool loftTrajectory;
+    [SerializeField] private float climbRatio;
+    [SerializeField] private float climbHeight;
+    [SerializeField] private float climbTurnRate;
 
     private Rigidbody rb;
+    private float initialTargetDistance;
 
     // Start is called before the first frame update
     void Start()
     {
         rb = GetComponent<Rigidbody>();
 
-        GameObject tgt = GameObject.FindWithTag("Player");
-        if(tgt != null)
+        if (target == null)
         {
-            target = tgt.transform;
+            GameObject tgt = GameObject.FindWithTag("Player");
+            if (tgt != null)
+            {
+                target = tgt.transform;
+            }
+        }
+
+        if(loftTrajectory && target != null)
+        {
+            initialTargetDistance = Vector3.Distance(transform.position, target.position);
         }
     }
 
@@ -29,10 +42,27 @@ public class TargetHoming : MonoBehaviour
         if(target != null && IsInFov(target.position))
         {
             Vector3 toTarget = (target.position - transform.position).normalized;
+            float adjustedTurnRate = turnRate;
+
+            if (loftTrajectory)
+            {
+                float targetDistance = Vector3.Distance(transform.position, target.position);
+                float distanceRatio = targetDistance / initialTargetDistance;
+
+                if(distanceRatio > climbRatio)
+                {
+                    //toTarget = Vector3.ProjectOnPlane(toTarget, Vector3.up).normalized;
+                    //toTarget = Quaternion.AngleAxis(climbAngle, Vector3.Cross(toTarget, Vector3.up)) * toTarget;
+                    float f = 1.0f - (distanceRatio - climbRatio) / (1.0f - climbRatio);
+                    toTarget = ((target.position + Vector3.up * climbHeight * f) - transform.position).normalized;
+                    adjustedTurnRate = climbTurnRate;
+                }
+            }
+
             Quaternion targetRotation = Quaternion.LookRotation(toTarget);
-            transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, turnRate * Time.fixedDeltaTime);
+            transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, adjustedTurnRate * Time.fixedDeltaTime);
             Vector3 newVelocity = toTarget * rb.velocity.magnitude;
-            rb.velocity = Vector3.RotateTowards(rb.velocity, newVelocity, turnRate * Mathf.Deg2Rad * Time.fixedDeltaTime, 0.0f);
+            rb.velocity = Vector3.RotateTowards(rb.velocity, newVelocity, adjustedTurnRate * Mathf.Deg2Rad * Time.fixedDeltaTime, 0.0f);
         }
     }
 

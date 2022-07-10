@@ -51,6 +51,7 @@ MonoBehaviour:
   rateOfFire: 700
   burstLength: 0
   shotsMax: 0
+  range: 100
 --- !u!82 &614814328935376274
 AudioSource:
   m_ObjectHideFlags: 0

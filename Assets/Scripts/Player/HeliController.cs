@@ -5,23 +5,26 @@ using UnityEngine;
 public class HeliController : MonoBehaviour
 {
     private Rigidbody rb;
-
-    public float mouseRate;
-    public float maxThrust;
-    public float maxVerticalThrust;
-    public float turnRate;
+    
+    [SerializeField] private float mouseRate;
+    [SerializeField] private float maxThrust;
+    [SerializeField] private float maxVerticalThrust;
+    [SerializeField] private float turnRate;
+    [SerializeField] private float maxFuel;
+    [SerializeField] private float fuelBurnRate;
+    private float fuel;
 
     [SerializeField] private float speed; // Speed in km/h
 
     [SerializeField] private Vector3 rotorTilt = Vector3.zero;
-    public float maxRotorTilt;
-    public float tiltSmooth;
-    public bool useAngularVelocity;
-    public bool useSmoothing;
+    [SerializeField] private float maxRotorTilt;
+    [SerializeField] private float tiltSmooth;
+    [SerializeField] private bool useAngularVelocity;
+    [SerializeField] private bool useSmoothing;
 
     private Transform cameraTransform;
     private Transform tailOffset;
-    public float tailDrag;
+    [SerializeField] private float tailDrag;
 
     private bool controllingCyclic = false;
     private bool thrustEnabled = true;
@@ -41,6 +44,7 @@ public class HeliController : MonoBehaviour
         rb = GetComponent<Rigidbody>();
         rb.centerOfMass = Vector3.zero;
         cameraTransform = Camera.main.transform;
+        fuel = maxFuel;
     }
 
     void ToggleCyclicContorl()
@@ -53,6 +57,11 @@ public class HeliController : MonoBehaviour
     public void OnDeath()
     {
         ShutDown();
+    }
+
+    public void Refuel()
+    {
+        fuel = maxFuel;
     }
 
     public void ShutDown()
@@ -93,8 +102,19 @@ public class HeliController : MonoBehaviour
         }
     }
 
+    private void LateUpdate()
+    {
+        GameController.Instance.GameUI.SetUIText(GameUI.UIElement.Fuel, Mathf.RoundToInt(fuel));
+    }
+
     private void FixedUpdate()
     {
+        fuel -= fuelBurnRate * Time.fixedDeltaTime;
+        if(fuel < 0.0f)
+        {
+            ShutDown();
+        }
+
         Vector3 worldForward = cameraTransform != null ? cameraTransform.forward : Vector3.forward;
         worldForward.y = 0;
         worldForward.Normalize();
@@ -183,5 +203,11 @@ public class HeliController : MonoBehaviour
         rb.AddForceAtPosition(tailOffset.right * tailDragForce, tailOffset.position, ForceMode.Force);
 
         speed = rb.velocity.magnitude * 60 * 60 / 1000;
+    }
+
+    public void OnItemPickedUp(Pickup pickup)
+    {
+        Refuel();
+        GetComponent<Health>().Heal();
     }
 }

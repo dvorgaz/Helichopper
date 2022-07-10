@@ -56,4 +56,9 @@ public class Health : MonoBehaviour
 
         //Destroy(gameObject);
     }
+
+    public void Heal()
+    {
+        Hp = maxHealth;
+    }
 }

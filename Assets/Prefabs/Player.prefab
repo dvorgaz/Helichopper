@@ -460,6 +460,8 @@ MonoBehaviour:
   maxThrust: 550000
   maxVerticalThrust: 270000
   turnRate: 80000
+  maxFuel: 100
+  fuelBurnRate: 0.25
   speed: 0
   rotorTilt: {x: 0, y: 0, z: 0}
   maxRotorTilt: 45
@@ -482,8 +484,9 @@ MonoBehaviour:
   targetingRange: 100
   targetingAngle: 20
   flarePrefab: {fileID: 7883236679921625398, guid: ea6184a6d39028d4e939745bea49049b, type: 3}
-  flareCount: 4
-  flareInterval: 0.2
+  flareBurstCount: 4
+  flareBurstInterval: 0.2
+  maxFlareAmount: 64
 --- !u!114 &1931832463046917380
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1486,6 +1489,10 @@ PrefabInstance:
     - target: {fileID: 861582365266140286, guid: 030f80ffc20aec54a80f042d50046855, type: 3}
       propertyPath: m_Name
       value: HydraLauncher
+      objectReference: {fileID: 0}
+    - target: {fileID: 6861817418690626442, guid: 030f80ffc20aec54a80f042d50046855, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -1.159
       objectReference: {fileID: 0}
     - target: {fileID: 7901879363373883155, guid: 030f80ffc20aec54a80f042d50046855, type: 3}
       propertyPath: m_RootOrder

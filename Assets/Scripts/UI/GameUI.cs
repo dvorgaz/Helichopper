@@ -14,6 +14,7 @@ public class GameUI : MonoBehaviour
         Gun,
         Rocket,
         Missile,
+        Flares,
         Num
     }
 

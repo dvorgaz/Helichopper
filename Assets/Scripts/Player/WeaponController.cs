@@ -17,9 +17,12 @@ public class WeaponController : MonoBehaviour
 
     private List<Transform> flareLaunchers;
     [SerializeField] private GameObject flarePrefab;
-    [SerializeField] private int flareCount;
-    [SerializeField] private float flareInterval;    
+    [SerializeField] private int flareBurstCount;
+    [SerializeField] private float flareBurstInterval;
+    [SerializeField] private int maxFlareAmount;
+    private int flareAmount;
 
+    private Health closestTarget;
     private RectTransform crosshairTransform;
     private Camera mainCamera;    
 
@@ -56,6 +59,8 @@ public class WeaponController : MonoBehaviour
         {
             Debug.LogError("Game object: " + gameObject.name + " missing FlareLaunchers node");
         }
+
+        flareAmount = maxFlareAmount;
     }
 
     // Update is called once per frame
@@ -85,7 +90,7 @@ public class WeaponController : MonoBehaviour
                 if (targetingPoint != Vector3.zero)
                 {
                     if (Weapon)
-                        Weapon.Fire(adjustedTargetingPoint);
+                        Weapon.Fire(adjustedTargetingPoint, closestTarget != null ? closestTarget.transform : null);
                 }
                 else
                 {
@@ -96,8 +101,7 @@ public class WeaponController : MonoBehaviour
 
             if (Input.GetKeyDown(KeyCode.R))
             {
-                if (Weapon)
-                    Weapon.Reload();
+                Rearm();
             }
 
             if (Input.GetKeyDown(KeyCode.F))
@@ -129,6 +133,7 @@ public class WeaponController : MonoBehaviour
         }
 
         ui.SetUIText(GameUI.UIElement.Armor, health.Hp);
+        ui.SetUIText(GameUI.UIElement.Flares, flareAmount);
     }
 
     private void FixedUpdate()
@@ -141,7 +146,8 @@ public class WeaponController : MonoBehaviour
         Vector3 planeL = Vector3.Cross(Vector3.up, dirSideL);
 
         float closestDist = float.MaxValue;
-        Health closestTarget = null;
+        closestTarget = null;
+        float range = Weapon != null ? Weapon.Range : targetingRange;
 
         foreach (Health target in FindObjectsOfType<Health>())
         {
@@ -161,7 +167,7 @@ public class WeaponController : MonoBehaviour
 
             float dist = Vector3.Magnitude(target.transform.position - transform.position);
 
-            if (dist > targetingRange)
+            if (dist > range)
                 continue;
 
             if (dist < closestDist)
@@ -180,7 +186,7 @@ public class WeaponController : MonoBehaviour
         {
             //Vector3 idleDir = Quaternion.AngleAxis(15.0f, Vector3.Cross(Vector3.up, dir)) * dir;
             Vector3 idleDir = Vector3.ProjectOnPlane(transform.forward, Vector3.up).normalized;
-            float idleDist = targetingRange / 2.0f;
+            float idleDist = targetingRange * 0.8f;
             Vector3 groundPoint = transform.position + idleDir * idleDist;
 
             RaycastHit hit;
@@ -198,26 +204,44 @@ public class WeaponController : MonoBehaviour
         }
     }
 
+    public void Rearm()
+    {
+        foreach(WeaponLauncher weapon in weapons)
+        {
+            weapon.Reload();
+        }
+
+        flareAmount = maxFlareAmount;
+    }
+
     void LaunchFlares()
     {
         foreach(Transform launcher in flareLaunchers)
         {
-            Instantiate(flarePrefab, launcher.position, launcher.rotation).GetComponent<Rigidbody>().velocity = rb.velocity;
+            if (flareAmount > 0)
+            {
+                Instantiate(flarePrefab, launcher.position, launcher.rotation).GetComponent<Rigidbody>().velocity = rb.velocity;
+                flareAmount--;
+            }
+            else
+            {
+                break;
+            }
         }
     }
 
     IEnumerator LaunchFlareCoroutine()
     {
-        for(int i = 0; i < flareCount; ++i)
+        for(int i = 0; i < flareBurstCount; ++i)
         {
             LaunchFlares();
-            yield return new WaitForSeconds(flareInterval);
+            yield return new WaitForSeconds(flareBurstInterval);
         }
     }
 
     public void OnItemPickedUp(Pickup pickup)
     {
+        Rearm();
         Debug.Log("Item processed: " + pickup.gameObject.name);
-        Destroy(pickup.gameObject);
     }
 }

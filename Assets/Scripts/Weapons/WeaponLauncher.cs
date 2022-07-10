@@ -15,7 +15,9 @@ public class WeaponLauncher : MonoBehaviour
     [SerializeField] private float rateOfFire; // rounds per minute
     [SerializeField] private int burstLength;
     [SerializeField] private int shotsMax = 0;
+    [SerializeField] private float range;
     public int ShotsLeft { get; private set; }
+    public float Range { get { return range; } }
 
     private GameObject weaponModel;
     private ParticleSystem[] particleSystems;
@@ -99,22 +101,22 @@ public class WeaponLauncher : MonoBehaviour
         }
     }
 
-    public void Fire(Vector3 targetPoint, Rigidbody launchPlatform = null)
+    public void Fire(Vector3 targetPoint, Transform lockedTarget = null, Rigidbody launchPlatform = null)
     {
         isFiring = true;
 
         if (CanFire())
         {           
-            FireProjectile(targetPoint, launchPlatform);
+            FireProjectile(targetPoint, lockedTarget, launchPlatform);
         }
     }
 
     public void Fire(Rigidbody launchPlatform = null)
     {
-        Fire(transform.position + transform.forward, launchPlatform);
+        Fire(transform.position + transform.forward, null, launchPlatform);
     }
 
-    private void FireProjectile(Vector3 targetPoint, Rigidbody launchPlatform)
+    private void FireProjectile(Vector3 targetPoint, Transform lockedTarget, Rigidbody launchPlatform)
     {
         lastShotTime = Time.time;
 
@@ -138,6 +140,16 @@ public class WeaponLauncher : MonoBehaviour
             if (rb != null)
             {
                 rb.velocity = launchPlatform.velocity;
+            }
+        }
+
+        if(lockedTarget != null)
+        {
+            TargetHoming homing = obj.GetComponent<TargetHoming>();
+            if (homing != null)
+            {
+                homing.target = lockedTarget;
+                obj.transform.rotation = transform.rotation;
             }
         }
 

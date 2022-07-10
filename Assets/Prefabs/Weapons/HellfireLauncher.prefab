@@ -49,7 +49,9 @@ MonoBehaviour:
   firingMode: 0
   spread: 0
   rateOfFire: 100
-  burstCount: 0
+  burstLength: 0
+  shotsMax: 0
+  range: 150
 --- !u!1 &7158312112252728201
 GameObject:
   m_ObjectHideFlags: 0
