@@ -50,6 +50,7 @@ MonoBehaviour:
   thickness: 0.25
   iterations: 40
   speed: 0.7
+  rotationSmoothing: 20
 --- !u!120 &280072018708828568
 LineRenderer:
   m_ObjectHideFlags: 0

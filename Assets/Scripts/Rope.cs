@@ -24,18 +24,15 @@ public class Rope : MonoBehaviour
     private List<RopeSegment> ropeSegments = new List<RopeSegment>();
     private LineRenderer lineRenderer;
     private Transform ropeEndNode;
-    private float ropePosition = 0.0f;
-    private float targetPosition;
+    private float targetPosition = 0.0f;
     [SerializeField] private float speed;
+    [SerializeField] float rotationSmoothing;
 
     public delegate void RopeDelegate();
     public RopeDelegate OnRetracted;
     public RopeDelegate OnExtended;
 
-    public float Position
-    {
-        get { return ropePosition; }
-    }
+    public float Position { get; private set; } = 0.0f;
 
     public float TargetPosition
     {
@@ -77,25 +74,24 @@ public class Rope : MonoBehaviour
     void Start()
     {
         lineRenderer = GetComponent<LineRenderer>();
-        targetPosition = ropePosition;
     }
 
     // Update is called once per frame
     void LateUpdate()
     {
         float epsilon = 0.01f;
-        bool wasRetracted = ropePosition < epsilon;
-        bool wasExtended = ropePosition > 1.0f - epsilon;
+        bool wasRetracted = Position < epsilon;
+        bool wasExtended = Position > 1.0f - epsilon;
 
-        ropePosition = Mathf.MoveTowards(ropePosition, TargetPosition, speed * Time.deltaTime);
-        ropePosition = Mathf.Clamp(ropePosition, 0.0f, 1.0f);
+        Position = Mathf.MoveTowards(Position, TargetPosition, speed * Time.deltaTime);
+        Position = Mathf.Clamp(Position, 0.0f, 1.0f);
 
-        if(!wasRetracted && ropePosition < epsilon && OnRetracted != null)
+        if(!wasRetracted && Position < epsilon && OnRetracted != null)
         {
             OnRetracted();
         }
 
-        if (!wasExtended && (ropePosition > 1.0f - epsilon) && OnExtended != null)
+        if (!wasExtended && (Position > 1.0f - epsilon) && OnExtended != null)
         {
             OnExtended();
         }
@@ -109,7 +105,8 @@ public class Rope : MonoBehaviour
 
         Vector3 dir = ropeSegments[ropeSegments.Count - 2].position - ropeSegments[ropeSegments.Count - 1].position;
         dir.Normalize();
-        ropeEndNode.rotation = Quaternion.FromToRotation(ropeEndNode.up, dir) * ropeEndNode.rotation;
+        Quaternion targetRot = Quaternion.FromToRotation(ropeEndNode.up, dir) * ropeEndNode.rotation;
+        ropeEndNode.rotation = Quaternion.Slerp(ropeEndNode.rotation, targetRot, Time.fixedDeltaTime * rotationSmoothing);
         ropeEndNode.position = ropeSegments[ropeSegments.Count - 1].position;
     }
 
@@ -148,7 +145,17 @@ public class Rope : MonoBehaviour
             ApplyConstraints();
         }
 
-        PickupConstraint = Vector3.zero;
+        if (PickupConstraint != Vector3.zero)
+        {
+            for (int i = 1; i < numSegments; i++)
+            {
+                RopeSegment firstSegment = ropeSegments[i];
+                firstSegment.lastPosition = firstSegment.position;
+                ropeSegments[i] = firstSegment;
+            }
+
+            PickupConstraint = Vector3.zero;
+        }
     }
 
     private void ApplyConstraints()
@@ -157,7 +164,7 @@ public class Rope : MonoBehaviour
         firstSegment.position = transform.position;
         ropeSegments[0] = firstSegment;
 
-        float invPos = 1.0f - ropePosition;
+        float invPos = 1.0f - Position;
         float s = 1.0f / (numSegments - 1);
         int sectionIdx = Mathf.FloorToInt(invPos / s);
         float sectionFraction = 1.0f - (Mathf.Repeat(invPos, s) / s);

@@ -79,7 +79,6 @@ public class Winch : MonoBehaviour
         rope.gameObject.SetActive(true);
         rope.TargetPosition = 1.0f;
 
-        //audioSrc.pitch = 0.95f;
         if (rope.Position < 0.9f)
             audioSrc.Play();
     }
@@ -89,7 +88,6 @@ public class Winch : MonoBehaviour
         delayedRetract = false;
         rope.TargetPosition = 0.0f;
 
-        //audioSrc.pitch = 1.0f;
         if (rope.Position > 0.1f)
             audioSrc.Play();
     }
@@ -106,6 +104,11 @@ public class Winch : MonoBehaviour
             pickedItem = null;
 
             audioSrc.PlayOneShot(pickupSfx);
+
+            if(pickupsInRange > 0)
+            {
+                Extend();
+            }
         }        
     }
 
