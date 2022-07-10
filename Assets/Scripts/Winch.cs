@@ -11,9 +11,12 @@ public class Winch : MonoBehaviour
     private Pickup pickedItem;
     private AudioSource audioSrc;
     [SerializeField] private float hookRadius;
-
     [SerializeField] private AudioClip hookConnectSfx;
     [SerializeField] private AudioClip pickupSfx;
+    [SerializeField] private float stayExtendedTime;
+    [SerializeField] private GameObject hookPrefab;
+    private float lastExtendedTime;
+    private bool delayedRetract = false;
 
     // Start is called before the first frame update
     void Start()
@@ -24,17 +27,16 @@ public class Winch : MonoBehaviour
         rope.OnRetracted += OnRopeRetracted;
         rope.OnExtended += OnRopeExtended;
         audioSrc = GetComponent<AudioSource>();
+
+        Instantiate(hookPrefab, hookNode);
     }
 
     // Update is called once per frame
     void Update()
     {
-        if(Input.GetKeyDown(KeyCode.V) && pickedItem != null)
+        if (delayedRetract && (Time.time - lastExtendedTime > stayExtendedTime))
         {
-            pickedItem.transform.parent = null;
-            pickedItem.GetComponent<Rigidbody>().isKinematic = false;
-            pickedItem = null;
-            Retract();
+            Retract();            
         }
     }
 
@@ -49,15 +51,7 @@ public class Winch : MonoBehaviour
                     Pickup item = coll.GetComponent<Pickup>();
                     if(item != null)
                     {
-                        pickedItem = item;
-                        pickedItem.transform.position = hookNode.position;
-                        pickedItem.transform.parent = hookNode;
-                        pickedItem.OnHooked();
-                        Debug.Log("Item: " + pickedItem.gameObject.name + " picked up");
-
-                        audioSrc.PlayOneShot(hookConnectSfx);
-                        Retract();
-
+                        AttachItem(item);
                         break;
                     }
                 }
@@ -65,21 +59,39 @@ public class Winch : MonoBehaviour
         }
     }
 
+    private void AttachItem(Pickup item)
+    {
+        rope.PickupConstraint = item.transform.position + item.AttachOffset;
+        pickedItem = item;
+        pickedItem.transform.position = hookNode.position - item.AttachOffset;
+        pickedItem.transform.parent = hookNode;
+        pickedItem.OnHooked();
+        Debug.Log("Item: " + pickedItem.gameObject.name + " picked up");
+
+        audioSrc.PlayOneShot(hookConnectSfx);
+        Retract();
+    }
+
     private void Extend()
     {
+        delayedRetract = false;
+        lastExtendedTime = Time.time;
         rope.gameObject.SetActive(true);
         rope.TargetPosition = 1.0f;
 
-        audioSrc.pitch = 0.95f;
-        audioSrc.Play();
+        //audioSrc.pitch = 0.95f;
+        if (rope.Position < 0.9f)
+            audioSrc.Play();
     }
 
     private void Retract()
     {
+        delayedRetract = false;
         rope.TargetPosition = 0.0f;
 
-        audioSrc.pitch = 1.0f;
-        audioSrc.Play();
+        //audioSrc.pitch = 1.0f;
+        if (rope.Position > 0.1f)
+            audioSrc.Play();
     }
 
     private void OnRopeRetracted()
@@ -124,10 +136,8 @@ public class Winch : MonoBehaviour
 
             pickupsInRange--;
 
-            if (pickupsInRange <= 0 && pickedItem == null)
-            {
-                Retract();
-            }
+            lastExtendedTime = Time.time;
+            delayedRetract = true;
         }        
     }
 }

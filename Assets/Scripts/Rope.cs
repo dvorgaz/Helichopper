@@ -20,7 +20,7 @@ public class Rope : MonoBehaviour
     private float segmentLength;
     [Range(3, 20)] [SerializeField] private int numSegments;    
     [SerializeField] private float thickness;
-    [Range(10, 50)] [SerializeField] private int iterations;
+    [Range(1, 50)] [SerializeField] private int iterations;
     private List<RopeSegment> ropeSegments = new List<RopeSegment>();
     private LineRenderer lineRenderer;
     private Transform ropeEndNode;
@@ -32,10 +32,21 @@ public class Rope : MonoBehaviour
     public RopeDelegate OnRetracted;
     public RopeDelegate OnExtended;
 
+    public float Position
+    {
+        get { return ropePosition; }
+    }
+
     public float TargetPosition
     {
         get { return targetPosition; }
         set { targetPosition = Mathf.Clamp(value, 0.0f, 1.0f); }
+    }
+
+    public Vector3 PickupConstraint
+    {
+        get;
+        set;
     }
 
     public Transform GetEndNode()
@@ -58,6 +69,8 @@ public class Rope : MonoBehaviour
         ropeEndNode = obj.transform;
         ropeEndNode.parent = transform;
         ropeEndNode.position = ropeSegments[ropeSegments.Count - 1].position;
+
+        PickupConstraint = Vector3.zero;
     }
 
     // Start is called before the first frame update
@@ -70,27 +83,19 @@ public class Rope : MonoBehaviour
     // Update is called once per frame
     void LateUpdate()
     {
-        if(Input.GetKey(KeyCode.T))
-        {
-            TargetPosition -= speed * Time.deltaTime;
-        }
-        else if (Input.GetKey(KeyCode.G))
-        {
-            TargetPosition += speed * Time.deltaTime;
-        }
-
-        bool wasRetracted = ropePosition == 0.0f;
-        bool wasExtended = ropePosition == 1.0f;
+        float epsilon = 0.01f;
+        bool wasRetracted = ropePosition < epsilon;
+        bool wasExtended = ropePosition > 1.0f - epsilon;
 
         ropePosition = Mathf.MoveTowards(ropePosition, TargetPosition, speed * Time.deltaTime);
         ropePosition = Mathf.Clamp(ropePosition, 0.0f, 1.0f);
 
-        if(!wasRetracted && ropePosition == 0.0f && OnRetracted != null)
+        if(!wasRetracted && ropePosition < epsilon && OnRetracted != null)
         {
             OnRetracted();
         }
 
-        if (!wasExtended && ropePosition == 1.0f && OnExtended != null)
+        if (!wasExtended && (ropePosition > 1.0f - epsilon) && OnExtended != null)
         {
             OnExtended();
         }
@@ -142,6 +147,8 @@ public class Rope : MonoBehaviour
         {
             ApplyConstraints();
         }
+
+        PickupConstraint = Vector3.zero;
     }
 
     private void ApplyConstraints()
@@ -159,6 +166,11 @@ public class Rope : MonoBehaviour
         {
             RopeSegment firstSeg = ropeSegments[i];
             RopeSegment secondSeg = ropeSegments[i + 1];
+
+            if((i == numSegments - 2) && PickupConstraint != Vector3.zero)
+            {
+                secondSeg.position = PickupConstraint;
+            }
 
             if(i <= sectionIdx)
             {

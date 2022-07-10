@@ -5,7 +5,13 @@ using UnityEngine;
 [RequireComponent(typeof(Rigidbody))]
 public class Pickup : MonoBehaviour
 {
+    [SerializeField] private float attachOffsetY;
     private Rigidbody rb;
+
+    public Vector3 AttachOffset
+    {
+        get { return transform.up * attachOffsetY; }
+    }
 
     // Start is called before the first frame update
     void Start()
