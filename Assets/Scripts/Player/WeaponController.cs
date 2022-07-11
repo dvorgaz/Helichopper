@@ -184,14 +184,14 @@ public class WeaponController : MonoBehaviour
         }
         else
         {
-            //Vector3 idleDir = Quaternion.AngleAxis(15.0f, Vector3.Cross(Vector3.up, dir)) * dir;
-            Vector3 idleDir = Vector3.ProjectOnPlane(transform.forward, Vector3.up).normalized;
-            float idleDist = targetingRange * 0.8f;
-            Vector3 groundPoint = transform.position + idleDir * idleDist;
+            Vector3 idleDir = Quaternion.AngleAxis(25.0f, Vector3.Cross(Vector3.up, dir)) * dir;
+            //Vector3 idleDir = Vector3.ProjectOnPlane(transform.forward, Vector3.up).normalized;
+            //float idleDist = targetingRange * 0.8f;
+            //Vector3 groundPoint = transform.position + idleDir * idleDist;
 
             RaycastHit hit;
-            //if (Physics.Raycast(transform.position, idleDir, out hit, 200.0f, LayerMask.GetMask("Default", "Vehicle"), QueryTriggerInteraction.Ignore))
-            if (Physics.Raycast(groundPoint, -Vector3.up, out hit, 200.0f, LayerMask.GetMask("Default", "Vehicle"), QueryTriggerInteraction.Ignore))
+            if (Physics.Raycast(transform.position, idleDir, out hit, 200.0f, LayerMask.GetMask("Default", "Vehicle"), QueryTriggerInteraction.Ignore))
+            //if (Physics.Raycast(groundPoint, -Vector3.up, out hit, 200.0f, LayerMask.GetMask("Default", "Vehicle"), QueryTriggerInteraction.Ignore))
             {
                 targetingPoint = hit.point;
             }

@@ -139,7 +139,7 @@ public class WeaponLauncher : MonoBehaviour
             Rigidbody rb = obj.GetComponent<Rigidbody>();
             if (rb != null)
             {
-                rb.velocity = launchPlatform.velocity;
+                rb.velocity = Vector3.ProjectOnPlane(launchPlatform.velocity, obj.transform.forward);
             }
         }
 

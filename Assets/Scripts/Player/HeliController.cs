@@ -19,23 +19,29 @@ public class HeliController : MonoBehaviour
     [SerializeField] private Vector3 rotorTilt = Vector3.zero;
     [SerializeField] private float maxRotorTilt;
     [SerializeField] private float tiltSmooth;
-    [SerializeField] private bool useAngularVelocity;
     [SerializeField] private bool useSmoothing;
 
     private Transform cameraTransform;
+    private Transform groundContact;
     private Transform tailOffset;
     [SerializeField] private float tailDrag;
+    [SerializeField] private float landingHeight;
 
     private bool controllingCyclic = false;
     private bool thrustEnabled = true;
-
     private bool controlEnabled = true;
+    private bool isLanding = false;
+    private bool isOnGround = false;
 
     private void Awake()
     {
         tailOffset = transform.Find("TailOffset");
         if (tailOffset == null)
             Debug.LogError("Object: " + gameObject.name + " missing TailOffset node");
+
+        groundContact = transform.Find("GroundContact");
+        if (groundContact == null)
+            Debug.LogError("Object: " + gameObject.name + " missing GroundContact node");
     }
 
     // Start is called before the first frame update
@@ -43,11 +49,12 @@ public class HeliController : MonoBehaviour
     {
         rb = GetComponent<Rigidbody>();
         rb.centerOfMass = Vector3.zero;
+        rb.maxAngularVelocity = 70;
         cameraTransform = Camera.main.transform;
         fuel = maxFuel;
     }
 
-    void ToggleCyclicContorl()
+    void ToggleCyclicControl()
     {
         controllingCyclic = !controllingCyclic;
         Cursor.visible = !controllingCyclic;
@@ -77,7 +84,7 @@ public class HeliController : MonoBehaviour
     {
         if(Input.GetMouseButtonDown(1))
         {
-            ToggleCyclicContorl();
+            ToggleCyclicControl();
         }
         if (Input.GetMouseButtonUp(2))
         {
@@ -86,7 +93,7 @@ public class HeliController : MonoBehaviour
 
         Vector3 mouseDelta = new Vector3(Input.GetAxis("Mouse X"), Input.GetAxis("Mouse Y"), 0);
 
-        if (controllingCyclic)
+        if (controllingCyclic && thrustEnabled)
         {
             rotorTilt += mouseDelta * mouseRate;
 
@@ -115,6 +122,16 @@ public class HeliController : MonoBehaviour
             ShutDown();
         }
 
+        UpdateRotorTilt();
+        UpdateVerticalMove();
+        UpdateHorizontalTurn();
+        CheckLanding();
+
+        speed = rb.velocity.magnitude * 60 * 60 / 1000;
+    }
+
+    private void UpdateRotorTilt()
+    {
         Vector3 worldForward = cameraTransform != null ? cameraTransform.forward : Vector3.forward;
         worldForward.y = 0;
         worldForward.Normalize();
@@ -126,36 +143,26 @@ public class HeliController : MonoBehaviour
 
         if (thrustEnabled)
         {
-            if (useAngularVelocity)
-            {
-                Vector3 targetTilt = useSmoothing ? Vector3.Slerp(transform.up, tiltVector, tiltSmooth * Time.fixedDeltaTime) : tiltVector;
-                Quaternion deltaQuat = Quaternion.FromToRotation(transform.up, targetTilt);
-                Vector3 axis;
-                float angle;
-                deltaQuat.ToAngleAxis(out angle, out axis);
+            Vector3 targetTilt = useSmoothing ? Vector3.Slerp(transform.up, tiltVector, tiltSmooth * Time.fixedDeltaTime) : tiltVector;
+            Quaternion deltaQuat = Quaternion.FromToRotation(transform.up, targetTilt);
+            Vector3 axis;
+            float angle;
+            deltaQuat.ToAngleAxis(out angle, out axis);
 
-                Vector3 yAngVel = transform.up * Vector3.Dot(transform.up, rb.angularVelocity);
-                float tiltRate = angle * Mathf.Deg2Rad / Time.fixedDeltaTime;
-                rb.maxAngularVelocity = 70;
-                rb.angularVelocity = axis * tiltRate + yAngVel;
-            }
-            else
-            {
-                Vector3 newRight = Vector3.Cross(tiltVector, transform.forward);
-                Vector3 newForward = Vector3.Cross(newRight, tiltVector);
-                Quaternion targetRotation = Quaternion.LookRotation(newForward, tiltVector);
+            Vector3 yAngVel = transform.up * Vector3.Dot(transform.up, rb.angularVelocity);
+            float tiltRate = angle * Mathf.Deg2Rad / Time.fixedDeltaTime;            
+            rb.angularVelocity = axis * tiltRate + yAngVel;
 
-                if (useSmoothing)
-                {
-                    transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, tiltSmooth * Time.fixedDeltaTime);
-                }
-                else
-                {
-                    transform.rotation = targetRotation;
-                }
-            }
+            Vector3 dir = Vector3.ProjectOnPlane(transform.up, Vector3.up);
+            if (isLanding)
+                dir *= 0.5f;
+
+            rb.AddForce(dir * maxThrust, ForceMode.Force);
         }
+    }
 
+    private void UpdateVerticalMove()
+    {
         float vertical = 0.0f;
 
         if (controlEnabled)
@@ -163,24 +170,27 @@ public class HeliController : MonoBehaviour
             if (Input.GetKey(KeyCode.W))
             {
                 vertical += 1;
+                if (isOnGround)
+                {
+                    isOnGround = false;
+                    thrustEnabled = true;
+                }
             }
 
             if (Input.GetKey(KeyCode.S))
             {
-                vertical -= 1;
+                vertical -= 1 * (isLanding ? 0.5f : 1.0f);
             }
         }
 
         if (thrustEnabled)
         {
             rb.AddForce(rb.mass * -Physics.gravity + (Vector3.up * vertical * maxVerticalThrust), ForceMode.Force);
-
-            Vector3 dir = transform.up - Vector3.up;
-            dir.y = 0;
-
-            rb.AddForce(dir * maxThrust, ForceMode.Force);
         }
+    }
 
+    private void UpdateHorizontalTurn()
+    {
         float horizontal = 0.0f;
 
         if (controlEnabled)
@@ -201,13 +211,47 @@ public class HeliController : MonoBehaviour
         Vector3 flow = -rb.velocity.normalized;
         float tailDragForce = Vector3.Dot(tailOffset.right, flow) * tailDrag * rb.velocity.sqrMagnitude;
         rb.AddForceAtPosition(tailOffset.right * tailDragForce, tailOffset.position, ForceMode.Force);
+    }
 
-        speed = rb.velocity.magnitude * 60 * 60 / 1000;
+    private void CheckLanding()
+    {
+        if (!isLanding)
+            return;
+
+        float heightOffset = 10.0f;
+        RaycastHit hit;
+        if (Physics.Raycast(groundContact.position + Vector3.up * heightOffset, -Vector3.up, out hit, heightOffset + landingHeight + 1.0f, LayerMask.GetMask("Default"), QueryTriggerInteraction.Ignore))
+        {
+            if(hit.distance < heightOffset + landingHeight)
+            {
+                isOnGround = true;
+                thrustEnabled = false;
+                rotorTilt = Vector3.zero;
+            }
+        }
     }
 
     public void OnItemPickedUp(Pickup pickup)
     {
         Refuel();
         GetComponent<Health>().Heal();
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if(other.CompareTag("LandingZone"))
+        {
+            Debug.Log("Entering landing zone");
+            isLanding = true;
+        }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.CompareTag("LandingZone"))
+        {
+            Debug.Log("Leaving landing zone");
+            isLanding = false;
+        }
     }
 }
