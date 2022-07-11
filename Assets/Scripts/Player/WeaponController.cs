@@ -83,7 +83,7 @@ public class WeaponController : MonoBehaviour
             crosshairTransform.position = mainCamera.WorldToScreenPoint(adjustedTargetingPoint);
         }
 
-        if (health.Alive)
+        if (health.Alive && GameController.Instance.CanProcessGameInput)
         {
             if (Input.GetMouseButton(0))
             {

@@ -32,6 +32,7 @@ public class HeliController : MonoBehaviour
     private bool controlEnabled = true;
     private bool isLanding = false;
     private bool isOnGround = false;
+    private float lastLandingTime = 0.0f;
 
     private void Awake()
     {
@@ -52,11 +53,17 @@ public class HeliController : MonoBehaviour
         rb.maxAngularVelocity = 70;
         cameraTransform = Camera.main.transform;
         fuel = maxFuel;
+        lastLandingTime = Time.time;
     }
 
     void ToggleCyclicControl()
     {
-        controllingCyclic = !controllingCyclic;
+        SetCyclicControl(!controllingCyclic);
+    }
+
+    void SetCyclicControl(bool enable)
+    {
+        controllingCyclic = enable;
         Cursor.visible = !controllingCyclic;
         Cursor.lockState = controllingCyclic ? CursorLockMode.Locked : CursorLockMode.None;
     }
@@ -64,6 +71,12 @@ public class HeliController : MonoBehaviour
     public void OnDeath()
     {
         ShutDown();
+        Invoke("NotifyDeath", 2.0f);
+    }
+
+    private void NotifyDeath()
+    {
+        GameController.Instance.OnPlayerDead();
     }
 
     public void Refuel()
@@ -82,30 +95,33 @@ public class HeliController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(Input.GetMouseButtonDown(1))
+        if (GameController.Instance.CanProcessGameInput)
         {
-            ToggleCyclicControl();
-        }
-        if (Input.GetMouseButtonUp(2))
-        {
-            thrustEnabled = !thrustEnabled && controlEnabled;
-        }
-
-        Vector3 mouseDelta = new Vector3(Input.GetAxis("Mouse X"), Input.GetAxis("Mouse Y"), 0);
-
-        if (controllingCyclic && thrustEnabled)
-        {
-            rotorTilt += mouseDelta * mouseRate;
-
-            if (rotorTilt.magnitude > maxRotorTilt)
+            if (Input.GetMouseButtonDown(1))
             {
-                rotorTilt = rotorTilt.normalized * maxRotorTilt;
+                ToggleCyclicControl();
             }
-        }
+            //if (Input.GetMouseButtonUp(2))
+            //{
+            //    thrustEnabled = !thrustEnabled && controlEnabled;
+            //}
 
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            rotorTilt = Vector3.zero;
+            Vector3 mouseDelta = new Vector3(Input.GetAxis("Mouse X"), Input.GetAxis("Mouse Y"), 0);
+
+            if (controllingCyclic && thrustEnabled)
+            {
+                rotorTilt += mouseDelta * mouseRate;
+
+                if (rotorTilt.magnitude > maxRotorTilt)
+                {
+                    rotorTilt = rotorTilt.normalized * maxRotorTilt;
+                }
+            }
+
+            if (Input.GetKeyDown(KeyCode.Space))
+            {
+                rotorTilt = Vector3.zero;
+            }
         }
     }
 
@@ -124,8 +140,7 @@ public class HeliController : MonoBehaviour
 
         UpdateRotorTilt();
         UpdateVerticalMove();
-        UpdateHorizontalTurn();
-        CheckLanding();
+        UpdateHorizontalTurn();        
 
         speed = rb.velocity.magnitude * 60 * 60 / 1000;
     }
@@ -164,16 +179,20 @@ public class HeliController : MonoBehaviour
     private void UpdateVerticalMove()
     {
         float vertical = 0.0f;
+        bool ignoreLanding = false;
 
         if (controlEnabled)
         {
             if (Input.GetKey(KeyCode.W))
             {
                 vertical += 1;
+
+                ignoreLanding = true;
                 if (isOnGround)
                 {
                     isOnGround = false;
                     thrustEnabled = true;
+                    lastLandingTime = Time.time;
                 }
             }
 
@@ -187,6 +206,9 @@ public class HeliController : MonoBehaviour
         {
             rb.AddForce(rb.mass * -Physics.gravity + (Vector3.up * vertical * maxVerticalThrust), ForceMode.Force);
         }
+
+        if(!ignoreLanding)
+            CheckLanding();
     }
 
     private void UpdateHorizontalTurn()
@@ -224,9 +246,12 @@ public class HeliController : MonoBehaviour
         {
             if(hit.distance < heightOffset + landingHeight)
             {
+                if (!isOnGround)
+                    OnLanded();
+
                 isOnGround = true;
                 thrustEnabled = false;
-                rotorTilt = Vector3.zero;
+                rotorTilt = Vector3.zero;                
             }
         }
     }
@@ -253,5 +278,26 @@ public class HeliController : MonoBehaviour
             Debug.Log("Leaving landing zone");
             isLanding = false;
         }
+    }
+
+    private void OnLanded()
+    {
+        if (Time.time - lastLandingTime > 1.0f)
+        {
+            Invoke("TryRearm", 2.0f);
+        }
+    }
+
+    private void TryRearm()
+    {
+        if(isOnGround)
+        {
+            GameController.Instance.OnLandedOnBase();
+        }
+    }
+
+    public void ControlEnable(bool enabled)
+    {
+        SetCyclicControl(enabled);
     }
 }

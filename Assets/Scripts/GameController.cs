@@ -10,6 +10,10 @@ public class GameController : MonoBehaviour
     [SerializeField] private GameObject gameUIPrefab;
     public GameUI GameUI { get; private set; }
 
+    private GameObject player;
+
+    public bool CanProcessGameInput { get; private set; } = false;
+
     private void Awake()
     {
         if(Instance != null && Instance != this)
@@ -28,7 +32,9 @@ public class GameController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        player = GameObject.FindGameObjectWithTag("Player");
+        ShowRearmMenu(true);
+        GameUI.ShowRetryButton(false);
     }
 
     // Update is called once per frame
@@ -41,7 +47,38 @@ public class GameController : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.F1))
         {
-            SceneManager.LoadScene("SampleScene");
+            Retry();
         }
+    }
+
+    public void OnLandedOnBase()
+    {
+        ShowRearmMenu(true);
+    }
+
+    public void ShowCursor(bool visible)
+    {
+        Cursor.visible = visible;
+        Cursor.lockState = visible ? CursorLockMode.None : CursorLockMode.Locked;
+    }
+
+    public void ShowRearmMenu(bool visible)
+    {
+        CanProcessGameInput = !visible;
+        ShowCursor(visible);
+        Time.timeScale = visible ? 0.0f : 1.0f;
+        GameUI.ShowRearmPane(visible);
+        player.SendMessage("ControlEnable", !visible);
+    }
+
+    public void Retry()
+    {
+        SceneManager.LoadScene("SampleScene");
+    }
+
+    public void OnPlayerDead()
+    {
+        ShowCursor(true);
+        GameUI.ShowRetryButton(true);
     }
 }

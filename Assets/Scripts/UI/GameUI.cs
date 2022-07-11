@@ -21,6 +21,9 @@ public class GameUI : MonoBehaviour
     [SerializeField]
     private TextMeshProUGUI[] texts;
 
+    [SerializeField] private GameObject rearmPanel;
+    [SerializeField] private GameObject retryButton;
+
     private void Awake()
     {
         Transform tr = transform.Find("Crosshair");
@@ -42,7 +45,7 @@ public class GameUI : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        ShowRearmPane(true);
     }
 
     // Update is called once per frame
@@ -54,5 +57,25 @@ public class GameUI : MonoBehaviour
     public void SetUIText(UIElement element, int amount)
     {
         texts[(int)element].text = amount.ToString();
+    }
+
+    public void ShowRearmPane(bool visible)
+    {
+        rearmPanel.SetActive(visible);        
+    }
+
+    public void ShowRetryButton(bool visible)
+    {
+        retryButton.SetActive(visible);
+    }
+
+    public void OnRearmClose()
+    {
+        GameController.Instance.ShowRearmMenu(false);
+    }
+
+    public void OnRetry()
+    {
+        GameController.Instance.Retry();
     }
 }
