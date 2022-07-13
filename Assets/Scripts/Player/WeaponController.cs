@@ -14,6 +14,9 @@ public class WeaponController : MonoBehaviour
     private List<WeaponLauncher> weapons;
     private int currWeaponIdx = 0;
     private Vector3 targetingPoint = Vector3.zero;
+    private Vector3 adjustedTargetingPoint = Vector3.zero;
+
+    public Vector3 TargetPoint { get { return adjustedTargetingPoint; } }
 
     private List<Transform> flareLaunchers;
     [SerializeField] private GameObject flarePrefab;
@@ -25,6 +28,11 @@ public class WeaponController : MonoBehaviour
     private Health closestTarget;
     private RectTransform crosshairTransform;
     private Camera mainCamera;    
+
+    public Transform Target
+    {
+        get { return closestTarget != null ? closestTarget.transform : null; }
+    }
 
     public WeaponLauncher Weapon
     {
@@ -66,7 +74,7 @@ public class WeaponController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Vector3 adjustedTargetingPoint = targetingPoint;
+        adjustedTargetingPoint = targetingPoint;
 
         if(targetingPoint != Vector3.zero)
         {

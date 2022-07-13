@@ -20,6 +20,9 @@ public class HeliController : MonoBehaviour
     [SerializeField] private float maxRotorTilt;
     [SerializeField] private float tiltSmooth;
     [SerializeField] private bool useSmoothing;
+    private Vector3 worldTiltDir;
+
+    public Vector3 TiltDirection { get { return worldTiltDir; } }
 
     private Transform cameraTransform;
     private Transform groundContact;
@@ -153,7 +156,7 @@ public class HeliController : MonoBehaviour
         worldForward.Normalize();
 
         Vector3 worldRight = Vector3.Cross(Vector3.up, worldForward);
-        Vector3 worldTiltDir = worldRight * rotorTilt.x + worldForward * rotorTilt.y;
+        worldTiltDir = worldRight * rotorTilt.x + worldForward * rotorTilt.y;
         Vector3 tiltAxis = Vector3.Cross(Vector3.up, worldTiltDir).normalized;
         Vector3 tiltVector = Quaternion.AngleAxis(rotorTilt.magnitude, tiltAxis) * Vector3.up;
 
@@ -231,7 +234,7 @@ public class HeliController : MonoBehaviour
 
         if(Input.GetMouseButton(0))
         {
-            horizontal *= 0.5f;
+            horizontal *= 0.3f;
         }
 
         rb.AddForceAtPosition(tailOffset.right * turnRate * horizontal, tailOffset.position, ForceMode.Force);
