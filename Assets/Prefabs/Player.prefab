@@ -501,6 +501,7 @@ MonoBehaviour:
   useSmoothing: 1
   tailDrag: 100
   landingHeight: 1
+  maxAltitude: 70
 --- !u!114 &-6727588473569729473
 MonoBehaviour:
   m_ObjectHideFlags: 0

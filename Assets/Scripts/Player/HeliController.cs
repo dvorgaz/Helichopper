@@ -26,6 +26,7 @@ public class HeliController : MonoBehaviour
     private Transform tailOffset;
     [SerializeField] private float tailDrag;
     [SerializeField] private float landingHeight;
+    [SerializeField] private float maxAltitude;
 
     private bool controllingCyclic = false;
     private bool thrustEnabled = true;
@@ -202,7 +203,7 @@ public class HeliController : MonoBehaviour
             }
         }
 
-        if (thrustEnabled)
+        if (thrustEnabled && transform.position.y < maxAltitude)
         {
             rb.AddForce(rb.mass * -Physics.gravity + (Vector3.up * vertical * maxVerticalThrust), ForceMode.Force);
         }
@@ -228,11 +229,19 @@ public class HeliController : MonoBehaviour
             }
         }
 
+        if(Input.GetMouseButton(0))
+        {
+            horizontal *= 0.5f;
+        }
+
         rb.AddForceAtPosition(tailOffset.right * turnRate * horizontal, tailOffset.position, ForceMode.Force);
 
-        Vector3 flow = -rb.velocity.normalized;
-        float tailDragForce = Vector3.Dot(tailOffset.right, flow) * tailDrag * rb.velocity.sqrMagnitude;
-        rb.AddForceAtPosition(tailOffset.right * tailDragForce, tailOffset.position, ForceMode.Force);
+        if (!Input.GetMouseButton(0))
+        {
+            Vector3 flow = -rb.velocity.normalized;
+            float tailDragForce = Vector3.Dot(tailOffset.right, flow) * tailDrag * rb.velocity.sqrMagnitude;
+            rb.AddForceAtPosition(tailOffset.right * tailDragForce, tailOffset.position, ForceMode.Force);
+        }
     }
 
     private void CheckLanding()
