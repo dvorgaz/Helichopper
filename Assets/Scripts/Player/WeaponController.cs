@@ -17,17 +17,16 @@ public class WeaponController : MonoBehaviour
     private Vector3 adjustedTargetingPoint = Vector3.zero;
 
     public Vector3 TargetPoint { get { return adjustedTargetingPoint; } }
+    public bool ShowCrosshair { get; private set; } = false;
 
     private List<Transform> flareLaunchers;
     [SerializeField] private GameObject flarePrefab;
     [SerializeField] private int flareBurstCount;
     [SerializeField] private float flareBurstInterval;
     [SerializeField] private int maxFlareAmount;
-    private int flareAmount;
+    public int Flares { get; private set; }
 
-    private Health closestTarget;
-    private RectTransform crosshairTransform;
-    private Camera mainCamera;    
+    private Health closestTarget; 
 
     public Transform Target
     {
@@ -39,13 +38,16 @@ public class WeaponController : MonoBehaviour
         get { return currWeaponIdx < weapons.Count ? weapons[currWeaponIdx] : null; }
     }
 
+    public WeaponLauncher GetWeapon(int idx)
+    {
+        return idx < weapons.Count ? weapons[idx] : null;
+    }
+
     // Start is called before the first frame update
     void Start()
     {
         rb = GetComponent<Rigidbody>();
         health = GetComponent<Health>();
-        mainCamera = Camera.main;
-        crosshairTransform = GameController.Instance.GameUI.Crosshair;
 
         weapons = new List<WeaponLauncher>();
         foreach (WeaponLauncher weapon in GetComponentsInChildren<WeaponLauncher>())
@@ -68,7 +70,7 @@ public class WeaponController : MonoBehaviour
             Debug.LogError("Game object: " + gameObject.name + " missing FlareLaunchers node");
         }
 
-        flareAmount = maxFlareAmount;
+        Flares = maxFlareAmount;
     }
 
     // Update is called once per frame
@@ -87,8 +89,6 @@ public class WeaponController : MonoBehaviour
 
             dir = Quaternion.AngleAxis(angle, Vector3.up) * dir;
             adjustedTargetingPoint = dir + transform.position;
-
-            crosshairTransform.position = mainCamera.WorldToScreenPoint(adjustedTargetingPoint);
         }
 
         if (health.Alive && GameController.Instance.CanProcessGameInput)
@@ -130,18 +130,6 @@ public class WeaponController : MonoBehaviour
                 currWeaponIdx = 2;
             }
         }
-    }
-
-    private void LateUpdate()
-    {
-        GameUI ui = GameController.Instance.GameUI;
-        for (int i = 0; i < 3 && i < weapons.Count; ++i)
-        {
-            ui.SetUIText(GameUI.UIElement.Gun + i, weapons[i].ShotsLeft);
-        }
-
-        ui.SetUIText(GameUI.UIElement.Armor, health.Hp);
-        ui.SetUIText(GameUI.UIElement.Flares, flareAmount);
     }
 
     private void FixedUpdate()
@@ -188,7 +176,7 @@ public class WeaponController : MonoBehaviour
         if(closestTarget != null)
         {
             targetingPoint = closestTarget.transform.position;
-            crosshairTransform.gameObject.SetActive(true);
+            ShowCrosshair = true;
         }
         else
         {
@@ -208,7 +196,7 @@ public class WeaponController : MonoBehaviour
                 targetingPoint = Vector3.zero;
             }
 
-            crosshairTransform.gameObject.SetActive(false);
+            ShowCrosshair = false;
         }
     }
 
@@ -219,17 +207,17 @@ public class WeaponController : MonoBehaviour
             weapon.Reload();
         }
 
-        flareAmount = maxFlareAmount;
+        Flares = maxFlareAmount;
     }
 
     void LaunchFlares()
     {
         foreach(Transform launcher in flareLaunchers)
         {
-            if (flareAmount > 0)
+            if (Flares > 0)
             {
                 Instantiate(flarePrefab, launcher.position, launcher.rotation).GetComponent<Rigidbody>().velocity = rb.velocity;
-                flareAmount--;
+                Flares--;
             }
             else
             {

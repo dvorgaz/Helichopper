@@ -7,22 +7,11 @@ public class GameUI : MonoBehaviour
 {
     public RectTransform Crosshair { get; private set; }
 
-    public enum UIElement
-    {
-        Armor = 0,
-        Fuel,
-        Gun,
-        Rocket,
-        Missile,
-        Flares,
-        Num
-    }
-
-    [SerializeField]
-    private TextMeshProUGUI[] texts;
-
+    [SerializeField] private HeliStatusDisplay heliStatus;
     [SerializeField] private GameObject rearmPanel;
     [SerializeField] private GameObject retryButton;
+    private WeaponController weaponController;
+    private Camera mainCamera;
 
     private void Awake()
     {
@@ -35,31 +24,33 @@ public class GameUI : MonoBehaviour
         {
             Debug.LogError("Missing Crosshair UI");
         }
-
-        if(texts == null || texts.Length != (int)UIElement.Num)
-        {
-            Debug.LogError("Invalid number of text UI references");
-        }
     }
 
     // Start is called before the first frame update
     void Start()
     {
-        ShowRearmPane(true);
+        mainCamera = Camera.main;
+        GameObject playerObj = GameObject.FindWithTag("Player");
+        if (playerObj != null)
+        {
+            heliStatus.SetObject(playerObj);
+            weaponController = playerObj.GetComponent<WeaponController>();
+        }
+
+        ShowRearmPanel(true);
     }
 
     // Update is called once per frame
-    void Update()
+    void LateUpdate()
     {
-        
+        if (weaponController != null)
+        {
+            Crosshair.gameObject.SetActive(weaponController.ShowCrosshair);
+            Crosshair.position = mainCamera.WorldToScreenPoint(weaponController.TargetPoint);
+        }
     }
 
-    public void SetUIText(UIElement element, int amount)
-    {
-        texts[(int)element].text = amount.ToString();
-    }
-
-    public void ShowRearmPane(bool visible)
+    public void ShowRearmPanel(bool visible)
     {
         rearmPanel.SetActive(visible);        
     }

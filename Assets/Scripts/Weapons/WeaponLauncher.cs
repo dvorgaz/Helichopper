@@ -9,6 +9,7 @@ public class WeaponLauncher : MonoBehaviour
         Auto
     }
 
+    public string displayName;
     [SerializeField] private GameObject weaponPrefab;    
     [SerializeField] private FiringMode firingMode;
     [SerializeField] private float spread;

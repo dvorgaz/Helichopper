@@ -12,7 +12,7 @@ public class HeliController : MonoBehaviour
     [SerializeField] private float turnRate;
     [SerializeField] private float maxFuel;
     [SerializeField] private float fuelBurnRate;
-    private float fuel;
+    public float Fuel { get; private set; }
 
     [SerializeField] private float speed; // Speed in km/h
 
@@ -56,7 +56,7 @@ public class HeliController : MonoBehaviour
         rb.centerOfMass = Vector3.zero;
         rb.maxAngularVelocity = 70;
         cameraTransform = Camera.main.transform;
-        fuel = maxFuel;
+        Fuel = maxFuel;
         lastLandingTime = Time.time;
     }
 
@@ -85,7 +85,7 @@ public class HeliController : MonoBehaviour
 
     public void Refuel()
     {
-        fuel = maxFuel;
+        Fuel = maxFuel;
     }
 
     public void ShutDown()
@@ -129,15 +129,10 @@ public class HeliController : MonoBehaviour
         }
     }
 
-    private void LateUpdate()
-    {
-        GameController.Instance.GameUI.SetUIText(GameUI.UIElement.Fuel, Mathf.RoundToInt(fuel));
-    }
-
     private void FixedUpdate()
     {
-        fuel -= fuelBurnRate * Time.fixedDeltaTime;
-        if(fuel < 0.0f)
+        Fuel -= fuelBurnRate * Time.fixedDeltaTime;
+        if(Fuel < 0.0f)
         {
             ShutDown();
         }

@@ -67,7 +67,7 @@ public class GameController : MonoBehaviour
         CanProcessGameInput = !visible;
         ShowCursor(visible);
         Time.timeScale = visible ? 0.0f : 1.0f;
-        GameUI.ShowRearmPane(visible);
+        GameUI.ShowRearmPanel(visible);
         player.SendMessage("ControlEnable", !visible);
     }
 

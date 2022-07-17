@@ -45,6 +45,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 59ffb06c90006cf4cb3467af99a424c5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  displayName: Hydra
   weaponPrefab: {fileID: 6226923990949560321, guid: b02c9a3eb46c3e148bc1c4f4e9e32211, type: 3}
   firingMode: 2
   spread: 0.05

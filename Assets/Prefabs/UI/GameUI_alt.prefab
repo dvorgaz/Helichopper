@@ -337,7 +337,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: '||||||||||||'
+  m_text: ll|ll|ll|ll|ll|ll
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: d73b70ce616cd614784d44dede3ff5cb, type: 2}
   m_sharedMaterial: {fileID: 1411503721957711960, guid: d73b70ce616cd614784d44dede3ff5cb, type: 2}
@@ -1518,7 +1518,7 @@ GameObject:
   - component: {fileID: 7847677752593860517}
   - component: {fileID: 7611108557136872553}
   m_Layer: 5
-  m_Name: Gun
+  m_Name: Weapon1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2080,6 +2080,7 @@ GameObject:
   - component: {fileID: 5847393691653896161}
   - component: {fileID: 5847393691653896160}
   - component: {fileID: 3354189039146618433}
+  - component: {fileID: 9212333992338739062}
   m_Layer: 5
   m_Name: GameUI_alt
   m_TagString: Untagged
@@ -2187,6 +2188,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fbed8b6288e888442a99e43d53dfcfb5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  heliStatus: {fileID: 9212333992338739062}
+  rearmPanel: {fileID: 3255260989079598246}
+  retryButton: {fileID: 2557464505901895247}
+--- !u!114 &9212333992338739062
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5847393691653896167}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c9df5128436f43c46bc9b3850fb12658, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
   texts:
   - {fileID: 4318885596886344196}
   - {fileID: 1232323861511228659}
@@ -2194,8 +2210,6 @@ MonoBehaviour:
   - {fileID: 8780165528312379046}
   - {fileID: 8447301346699370840}
   - {fileID: 1991956204029275695}
-  rearmPanel: {fileID: 3255260989079598246}
-  retryButton: {fileID: 2557464505901895247}
 --- !u!1 &5881260259379352154
 GameObject:
   m_ObjectHideFlags: 0
@@ -2640,7 +2654,7 @@ GameObject:
   - component: {fileID: 8369336576258750735}
   - component: {fileID: 8780165528312379046}
   m_Layer: 5
-  m_Name: Rockets
+  m_Name: Weapon2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3046,7 +3060,7 @@ GameObject:
   - component: {fileID: 1765804916920400046}
   - component: {fileID: 8447301346699370840}
   m_Layer: 5
-  m_Name: Missiles
+  m_Name: Weapon3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

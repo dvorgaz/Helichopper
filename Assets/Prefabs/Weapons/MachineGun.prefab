@@ -45,6 +45,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 59ffb06c90006cf4cb3467af99a424c5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  displayName: Gun
   weaponPrefab: {fileID: 7860987759465983520, guid: 42e1705a9bb70f949a4b041f38edc084, type: 3}
   firingMode: 2
   spread: 0.025

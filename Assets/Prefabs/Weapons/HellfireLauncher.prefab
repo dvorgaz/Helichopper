@@ -45,6 +45,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 59ffb06c90006cf4cb3467af99a424c5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  displayName: Hellfire
   weaponPrefab: {fileID: 6226923990949560321, guid: 2db4ccf229945c84c85ca0facc339da8, type: 3}
   firingMode: 0
   spread: 0
