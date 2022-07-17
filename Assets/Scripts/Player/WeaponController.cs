@@ -3,11 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody))]
-[RequireComponent(typeof(Health))]
 public class WeaponController : MonoBehaviour
 {
     private Rigidbody rb;
-    private Health health;
 
     [SerializeField] private float targetingRange;
     [SerializeField] private float targetingAngle;
@@ -47,7 +45,6 @@ public class WeaponController : MonoBehaviour
     void Start()
     {
         rb = GetComponent<Rigidbody>();
-        health = GetComponent<Health>();
 
         weapons = new List<WeaponLauncher>();
         foreach (WeaponLauncher weapon in GetComponentsInChildren<WeaponLauncher>())
@@ -89,46 +86,6 @@ public class WeaponController : MonoBehaviour
 
             dir = Quaternion.AngleAxis(angle, Vector3.up) * dir;
             adjustedTargetingPoint = dir + transform.position;
-        }
-
-        if (health.Alive && GameController.Instance.CanProcessGameInput)
-        {
-            if (Input.GetMouseButton(0))
-            {
-                if (targetingPoint != Vector3.zero)
-                {
-                    if (Weapon)
-                        Weapon.Fire(adjustedTargetingPoint, closestTarget != null ? closestTarget.transform : null);
-                }
-                else
-                {
-                    if (Weapon)
-                        Weapon.Fire();
-                }
-            }
-
-            if (Input.GetKeyDown(KeyCode.R))
-            {
-                Rearm();
-            }
-
-            if (Input.GetKeyDown(KeyCode.F))
-            {
-                StartCoroutine(LaunchFlareCoroutine());
-            }
-
-            if (Input.GetKeyDown(KeyCode.Alpha1))
-            {
-                currWeaponIdx = 0;
-            }
-            if (Input.GetKeyDown(KeyCode.Alpha2))
-            {
-                currWeaponIdx = 1;
-            }
-            if (Input.GetKeyDown(KeyCode.Alpha3))
-            {
-                currWeaponIdx = 2;
-            }
         }
     }
 
@@ -200,6 +157,20 @@ public class WeaponController : MonoBehaviour
         }
     }
 
+    public void FireSelectedWeapon()
+    {
+        if (targetingPoint != Vector3.zero)
+        {
+            if (Weapon)
+                Weapon.Fire(adjustedTargetingPoint, closestTarget != null ? closestTarget.transform : null);
+        }
+        else
+        {
+            if (Weapon)
+                Weapon.Fire();
+        }
+    }
+
     public void Rearm()
     {
         foreach(WeaponLauncher weapon in weapons)
@@ -210,7 +181,17 @@ public class WeaponController : MonoBehaviour
         Flares = maxFlareAmount;
     }
 
-    void LaunchFlares()
+    public void SelectWeapon(int idx)
+    {
+        currWeaponIdx = Mathf.Clamp(idx, 0, weapons.Count - 1);
+    }
+
+    public void LaunchFlares()
+    {
+        StartCoroutine(LaunchFlareCoroutine());
+    }
+
+    void LaunchFlaresSingle()
     {
         foreach(Transform launcher in flareLaunchers)
         {
@@ -230,7 +211,7 @@ public class WeaponController : MonoBehaviour
     {
         for(int i = 0; i < flareBurstCount; ++i)
         {
-            LaunchFlares();
+            LaunchFlaresSingle();
             yield return new WaitForSeconds(flareBurstInterval);
         }
     }

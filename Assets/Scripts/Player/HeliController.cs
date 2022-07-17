@@ -22,6 +22,10 @@ public class HeliController : MonoBehaviour
     [SerializeField] private bool useSmoothing;
     private Vector3 worldTiltDir;
 
+    public float Horizontal { get; set; } = 0.0f;
+    public float Vertical { get; set; } = 0.0f;
+    public bool StabilizeAim { get; set; } = false;
+
     public Vector3 TiltDirection { get { return worldTiltDir; } }
 
     private Transform cameraTransform;
@@ -31,7 +35,6 @@ public class HeliController : MonoBehaviour
     [SerializeField] private float landingHeight;
     [SerializeField] private float maxAltitude;
 
-    private bool controllingCyclic = false;
     private bool thrustEnabled = true;
     private bool controlEnabled = true;
     private bool isLanding = false;
@@ -60,18 +63,6 @@ public class HeliController : MonoBehaviour
         lastLandingTime = Time.time;
     }
 
-    void ToggleCyclicControl()
-    {
-        SetCyclicControl(!controllingCyclic);
-    }
-
-    void SetCyclicControl(bool enable)
-    {
-        controllingCyclic = enable;
-        Cursor.visible = !controllingCyclic;
-        Cursor.lockState = controllingCyclic ? CursorLockMode.Locked : CursorLockMode.None;
-    }
-
     public void OnDeath()
     {
         ShutDown();
@@ -96,37 +87,25 @@ public class HeliController : MonoBehaviour
         rb.angularDrag = 0.02f;
     }
 
+    public void SetRotorTilt(Vector3 tilt)
+    {
+        rotorTilt = tilt;
+
+        if (rotorTilt.magnitude > maxRotorTilt)
+        {
+            rotorTilt = rotorTilt.normalized * maxRotorTilt;
+        }
+    }
+
+    public void SetRotorTiltDelta(Vector3 delta)
+    {
+        SetRotorTilt(rotorTilt + delta);
+    }
+
     // Update is called once per frame
     void Update()
     {
-        if (GameController.Instance.CanProcessGameInput)
-        {
-            if (Input.GetMouseButtonDown(1))
-            {
-                ToggleCyclicControl();
-            }
-            //if (Input.GetMouseButtonUp(2))
-            //{
-            //    thrustEnabled = !thrustEnabled && controlEnabled;
-            //}
 
-            Vector3 mouseDelta = new Vector3(Input.GetAxis("Mouse X"), Input.GetAxis("Mouse Y"), 0);
-
-            if (controllingCyclic && thrustEnabled)
-            {
-                rotorTilt += mouseDelta * mouseRate;
-
-                if (rotorTilt.magnitude > maxRotorTilt)
-                {
-                    rotorTilt = rotorTilt.normalized * maxRotorTilt;
-                }
-            }
-
-            if (Input.GetKeyDown(KeyCode.Space))
-            {
-                rotorTilt = Vector3.zero;
-            }
-        }
     }
 
     private void FixedUpdate()
@@ -177,15 +156,17 @@ public class HeliController : MonoBehaviour
 
     private void UpdateVerticalMove()
     {
-        float vertical = 0.0f;
         bool ignoreLanding = false;
+
+        Vector3 vThrust = Vector3.zero;
 
         if (controlEnabled)
         {
-            if (Input.GetKey(KeyCode.W))
-            {
-                vertical += 1;
+            vThrust = Vector3.up * Vertical * maxVerticalThrust;
 
+            float epsilon = 0.01f;
+            if(Vertical > epsilon)
+            {
                 ignoreLanding = true;
                 if (isOnGround)
                 {
@@ -194,16 +175,15 @@ public class HeliController : MonoBehaviour
                     lastLandingTime = Time.time;
                 }
             }
-
-            if (Input.GetKey(KeyCode.S))
+            else if (Vertical < -epsilon && isLanding)
             {
-                vertical -= 1 * (isLanding ? 0.5f : 1.0f);
+                vThrust *= 0.5f;
             }
         }
 
         if (thrustEnabled && transform.position.y < maxAltitude)
         {
-            rb.AddForce(rb.mass * -Physics.gravity + (Vector3.up * vertical * maxVerticalThrust), ForceMode.Force);
+            rb.AddForce(rb.mass * -Physics.gravity + vThrust, ForceMode.Force);
         }
 
         if(!ignoreLanding)
@@ -212,29 +192,16 @@ public class HeliController : MonoBehaviour
 
     private void UpdateHorizontalTurn()
     {
-        float horizontal = 0.0f;
-
         if (controlEnabled)
         {
-            if (Input.GetKey(KeyCode.A))
-            {
-                horizontal += 1;
-            }
+            Vector3 hThrust = tailOffset.right * turnRate * Horizontal;
+            if (StabilizeAim)
+                hThrust *= 0.3f;
 
-            if (Input.GetKey(KeyCode.D))
-            {
-                horizontal -= 1;
-            }
+            rb.AddForceAtPosition(hThrust, tailOffset.position, ForceMode.Force);
         }
 
-        if(Input.GetMouseButton(0))
-        {
-            horizontal *= 0.3f;
-        }
-
-        rb.AddForceAtPosition(tailOffset.right * turnRate * horizontal, tailOffset.position, ForceMode.Force);
-
-        if (!Input.GetMouseButton(0))
+        if (!StabilizeAim)
         {
             Vector3 flow = -rb.velocity.normalized;
             float tailDragForce = Vector3.Dot(tailOffset.right, flow) * tailDrag * rb.velocity.sqrMagnitude;
@@ -301,10 +268,5 @@ public class HeliController : MonoBehaviour
         {
             GameController.Instance.OnLandedOnBase();
         }
-    }
-
-    public void ControlEnable(bool enabled)
-    {
-        SetCyclicControl(enabled);
     }
 }

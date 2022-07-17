@@ -513,6 +513,7 @@ GameObject:
   - component: {fileID: 3856494494415502108}
   - component: {fileID: 230868943077319931}
   - component: {fileID: -6356865481521858092}
+  - component: {fileID: 3967400467234898926}
   - component: {fileID: 3856494494415502111}
   - component: {fileID: -6727588473569729473}
   - component: {fileID: 1931832463046917380}
@@ -610,6 +611,19 @@ MonoBehaviour:
   hitEffects:
   - type: 0
     effectPrefab: {fileID: 5052711917731508930, guid: 0749804699f757145833edd8dd9d1bc5, type: 3}
+--- !u!114 &3967400467234898926
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3856494494415502105}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 09768ee595eea974cb4057c2eac5bb31, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mouseRate: 2
 --- !u!114 &3856494494415502111
 MonoBehaviour:
   m_ObjectHideFlags: 0

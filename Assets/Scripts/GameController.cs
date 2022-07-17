@@ -68,7 +68,7 @@ public class GameController : MonoBehaviour
         ShowCursor(visible);
         Time.timeScale = visible ? 0.0f : 1.0f;
         GameUI.ShowRearmPanel(visible);
-        player.SendMessage("ControlEnable", !visible);
+        player.GetComponent<PlayerInputHandler>().enabled = !visible;
     }
 
     public void Retry()
