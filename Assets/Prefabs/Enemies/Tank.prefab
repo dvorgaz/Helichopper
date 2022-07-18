@@ -148,6 +148,21 @@ MonoBehaviour:
   maxHealth: 30
   deathEffectPrefab: {fileID: 1000011797152326, guid: 754f37ed93f92ec4887f482466830e31, type: 3}
   smokeEffectPrefab: {fileID: 4111725265502828604, guid: 4905fa2205bde7d4398af112d659d45a, type: 3}
+  onDeath:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 11400000, guid: c5cae90c19773bb45968e648569a9bfe, type: 2}
+        m_TargetAssemblyTypeName: GameEvent, Assembly-CSharp
+        m_MethodName: Raise
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &7279809926057842064
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -209,8 +224,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 807789315db062d4aa74da8e7df97d66, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rotSpeed: 2
-  patrolRoute: []
+  patrolRoute: {fileID: 0}
   tiltDampTime: 0.1
   turnDampTime: 0.5
 --- !u!195 &7763684925570196261

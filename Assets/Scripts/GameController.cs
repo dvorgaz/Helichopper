@@ -12,7 +12,10 @@ public class GameController : MonoBehaviour
 
     private GameObject player;
 
-    public bool CanProcessGameInput { get; private set; } = false;
+    [SerializeField] private GameEvent playerDeathEvent;
+    [SerializeField] private GameEvent playerLandingEvent;
+
+    int lives = 1;
 
     private void Awake()
     {
@@ -29,12 +32,26 @@ public class GameController : MonoBehaviour
         GameUI = Instantiate(gameUIPrefab).GetComponent<GameUI>();
     }
 
+    private void OnEnable()
+    {
+        playerDeathEvent.AddListener(OnPlayerDead);
+        playerLandingEvent.AddListener(OnLandedOnBase);
+    }
+
+    private void OnDisable()
+    {
+        playerDeathEvent.RemoveListener(OnPlayerDead);
+        playerLandingEvent.RemoveListener(OnLandedOnBase);
+    }
+
     // Start is called before the first frame update
     void Start()
     {
         player = GameObject.FindGameObjectWithTag("Player");
-        ShowRearmMenu(true);
+        ShowRearmMenu(false);
         GameUI.ShowRetryButton(false);
+
+        StartCoroutine(GameLoopCoroutine());
     }
 
     // Update is called once per frame
@@ -51,7 +68,15 @@ public class GameController : MonoBehaviour
         }
     }
 
-    public void OnLandedOnBase()
+    public void SetPlayerInputEnable(bool enable)
+    {
+        if(player != null)
+        {
+            player.GetComponent<PlayerInputHandler>().enabled = enable;
+        }
+    }
+
+    public void OnLandedOnBase(GameObject landingZone)
     {
         ShowRearmMenu(true);
     }
@@ -64,11 +89,10 @@ public class GameController : MonoBehaviour
 
     public void ShowRearmMenu(bool visible)
     {
-        CanProcessGameInput = !visible;
         ShowCursor(visible);
         Time.timeScale = visible ? 0.0f : 1.0f;
         GameUI.ShowRearmPanel(visible);
-        player.GetComponent<PlayerInputHandler>().enabled = !visible;
+        SetPlayerInputEnable(!visible);
     }
 
     public void Retry()
@@ -76,8 +100,30 @@ public class GameController : MonoBehaviour
         SceneManager.LoadScene("SampleScene");
     }
 
-    public void OnPlayerDead()
+    public void OnPlayerDead(GameObject player)
     {
+        if (this.player == player)
+        {
+            lives--;
+            //ShowCursor(true);
+            //GameUI.ShowRetryButton(true);
+        }
+    }
+
+    public IEnumerator GameLoopCoroutine()
+    {
+        SetPlayerInputEnable(false);
+        yield return new WaitForSeconds(1.0f);
+
+        SetPlayerInputEnable(true);
+
+        while(lives > 0)
+        {
+            yield return null;
+        }
+
+        yield return new WaitForSeconds(2.0f);
+
         ShowCursor(true);
         GameUI.ShowRetryButton(true);
     }

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class Health : MonoBehaviour
 {
@@ -9,6 +10,7 @@ public class Health : MonoBehaviour
 
     [SerializeField] private GameObject deathEffectPrefab;
     [SerializeField] private GameObject smokeEffectPrefab;
+    [SerializeField] private UnityEvent<GameObject> onDeath;
 
     private uint lastDamageID = 0;
 
@@ -53,7 +55,8 @@ public class Health : MonoBehaviour
         }
 
         gameObject.BroadcastMessage("OnDeath", SendMessageOptions.DontRequireReceiver);
-
+        if (onDeath != null)
+            onDeath.Invoke(gameObject);
         //Destroy(gameObject);
     }
 

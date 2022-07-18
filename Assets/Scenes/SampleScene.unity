@@ -1748,6 +1748,7 @@ GameObject:
   m_Component:
   - component: {fileID: 713578400}
   - component: {fileID: 713578399}
+  - component: {fileID: 713578402}
   - component: {fileID: 713578401}
   m_Layer: 0
   m_Name: GameController
@@ -1769,6 +1770,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gameUIPrefab: {fileID: 5847393691653896167, guid: e1bb057607d860041a45d81bb70b7053, type: 3}
+  playerDeathEvent: {fileID: 11400000, guid: c5cae90c19773bb45968e648569a9bfe, type: 2}
+  playerLandingEvent: {fileID: 11400000, guid: f988916a17f71e1419c2e29bd9f7a491, type: 2}
 --- !u!4 &713578400
 Transform:
   m_ObjectHideFlags: 0
@@ -1880,6 +1883,28 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &713578402
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 713578398}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ea852339644385f44b70288160315eaf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  missions:
+  - title: Destroy trucks
+    description: Kill some trucks to the west
+    tasks:
+    - taskEvent: {fileID: 11400000, guid: c5cae90c19773bb45968e648569a9bfe, type: 2}
+      taskSubject: {fileID: 951756096}
+      completed: 0
+    - taskEvent: {fileID: 11400000, guid: c5cae90c19773bb45968e648569a9bfe, type: 2}
+      taskSubject: {fileID: 0}
+      completed: 0
 --- !u!4 &746859005 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6950133460667474165, guid: 6746f9714dd28cd439225c5473c27432, type: 3}
@@ -2256,6 +2281,11 @@ MeshFilter:
 Transform:
   m_CorrespondingSourceObject: {fileID: 1521497365279511478, guid: 208d9f4141acc7c4aaee37fffba4116b, type: 3}
   m_PrefabInstance: {fileID: 11316962}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &951756096 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6273461742280641141, guid: 6746f9714dd28cd439225c5473c27432, type: 3}
+  m_PrefabInstance: {fileID: 598733507}
   m_PrefabAsset: {fileID: 0}
 --- !u!1 &963194225
 GameObject:

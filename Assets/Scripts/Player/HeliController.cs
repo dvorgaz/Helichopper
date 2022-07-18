@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class HeliController : MonoBehaviour
 {
@@ -37,9 +38,13 @@ public class HeliController : MonoBehaviour
 
     private bool thrustEnabled = true;
     private bool controlEnabled = true;
-    private bool isLanding = false;
+    private int isInLandingZone = 0;
     private bool isOnGround = false;
-    private float lastLandingTime = 0.0f;
+    private float lastTakeoffTime = 0.0f;
+    [SerializeField] private UnityEvent<GameObject> onLanding;
+    private GameObject landingZone;
+
+    public bool Landing { get { return isInLandingZone > 0; } }
 
     private void Awake()
     {
@@ -60,18 +65,12 @@ public class HeliController : MonoBehaviour
         rb.maxAngularVelocity = 70;
         cameraTransform = Camera.main.transform;
         Fuel = maxFuel;
-        lastLandingTime = Time.time;
+        lastTakeoffTime = Time.time;
     }
 
     public void OnDeath()
     {
         ShutDown();
-        Invoke("NotifyDeath", 2.0f);
-    }
-
-    private void NotifyDeath()
-    {
-        GameController.Instance.OnPlayerDead();
     }
 
     public void Refuel()
@@ -147,7 +146,7 @@ public class HeliController : MonoBehaviour
             rb.angularVelocity = axis * tiltRate + yAngVel;
 
             Vector3 dir = Vector3.ProjectOnPlane(transform.up, Vector3.up);
-            if (isLanding)
+            if (Landing)
                 dir *= 0.5f;
 
             rb.AddForce(dir * maxThrust, ForceMode.Force);
@@ -172,10 +171,10 @@ public class HeliController : MonoBehaviour
                 {
                     isOnGround = false;
                     thrustEnabled = true;
-                    lastLandingTime = Time.time;
+                    lastTakeoffTime = Time.time;
                 }
             }
-            else if (Vertical < -epsilon && isLanding)
+            else if (Vertical < -epsilon && Landing)
             {
                 vThrust *= 0.5f;
             }
@@ -211,7 +210,7 @@ public class HeliController : MonoBehaviour
 
     private void CheckLanding()
     {
-        if (!isLanding)
+        if (!Landing)
             return;
 
         float heightOffset = 10.0f;
@@ -241,7 +240,8 @@ public class HeliController : MonoBehaviour
         if(other.CompareTag("LandingZone"))
         {
             Debug.Log("Entering landing zone");
-            isLanding = true;
+            isInLandingZone = Mathf.Max(isInLandingZone + 1, 1);
+            landingZone = other.gameObject;
         }
     }
 
@@ -250,14 +250,16 @@ public class HeliController : MonoBehaviour
         if (other.CompareTag("LandingZone"))
         {
             Debug.Log("Leaving landing zone");
-            isLanding = false;
+            isInLandingZone = Mathf.Max(isInLandingZone - 1, 0);
+            if (!Landing)
+                landingZone = null;
         }
     }
 
     private void OnLanded()
     {
-        if (Time.time - lastLandingTime > 1.0f)
-        {
+        if (Time.time - lastTakeoffTime > 1.0f)
+        {           
             Invoke("TryRearm", 2.0f);
         }
     }
@@ -266,7 +268,8 @@ public class HeliController : MonoBehaviour
     {
         if(isOnGround)
         {
-            GameController.Instance.OnLandedOnBase();
+            if (onLanding != null)
+                onLanding.Invoke(landingZone);
         }
     }
 }

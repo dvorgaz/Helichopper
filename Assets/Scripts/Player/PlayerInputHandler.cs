@@ -8,7 +8,7 @@ public class PlayerInputHandler : MonoBehaviour
     private WeaponController wpn;
 
     [SerializeField] private float mouseRate;
-    private bool controllingCyclic = false;
+    private bool controllingCyclic = true;
 
     private void Awake()
     {
@@ -109,12 +109,12 @@ public class PlayerInputHandler : MonoBehaviour
 
     private void OnEnable()
     {
-        SetCyclicControl(true);
+        //SetCyclicControl(true);
     }
 
     private void OnDisable()
     {
-        SetCyclicControl(false);
+        //SetCyclicControl(false);
     }
 
     public void OnDeath()

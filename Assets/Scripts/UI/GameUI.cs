@@ -36,8 +36,6 @@ public class GameUI : MonoBehaviour
             heliStatus.SetObject(playerObj);
             weaponController = playerObj.GetComponent<WeaponController>();
         }
-
-        ShowRearmPanel(true);
     }
 
     // Update is called once per frame
