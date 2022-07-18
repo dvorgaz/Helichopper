@@ -25,19 +25,26 @@ public class TargetingLine : MonoBehaviour
 
     // Start is called before the first frame update
     void Start()
-    {
-        player = GameObject.FindGameObjectWithTag("Player").transform;
+    {        
         lineRenderer = GetComponent<LineRenderer>();
         lineRenderer.startWidth = thickness;
         lineRenderer.endWidth = thickness;
-
-        heli = player.GetComponent<HeliController>();
-        weapon = player.GetComponent<WeaponController>();
     }
 
     // Update is called once per frame
     void LateUpdate()
     {
+        if(player == null)
+        {
+            GameObject po = GameController.Instance.Player;
+            if (po == null)
+                return;
+
+            player = po.transform;
+            heli = player.GetComponent<HeliController>();
+            weapon = player.GetComponent<WeaponController>();
+        }
+
         switch(symbology)
         {
             case Symbol.TargetingLine:

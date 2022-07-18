@@ -1772,6 +1772,7 @@ MonoBehaviour:
   gameUIPrefab: {fileID: 5847393691653896167, guid: e1bb057607d860041a45d81bb70b7053, type: 3}
   playerDeathEvent: {fileID: 11400000, guid: c5cae90c19773bb45968e648569a9bfe, type: 2}
   playerLandingEvent: {fileID: 11400000, guid: f988916a17f71e1419c2e29bd9f7a491, type: 2}
+  lives: 3
 --- !u!4 &713578400
 Transform:
   m_ObjectHideFlags: 0

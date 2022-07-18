@@ -29,18 +29,22 @@ public class GameUI : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        mainCamera = Camera.main;
-        GameObject playerObj = GameObject.FindWithTag("Player");
-        if (playerObj != null)
-        {
-            heliStatus.SetObject(playerObj);
-            weaponController = playerObj.GetComponent<WeaponController>();
-        }
+        mainCamera = Camera.main;        
     }
 
     // Update is called once per frame
     void LateUpdate()
     {
+        if(weaponController == null || weaponController.gameObject.activeInHierarchy == false)
+        {
+            GameObject playerObj = GameObject.FindWithTag("Player");
+            if (playerObj != null)
+            {
+                heliStatus.SetObject(playerObj);
+                weaponController = playerObj.GetComponent<WeaponController>();
+            }
+        }
+
         if (weaponController != null)
         {
             Crosshair.gameObject.SetActive(weaponController.ShowCrosshair);

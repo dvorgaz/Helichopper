@@ -10,12 +10,14 @@ public class GameController : MonoBehaviour
     [SerializeField] private GameObject gameUIPrefab;
     public GameUI GameUI { get; private set; }
 
-    private GameObject player;
+    private GameObject playerTemplate;
+    public GameObject Player { get; private set; }
 
     [SerializeField] private GameEvent playerDeathEvent;
     [SerializeField] private GameEvent playerLandingEvent;
 
-    int lives = 1;
+    [SerializeField] private int lives = 3;
+    private bool playerWasKilled = false;
 
     private void Awake()
     {
@@ -47,7 +49,16 @@ public class GameController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        player = GameObject.FindGameObjectWithTag("Player");
+        playerTemplate = GameObject.FindGameObjectWithTag("Player");
+        if(playerTemplate != null)
+        {
+            playerTemplate.SetActive(false);
+        }
+        else
+        {
+            Debug.LogError("Missing player template");
+        }
+
         ShowRearmMenu(false);
         GameUI.ShowRetryButton(false);
 
@@ -68,11 +79,23 @@ public class GameController : MonoBehaviour
         }
     }
 
+    public void SpawnPlayer()
+    {
+        if(Player != null)
+        {
+            Destroy(Player);
+            Player = null;
+        }
+
+        Player = Instantiate(playerTemplate);
+        Player.SetActive(true);
+    }
+
     public void SetPlayerInputEnable(bool enable)
     {
-        if(player != null)
+        if(Player != null)
         {
-            player.GetComponent<PlayerInputHandler>().enabled = enable;
+            Player.GetComponent<PlayerInputHandler>().enabled = enable;
         }
     }
 
@@ -102,9 +125,10 @@ public class GameController : MonoBehaviour
 
     public void OnPlayerDead(GameObject player)
     {
-        if (this.player == player)
+        if (this.Player == player)
         {
             lives--;
+            playerWasKilled = true;
             //ShowCursor(true);
             //GameUI.ShowRetryButton(true);
         }
@@ -115,10 +139,19 @@ public class GameController : MonoBehaviour
         SetPlayerInputEnable(false);
         yield return new WaitForSeconds(1.0f);
 
+        SpawnPlayer();
         SetPlayerInputEnable(true);
 
         while(lives > 0)
         {
+            if(playerWasKilled)
+            {
+                playerWasKilled = false;
+                yield return new WaitForSeconds(3.0f);
+
+                SpawnPlayer();
+            }
+
             yield return null;
         }
 

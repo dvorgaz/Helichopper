@@ -11,7 +11,9 @@ public class CameraController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        if (target != null)
+        FindTargetIfInvalid();
+
+        if (IsTargetValid())
         {
             Vector3 dir = target.forward;
             dir.y = 0;
@@ -22,12 +24,31 @@ public class CameraController : MonoBehaviour
     // Update is called once per frame
     void LateUpdate()
     {
-        if (target != null)
+        FindTargetIfInvalid();
+
+        if (IsTargetValid())
         {
             Vector3 dir = target.forward;
             dir.y = 0;
             //transform.position = target.position + dir.normalized * offset;
             transform.position = Vector3.Lerp(transform.position, target.position + dir.normalized * offset, smoothParam * Time.deltaTime);
+        }        
+    }
+
+    void FindTargetIfInvalid()
+    {
+        if (!IsTargetValid())
+        {
+            GameObject obj = GameController.Instance.Player;
+            if (obj != null)
+            {
+                target = obj.transform;
+            }
         }
+    }
+
+    bool IsTargetValid()
+    {
+        return target != null && target.gameObject.activeInHierarchy;
     }
 }

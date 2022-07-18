@@ -10,7 +10,12 @@ public class EnemyAI : MonoBehaviour
 
     private GameObject target;
     private Health targetHealth;
-    private bool isTargetValid = false;
+    private bool isTargetInLOS = false;
+
+    public bool IsTargetValid
+    {
+        get { return target != null && target.activeInHierarchy && isTargetInLOS; }
+    }
 
     [SerializeField] private float detectionRange;
     [SerializeField] private float losRangeOffset = 5.0f;
@@ -39,7 +44,7 @@ public class EnemyAI : MonoBehaviour
         if (!health.Alive)
             return;
 
-        if(isTargetValid && weapon != null)
+        if(IsTargetValid && weapon != null)
         {
             if(targetHealth.Alive && !isAttacking)
             {
@@ -51,7 +56,7 @@ public class EnemyAI : MonoBehaviour
 
     void FindTarget()
     {
-        isTargetValid = false;
+        isTargetInLOS = false;
         target = GameObject.FindWithTag("Player");
 
         if (target != null)
@@ -59,7 +64,7 @@ public class EnemyAI : MonoBehaviour
             targetHealth = target.GetComponent<Health>();
             if(targetHealth != null && targetHealth.Alive)
             {
-                isTargetValid = IsInLineOfSight(target.transform.position);
+                isTargetInLOS = IsInLineOfSight(target.transform.position);
             }
         }
     }
@@ -87,13 +92,13 @@ public class EnemyAI : MonoBehaviour
     {
         while (true)
         {
-            if (!isTargetValid)
+            if (!IsTargetValid)
             {
                 FindTarget();
             }
             else
             {
-                isTargetValid = IsInLineOfSight(target.transform.position);
+                isTargetInLOS = IsInLineOfSight(target.transform.position);
             }
 
             yield return new WaitForSeconds(Random.Range(tickDelayRange.x, tickDelayRange.y));
