@@ -20,8 +20,13 @@ public class Task : MonoBehaviour
 
         if(!completed && progress >= target)
         {
+#if UNITY_EDITOR
+            name += " (Completed)";
+#endif
+
             completed = true;
             taskCompleted.Invoke();
+            MissionController.Instance.CheckMissionsCompleted();
         }
     }
 }

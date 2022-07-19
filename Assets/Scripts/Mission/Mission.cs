@@ -1,46 +1,44 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class Mission : MonoBehaviour
 {
-    //public class Task
-    //{
-    //    public GameEvent taskEvent;
-    //    public GameObject taskSubject;
-    //    public bool completed = false;
-
-    //    public void ProcessEvent(GameObject subject)
-    //    {
-    //        if(taskSubject == null || subject == taskSubject)
-    //        {
-    //            completed = true;
-    //        }
-    //    }
-    //}
-
-    [SerializeField] private string title;
-    [SerializeField] private string description;
-    [SerializeField] private Task[] tasks;
+    public string title;
+    public string description;
+    private Task[] tasks;
+    public bool completed;
+    public UnityEvent missionCompleted;    
 
     private void Awake()
     {
         tasks = GetComponentsInChildren<Task>();
+
+#if UNITY_EDITOR
+        if(title.Length > 0) name = title;
+#endif
     }
 
-    public void OnEnable()
+    public bool CheckCompleted()
     {
+        if (completed)
+            return true;
+
         foreach(Task task in tasks)
         {
-            //task.taskEvent.AddListener(task.ProcessEvent);
+            if (!task.completed)
+                return false;
         }
-    }
 
-    public void OnDisable()
-    {
-        foreach (Task task in tasks)
-        {
-            //task.taskEvent.RemoveListener(task.ProcessEvent);
-        }
+#if UNITY_EDITOR
+        name += " (Completed)";
+#endif
+
+        completed = true;
+        missionCompleted.Invoke();
+        Debug.Log("Mission " + title + " completed");
+
+        return true;
     }
 }

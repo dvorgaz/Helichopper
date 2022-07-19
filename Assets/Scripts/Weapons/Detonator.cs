@@ -23,6 +23,8 @@ public class Detonator : MonoBehaviour
         if(Physics.Raycast(transform.position - dir * d, dir, out hitInfo, d * 2.0f, LayerMask.GetMask("Default", "Vehicle"), QueryTriggerInteraction.Ignore))
         {
             gameObject.SendMessage("TriggerDamage", hitInfo);
+            gameObject.BroadcastMessage("OnDeath", SendMessageOptions.DontRequireReceiver);
+            Destroy(gameObject);
         }
     }
 }

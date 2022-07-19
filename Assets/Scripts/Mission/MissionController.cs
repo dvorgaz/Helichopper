@@ -4,10 +4,22 @@ using UnityEngine;
 
 public class MissionController : MonoBehaviour
 {
-    [SerializeField] private Mission[] missions;
+    public static MissionController Instance { get; private set; }
+
+    private Mission[] missions;
 
     private void Awake()
     {
+        if (Instance != null && Instance != this)
+        {
+            Destroy(gameObject);
+            Debug.LogError("MissionController instance already exists");
+        }
+        else
+        {
+            Instance = this;
+        }
+
         missions = GetComponentsInChildren<Mission>();
     }
 
@@ -23,13 +35,11 @@ public class MissionController : MonoBehaviour
         
     }
 
-    private void OnEnable()
+    public void CheckMissionsCompleted()
     {
-
-    }
-
-    private void OnDisable()
-    {
-
+        foreach(Mission mission in missions)
+        {
+            mission.CheckCompleted();
+        }
     }
 }

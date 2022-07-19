@@ -778,6 +778,7 @@ Transform:
   - {fileID: 1878277973}
   - {fileID: 861048096}
   - {fileID: 608065793}
+  - {fileID: 1417217301}
   m_Father: {fileID: 0}
   m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -785,6 +786,11 @@ Transform:
 Transform:
   m_CorrespondingSourceObject: {fileID: 6950133460667474165, guid: 6746f9714dd28cd439225c5473c27432, type: 3}
   m_PrefabInstance: {fileID: 3856038952688623686}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &456699196 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5323227653713055207, guid: 7d5e6eadf8700534fbaeef7ee7024d79, type: 3}
+  m_PrefabInstance: {fileID: 5323227653109716199}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &476577054
 PrefabInstance:
@@ -2037,6 +2043,83 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d9c4655fce6d1474386cbe850940bb75, type: 3}
+--- !u!1 &779417312
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 779417313}
+  - component: {fileID: 779417315}
+  - component: {fileID: 779417314}
+  m_Layer: 0
+  m_Name: Task_1
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &779417313
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 779417312}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1210088630}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &779417314
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 779417312}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 669aeeb701d2d674eb2ade569d825b9d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  gameEvent: {fileID: 11400000, guid: c5cae90c19773bb45968e648569a9bfe, type: 2}
+--- !u!114 &779417315
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 779417312}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 24bfb8ca91a786f4cacfd1632c708de1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  taskSubject: {fileID: 456699196}
+  completed: 0
+  target: 1
+  progress: 0
+  taskCompleted:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 2092879692}
+        m_TargetAssemblyTypeName: SpawnTaskObjective, Assembly-CSharp
+        m_MethodName: Spawn
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &781447866
 GameObject:
   m_ObjectHideFlags: 0
@@ -2860,8 +2943,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ea852339644385f44b70288160315eaf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  missions:
-  - {fileID: 0}
 --- !u!4 &1129577305
 Transform:
   m_ObjectHideFlags: 0
@@ -2875,6 +2956,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1471836131}
+  - {fileID: 1210088630}
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -2972,7 +3054,7 @@ MonoBehaviour:
   completed: 0
   target: 3
   progress: 0
-  onCompleted:
+  taskCompleted:
     m_PersistentCalls:
       m_Calls: []
 --- !u!114 &1173002829
@@ -3070,6 +3152,58 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8e697b5e8e6572d46b80f8b8305feac1, type: 3}
+--- !u!1 &1210088629
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1210088630}
+  - component: {fileID: 1210088631}
+  m_Layer: 0
+  m_Name: Mission_2
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1210088630
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1210088629}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 779417313}
+  - {fileID: 2092879689}
+  m_Father: {fileID: 1129577305}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1210088631
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1210088629}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7872c5fc1e04ad442813c7fe64fd3f43, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  title: Destroy radar crew
+  description: Destroy radar and stuff coming from it
+  completed: 0
+  missionCompleted:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1001 &1213677834
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3292,7 +3426,7 @@ MonoBehaviour:
   completed: 0
   target: 1
   progress: 0
-  onCompleted:
+  taskCompleted:
     m_PersistentCalls:
       m_Calls: []
 --- !u!114 &1248072565
@@ -3609,6 +3743,37 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6488b6e6bbe8a9c4585b531a71d8211c, type: 3}
+--- !u!1 &1417217300
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1417217301}
+  m_Layer: 0
+  m_Name: MissionSpawnPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: -964228994112308473, guid: 0000000000000000d000000000000000, type: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1417217301
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1417217300}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 464.52524, y: 44.0922, z: 191.23618}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 406802727}
+  m_RootOrder: 7
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &1437099833 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6950133460667474165, guid: 6746f9714dd28cd439225c5473c27432, type: 3}
@@ -3667,7 +3832,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   title: Destroy trucks
   description: Kill some trucks to the west
-  tasks: []
+  completed: 0
+  missionCompleted:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!4 &1506391280 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6914399163359192909, guid: 8e697b5e8e6572d46b80f8b8305feac1, type: 3}
@@ -5312,6 +5480,87 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 14
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &2092879688
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2092879689}
+  - component: {fileID: 2092879691}
+  - component: {fileID: 2092879690}
+  - component: {fileID: 2092879692}
+  m_Layer: 0
+  m_Name: Task_2
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2092879689
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2092879688}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1210088630}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2092879690
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2092879688}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 669aeeb701d2d674eb2ade569d825b9d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  gameEvent: {fileID: 11400000, guid: c5cae90c19773bb45968e648569a9bfe, type: 2}
+--- !u!114 &2092879691
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2092879688}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 24bfb8ca91a786f4cacfd1632c708de1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  taskSubject: {fileID: 0}
+  completed: 0
+  target: 1
+  progress: 0
+  taskCompleted:
+    m_PersistentCalls:
+      m_Calls: []
+--- !u!114 &2092879692
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2092879688}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ef324c04d18d49f429bb53c7c7af34c6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  objectToSpawn: {fileID: 6273461742280641141, guid: 6746f9714dd28cd439225c5473c27432, type: 3}
+  spawnPoint: {fileID: 1417217301}
+  activateTaskAfterSpawn: 1
 --- !u!4 &2146710249 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6950133460667474165, guid: 6746f9714dd28cd439225c5473c27432, type: 3}

@@ -25,7 +25,6 @@ public class DoDamage : MonoBehaviour
             Collider[] colliders = Physics.OverlapSphere(transform.position, blastRadius, LayerMask.GetMask("Default", "Vehicle"));
             foreach (Collider coll in colliders)
             {                
-                Debug.Log("Blast collider hit: " + coll.name);
                 coll.gameObject.SendMessageUpwards("Damage", dmgParams, SendMessageOptions.DontRequireReceiver);
 
                 Rigidbody rb = coll.gameObject.GetComponent<Rigidbody>();
@@ -40,9 +39,6 @@ public class DoDamage : MonoBehaviour
         if (explosionPrefab != null)
         {
             Instantiate(explosionPrefab, transform.position, Quaternion.LookRotation(hitInfo.normal));
-        }
-
-        gameObject.BroadcastMessage("OnDeath", SendMessageOptions.DontRequireReceiver);
-        Destroy(gameObject);            
+        }                  
     }
 }
