@@ -55,8 +55,7 @@ public class Health : MonoBehaviour
         }
 
         gameObject.BroadcastMessage("OnDeath", SendMessageOptions.DontRequireReceiver);
-        if (onDeath != null)
-            onDeath.Invoke(gameObject);
+        onDeath.Invoke(gameObject);
         //Destroy(gameObject);
     }
 

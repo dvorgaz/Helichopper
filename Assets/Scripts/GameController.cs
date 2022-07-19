@@ -13,9 +13,6 @@ public class GameController : MonoBehaviour
     private GameObject playerTemplate;
     public GameObject Player { get; private set; }
 
-    [SerializeField] private GameEvent playerDeathEvent;
-    [SerializeField] private GameEvent playerLandingEvent;
-
     [SerializeField] private int lives = 3;
     private bool playerWasKilled = false;
 
@@ -32,18 +29,6 @@ public class GameController : MonoBehaviour
         }
 
         GameUI = Instantiate(gameUIPrefab).GetComponent<GameUI>();
-    }
-
-    private void OnEnable()
-    {
-        playerDeathEvent.AddListener(OnPlayerDead);
-        playerLandingEvent.AddListener(OnLandedOnBase);
-    }
-
-    private void OnDisable()
-    {
-        playerDeathEvent.RemoveListener(OnPlayerDead);
-        playerLandingEvent.RemoveListener(OnLandedOnBase);
     }
 
     // Start is called before the first frame update

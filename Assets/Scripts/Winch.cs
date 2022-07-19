@@ -14,21 +14,21 @@ public class Winch : MonoBehaviour
     [SerializeField] private AudioClip hookConnectSfx;
     [SerializeField] private AudioClip pickupSfx;
     [SerializeField] private float stayExtendedTime;
-    [SerializeField] private GameObject hookPrefab;
+    //[SerializeField] private GameObject hookPrefab;
     private float lastExtendedTime;
     private bool delayedRetract = false;
 
     // Start is called before the first frame update
     void Start()
     {        
-        rope = GetComponentInChildren<Rope>();
+        rope = GetComponentInChildren<Rope>(true);
         hookNode = rope.GetEndNode();
         rope.gameObject.SetActive(false);
         rope.OnRetracted += OnRopeRetracted;
         rope.OnExtended += OnRopeExtended;
         audioSrc = GetComponent<AudioSource>();
 
-        Instantiate(hookPrefab, hookNode);
+        //Instantiate(hookPrefab, hookNode);
     }
 
     // Update is called once per frame

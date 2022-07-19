@@ -260,7 +260,7 @@ public class HeliController : MonoBehaviour
     {
         if (Time.time - lastTakeoffTime > 1.0f)
         {           
-            Invoke("TryRearm", 2.0f);
+            Invoke(nameof(TryRearm), 2.0f);
         }
     }
 
@@ -268,8 +268,7 @@ public class HeliController : MonoBehaviour
     {
         if(isOnGround)
         {
-            if (onLanding != null)
-                onLanding.Invoke(landingZone);
+            onLanding.Invoke(landingZone);
         }
     }
 }

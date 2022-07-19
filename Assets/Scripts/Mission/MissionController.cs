@@ -4,7 +4,13 @@ using UnityEngine;
 
 public class MissionController : MonoBehaviour
 {
-    [SerializeField] private List<Mission> missions;
+    [SerializeField] private Mission[] missions;
+
+    private void Awake()
+    {
+        missions = GetComponentsInChildren<Mission>();
+    }
+
     // Start is called before the first frame update
     void Start()
     {
@@ -19,17 +25,11 @@ public class MissionController : MonoBehaviour
 
     private void OnEnable()
     {
-        foreach(Mission mission in missions)
-        {
-            mission.OnEnable();
-        }
+
     }
 
     private void OnDisable()
     {
-        foreach (Mission mission in missions)
-        {
-            mission.OnDisable();
-        }
+
     }
 }

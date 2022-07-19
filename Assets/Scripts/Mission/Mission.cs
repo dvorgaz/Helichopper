@@ -2,34 +2,37 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[System.Serializable]
-public class Mission
+public class Mission : MonoBehaviour
 {
-    [System.Serializable]
-    public class Task
-    {
-        public GameEvent taskEvent;
-        public GameObject taskSubject;
-        public bool completed = false;
+    //public class Task
+    //{
+    //    public GameEvent taskEvent;
+    //    public GameObject taskSubject;
+    //    public bool completed = false;
 
-        public void ProcessEvent(GameObject subject)
-        {
-            if(taskSubject == null || subject == taskSubject)
-            {
-                completed = true;
-            }
-        }
-    }
+    //    public void ProcessEvent(GameObject subject)
+    //    {
+    //        if(taskSubject == null || subject == taskSubject)
+    //        {
+    //            completed = true;
+    //        }
+    //    }
+    //}
 
     [SerializeField] private string title;
     [SerializeField] private string description;
-    [SerializeField] private List<Task> tasks;    
+    [SerializeField] private Task[] tasks;
+
+    private void Awake()
+    {
+        tasks = GetComponentsInChildren<Task>();
+    }
 
     public void OnEnable()
     {
         foreach(Task task in tasks)
         {
-            task.taskEvent.AddListener(task.ProcessEvent);
+            //task.taskEvent.AddListener(task.ProcessEvent);
         }
     }
 
@@ -37,7 +40,7 @@ public class Mission
     {
         foreach (Task task in tasks)
         {
-            task.taskEvent.RemoveListener(task.ProcessEvent);
+            //task.taskEvent.RemoveListener(task.ProcessEvent);
         }
     }
 }

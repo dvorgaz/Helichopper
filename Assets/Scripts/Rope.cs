@@ -23,7 +23,7 @@ public class Rope : MonoBehaviour
     [Range(1, 50)] [SerializeField] private int iterations;
     private List<RopeSegment> ropeSegments = new List<RopeSegment>();
     private LineRenderer lineRenderer;
-    private Transform ropeEndNode;
+    [SerializeField] private Transform ropeEndNode;
     private float targetPosition = 0.0f;
     [SerializeField] private float speed;
     [SerializeField] float rotationSmoothing;
@@ -62,9 +62,6 @@ public class Rope : MonoBehaviour
             ropeStartPoint.y -= segmentLength;
         }
 
-        GameObject obj = new GameObject("RopeEnd");
-        ropeEndNode = obj.transform;
-        ropeEndNode.parent = transform;
         ropeEndNode.position = ropeSegments[ropeSegments.Count - 1].position;
 
         PickupConstraint = Vector3.zero;
