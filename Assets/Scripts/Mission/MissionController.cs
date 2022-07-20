@@ -8,6 +8,8 @@ public class MissionController : MonoBehaviour
 
     private Mission[] missions;
 
+    public int MissionCount { get { return missions.Length; } }
+
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -33,6 +35,21 @@ public class MissionController : MonoBehaviour
     void Update()
     {
         
+    }
+
+    public Mission[] GetMissions()
+    {
+        return missions;
+    }
+
+    public Mission GetMission(int idx)
+    {
+        if(idx >= 0 && idx < missions.Length)
+        {
+            return missions[idx];
+        }
+
+        return null;
     }
 
     public void CheckMissionsCompleted()

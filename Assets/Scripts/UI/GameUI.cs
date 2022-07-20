@@ -4,32 +4,30 @@ using TMPro;
 using UnityEngine;
 
 public class GameUI : MonoBehaviour
-{
-    public RectTransform Crosshair { get; private set; }
-
+{    
     [SerializeField] private HeliStatusDisplay heliStatus;
+    [SerializeField] private RectTransform crosshair;
+    [SerializeField] private RectTransform hudContainer;
     [SerializeField] private GameObject rearmPanel;
     [SerializeField] private GameObject retryButton;
+    [SerializeField] private GameObject menuPrefab;
+    private GameObject menu;
     private WeaponController weaponController;
     private Camera mainCamera;
 
+    public RectTransform Crosshair { get { return crosshair; } }
+
     private void Awake()
     {
-        Transform tr = transform.Find("Crosshair");
-        if(tr != null)
-        {
-            Crosshair = tr.GetComponent<RectTransform>();
-        }
-        else
-        {
-            Debug.LogError("Missing Crosshair UI");
-        }
+
     }
 
     // Start is called before the first frame update
     void Start()
     {
-        mainCamera = Camera.main;        
+        mainCamera = Camera.main;
+        menu = Instantiate(menuPrefab, hudContainer.parent);
+        menu.SetActive(false);
     }
 
     // Update is called once per frame
@@ -54,12 +52,38 @@ public class GameUI : MonoBehaviour
 
     public void ShowRearmPanel(bool visible)
     {
-        rearmPanel.SetActive(visible);        
+        rearmPanel.SetActive(visible);
+
+        if (visible)
+        {
+            menu.SetActive(false);
+        }
+    }
+
+    public void ShowIngameMenu(bool visible)
+    {
+        menu.SetActive(visible);
+
+        if(visible)
+        {
+            rearmPanel.SetActive(false);
+        }
+    }
+
+    public bool IsIngameMenuOpen()
+    {
+        return menu.activeInHierarchy;
     }
 
     public void ShowRetryButton(bool visible)
     {
         retryButton.SetActive(visible);
+
+        if (visible)
+        {
+            menu.SetActive(false);
+            rearmPanel.SetActive(false);
+        }
     }
 
     public void OnRearmClose()

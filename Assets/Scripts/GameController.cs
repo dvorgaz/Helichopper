@@ -103,6 +103,14 @@ public class GameController : MonoBehaviour
         SetPlayerInputEnable(!visible);
     }
 
+    public void ShowIngameMenu(bool visible)
+    {
+        ShowCursor(visible);
+        Time.timeScale = visible ? 0.0f : 1.0f;
+        GameUI.ShowIngameMenu(visible);
+        SetPlayerInputEnable(!visible);
+    }
+
     public void Retry()
     {
         SceneManager.LoadScene("SampleScene");
@@ -137,6 +145,11 @@ public class GameController : MonoBehaviour
                 SpawnPlayer();
             }
 
+            if(Input.GetKeyDown(KeyCode.Tab))
+            {
+                ShowIngameMenu(!GameUI.IsIngameMenuOpen());
+            }
+
             yield return null;
         }
 
@@ -144,5 +157,12 @@ public class GameController : MonoBehaviour
 
         ShowCursor(true);
         GameUI.ShowRetryButton(true);
+    }
+
+    public Vector3 WorldToMapPos(Vector3 worldPos)
+    {
+        // TODO
+        float mapSize = 1000.0f;
+        return new Vector3(worldPos.x / mapSize, worldPos.z / mapSize, 0.0f);
     }
 }

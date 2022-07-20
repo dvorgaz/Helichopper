@@ -41,4 +41,19 @@ public class Mission : MonoBehaviour
 
         return true;
     }
+
+    public List<Vector3> GetMarkerPositions()
+    {
+        List<Vector3> markers = new List<Vector3>();
+
+        foreach(Task task in tasks)
+        {
+            if (task.taskSubject != null && !task.completed)
+            {
+                markers.Add(task.taskSubject.transform.position);
+            }
+        }
+
+        return markers;
+    }
 }
