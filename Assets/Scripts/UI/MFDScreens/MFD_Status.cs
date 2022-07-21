@@ -11,10 +11,17 @@ public class MFD_Status : MFD_Page
     {
         string status = "";
 
+        bool allComplete = true;
         for(int i = 0; i < MissionController.Instance.MissionCount; ++i)
         {
             Mission msn = MissionController.Instance.GetMission(i);
+            allComplete &= msn.completed;
             status += (i + 1).ToString() + " - " + msn.title + ": " + (msn.completed ? "COMPLETED" : "PENDING") + "\n";
+        }
+
+        if(allComplete)
+        {
+            status += "\n\nAll missions completed. Return to base.";
         }
 
         statusText.text = status;

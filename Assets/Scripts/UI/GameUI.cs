@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class GameUI : MonoBehaviour
 {    
@@ -11,9 +12,11 @@ public class GameUI : MonoBehaviour
     [SerializeField] private GameObject rearmPanel;
     [SerializeField] private GameObject retryButton;
     [SerializeField] private GameObject menuPrefab;
+    [SerializeField] private GameObject notificationPrefab;
     private GameObject menu;
     private WeaponController weaponController;
     private Camera mainCamera;
+    private Queue<UnityAction> notificationQueue = new Queue<UnityAction>();
 
     public RectTransform Crosshair { get { return crosshair; } }
 
@@ -94,5 +97,31 @@ public class GameUI : MonoBehaviour
     public void OnRetry()
     {
         GameController.Instance.Retry();
+    }
+
+    public void ShowNotification(string text)
+    {
+        bool wasEmpty = notificationQueue.Count == 0;
+
+        notificationQueue.Enqueue(() => ShowNotificationInternal(text));
+
+        if (wasEmpty)
+            notificationQueue.Peek().Invoke();
+    }
+
+    private void ShowNotificationInternal(string text)
+    {
+        NotificationText notif = Instantiate(notificationPrefab, hudContainer).GetComponent<NotificationText>();
+        notif.ShowNotification(text, () => ShowNextNotification());
+    }
+
+    private void ShowNextNotification()
+    {
+        notificationQueue.Dequeue();
+
+        if (notificationQueue.Count > 0)
+        {
+            notificationQueue.Peek().Invoke();
+        }
     }
 }

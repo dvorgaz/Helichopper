@@ -38,6 +38,7 @@ public class Mission : MonoBehaviour
         completed = true;
         missionCompleted.Invoke();
         Debug.Log("Mission " + title + " completed");
+        GameController.Instance.ShowNotification("Mission Completed");
 
         return true;
     }

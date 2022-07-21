@@ -8,6 +8,7 @@ public class GameController : MonoBehaviour
     public static GameController Instance { get; private set; }
 
     [SerializeField] private GameObject gameUIPrefab;
+    [SerializeField] private ScreenFader screenFader;
     public GameUI GameUI { get; private set; }
 
     private GameObject playerTemplate;
@@ -15,7 +16,7 @@ public class GameController : MonoBehaviour
 
     [SerializeField] private int lives = 3;
     private bool playerWasKilled = false;
-
+    private bool campaignCompleted = false;
     private void Awake()
     {
         if(Instance != null && Instance != this)
@@ -47,6 +48,7 @@ public class GameController : MonoBehaviour
         ShowRearmMenu(false);
         GameUI.ShowRetryButton(false);
 
+        screenFader.Fade(-1);
         StartCoroutine(GameLoopCoroutine());
     }
 
@@ -55,12 +57,20 @@ public class GameController : MonoBehaviour
     {
         if(Input.GetKeyDown(KeyCode.Escape))
         {
-            Application.Quit();
+            ReturnToMainMenu();
+            //Application.Quit();
         }
 
         if (Input.GetKeyDown(KeyCode.F1))
         {
             Retry();
+        }
+
+        if(Input.GetKeyDown(KeyCode.E))
+        {
+            //ShowNotification("sdfsdf");
+            StopAllCoroutines();
+            screenFader.Fade(1, () => SceneManager.LoadScene("VictoryScene"));
         }
     }
 
@@ -86,7 +96,19 @@ public class GameController : MonoBehaviour
 
     public void OnLandedOnBase(GameObject landingZone)
     {
-        ShowRearmMenu(true);
+        LandingZone lz = landingZone.GetComponent<LandingZone>();
+        if (lz != null && lz.type == LandingZone.Type.HomeBase)
+        {
+            if (campaignCompleted)
+            {
+                StopAllCoroutines();
+                screenFader.Fade(1, () => SceneManager.LoadScene("VictoryScene"));
+            }
+            else
+            {
+                ShowRearmMenu(true);
+            }
+        }
     }
 
     public void ShowCursor(bool visible)
@@ -116,6 +138,12 @@ public class GameController : MonoBehaviour
         SceneManager.LoadScene("SampleScene");
     }
 
+    public void ReturnToMainMenu()
+    {
+        StopAllCoroutines();
+        screenFader.Fade(1, () => SceneManager.LoadScene("MainMenu"));
+    }
+
     public void OnPlayerDead(GameObject player)
     {
         if (this.Player == player)
@@ -129,10 +157,11 @@ public class GameController : MonoBehaviour
 
     public IEnumerator GameLoopCoroutine()
     {
-        SetPlayerInputEnable(false);
-        yield return new WaitForSeconds(1.0f);
-
         SpawnPlayer();
+        SetPlayerInputEnable(false);
+
+        yield return new WaitForSeconds(1.0f);
+        
         SetPlayerInputEnable(true);
 
         while(lives > 0)
@@ -164,5 +193,15 @@ public class GameController : MonoBehaviour
         // TODO
         float mapSize = 1000.0f;
         return new Vector3(worldPos.x / mapSize, worldPos.z / mapSize, 0.0f);
+    }
+
+    public void OnAllMissionsCompleted()
+    {
+        campaignCompleted = true;
+    }
+
+    public void ShowNotification(string text)
+    {
+        GameUI.ShowNotification(text);
     }
 }

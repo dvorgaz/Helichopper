@@ -42,6 +42,7 @@ public class HeliController : MonoBehaviour
     private bool isOnGround = false;
     private float lastTakeoffTime = 0.0f;
     [SerializeField] private UnityEvent<GameObject> onLanding;
+    [SerializeField] private UnityEvent<GameObject> onOutOfFuel;
     private GameObject landingZone;
 
     public bool Landing { get { return isInLandingZone > 0; } }
@@ -109,10 +110,13 @@ public class HeliController : MonoBehaviour
 
     private void FixedUpdate()
     {
-        Fuel -= fuelBurnRate * Time.fixedDeltaTime;
+        if(!Landing)
+            Fuel -= fuelBurnRate * Time.fixedDeltaTime;
+
         if(Fuel < 0.0f)
         {
             ShutDown();
+            onOutOfFuel.Invoke(gameObject);
         }
 
         UpdateRotorTilt();
