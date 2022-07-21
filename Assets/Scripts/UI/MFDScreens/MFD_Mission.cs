@@ -14,7 +14,7 @@ public class MFD_Mission : MFD_Page
         Mission msn = MissionController.Instance.GetMission(IngameMenu.Instance.SelectedMission);
         if (msn != null)
         {
-            titleText.text = msn.title;
+            titleText.text = msn.title.ToUpper();
             descriptionText.text = msn.description;
             selectedMissionText.text = "MISSION " + (IngameMenu.Instance.SelectedMission + 1).ToString();
         }

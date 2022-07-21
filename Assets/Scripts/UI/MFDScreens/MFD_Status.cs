@@ -16,7 +16,7 @@ public class MFD_Status : MFD_Page
         {
             Mission msn = MissionController.Instance.GetMission(i);
             allComplete &= msn.completed;
-            status += (i + 1).ToString() + " - " + msn.title + ": " + (msn.completed ? "COMPLETED" : "PENDING") + "\n";
+            status += (i + 1).ToString() + " - " + msn.title.ToUpper() + ": " + (msn.completed ? "COMPLETED" : "PENDING") + "\n";
         }
 
         if(allComplete)

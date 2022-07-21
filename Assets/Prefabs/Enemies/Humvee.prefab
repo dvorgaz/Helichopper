@@ -319,7 +319,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   detectionRange: 100
-  losRangeOffset: 5
+  losRangeOffset: 2
   losSizeOffset: 20
   tickDelayRange: {x: 1, y: 1}
   attackDelayRange: {x: 2, y: 4}

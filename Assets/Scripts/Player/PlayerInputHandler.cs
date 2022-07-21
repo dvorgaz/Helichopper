@@ -27,10 +27,12 @@ public class PlayerInputHandler : MonoBehaviour
     {
         if(heli != null)
         {
+#if UNITY_EDITOR
             if (Input.GetMouseButtonDown(1))
             {
                 SetCyclicControl(!controllingCyclic);
             }
+#endif
 
             if (controllingCyclic)
             {

@@ -61,6 +61,7 @@ public class GameController : MonoBehaviour
             //Application.Quit();
         }
 
+#if UNITY_EDITOR
         if (Input.GetKeyDown(KeyCode.F1))
         {
             Retry();
@@ -72,6 +73,7 @@ public class GameController : MonoBehaviour
             StopAllCoroutines();
             screenFader.Fade(1, () => SceneManager.LoadScene("VictoryScene"));
         }
+#endif
     }
 
     public void SpawnPlayer()

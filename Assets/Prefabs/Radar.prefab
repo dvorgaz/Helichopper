@@ -62,8 +62,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxHealth: 30
-  deathEffectPrefab: {fileID: 1000011797152326, guid: 754f37ed93f92ec4887f482466830e31, type: 3}
-  smokeEffectPrefab: {fileID: 4111725265502828604, guid: 4905fa2205bde7d4398af112d659d45a, type: 3}
+  deathEffectPrefab: {fileID: 2690062755078764634, guid: 4192a968efa7f7e4587b731f73dbce48, type: 3}
+  smokeEffectPrefab: {fileID: 9011997764750237971, guid: d80fc703c2b6e7d4bb990b2b73a14b19, type: 3}
   onDeath:
     m_PersistentCalls:
       m_Calls:

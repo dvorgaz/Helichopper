@@ -72,14 +72,14 @@ public class EnemyAI : MonoBehaviour
     private bool IsInLineOfSight(Vector3 pos)
     {
         RaycastHit hitInfo;
-        Vector3 delta = pos - transform.position;
+        Vector3 delta = pos - weapon.transform.position;
         Vector3 dir = delta.normalized;
         float dist = delta.magnitude;
 
         if (dist > detectionRange)
             return false;
 
-        if (Physics.Raycast(transform.position + dir * losRangeOffset, dir, out hitInfo, dist, LayerMask.GetMask("Default", "Vehicle"), QueryTriggerInteraction.Ignore))
+        if (Physics.Raycast(weapon.transform.position + dir * losRangeOffset, dir, out hitInfo, dist, LayerMask.GetMask("Default", "Vehicle"), QueryTriggerInteraction.Ignore))
         {
             if (hitInfo.distance < dist - losSizeOffset)
                 return false;
