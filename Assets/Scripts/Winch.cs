@@ -105,10 +105,10 @@ public class Winch : MonoBehaviour
 
             audioSrc.PlayOneShot(pickupSfx);
 
-            if(pickupsInRange > 0)
-            {
-                Extend();
-            }
+            //if(pickupsInRange > 0)
+            //{
+            //    Extend();
+            //}
         }        
     }
 

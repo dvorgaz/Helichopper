@@ -197,33 +197,43 @@ public class HeliController : MonoBehaviour
 
         if(useAltitudeFromGround)
         {
+            float r = 20.0f;
             RaycastHit hit;
-            if (Physics.Raycast(transform.position, -Vector3.up, out hit, 200.0f, LayerMask.GetMask("Default"), QueryTriggerInteraction.Ignore))
+            if (Physics.SphereCast(transform.position + Vector3.up * r, r, -Vector3.up, out hit, 200.0f, LayerMask.GetMask("Default"), QueryTriggerInteraction.Ignore))
+            //if (Physics.Raycast(transform.position, -Vector3.up, out hit, 200.0f, LayerMask.GetMask("Default"), QueryTriggerInteraction.Ignore))
             {
                 altitudeThreshold = maxAltitude + hit.point.y;
-            }
+            }            
         }
 
-        if (thrustEnabled && transform.position.y < altitudeThreshold)
+        if (thrustEnabled)
         {
-            rb.AddForce(rb.mass * -Physics.gravity + vThrust, ForceMode.Force);
+            Vector3 totalLift = Vector3.zero;
+
+            if (transform.position.y < altitudeThreshold)
+                totalLift += rb.mass * -Physics.gravity;
+
+            if (transform.position.y < altitudeThreshold || vThrust.y < 0)
+                totalLift += vThrust;
+
+            rb.AddForce(totalLift, ForceMode.Force);
 
             if (useMinAltitude && !Landing)
             {
-                float nextGroundAlt = 0;
+                float nextGroundAlt = -1;
 
                 RaycastHit hit2;
-                if (Physics.Raycast(transform.position + rb.velocity * 0.5f, -Vector3.up, out hit2, 200.0f, LayerMask.GetMask("Default"), QueryTriggerInteraction.Ignore))
+                if (Physics.Raycast(transform.position + rb.velocity * 1.0f, -Vector3.up, out hit2, 200.0f, LayerMask.GetMask("Default"), QueryTriggerInteraction.Ignore))
                 {
                     nextGroundAlt = hit2.point.y;
                 }
 
-                if (nextGroundAlt > 0)
+                if (nextGroundAlt > -1)
                 {
-                    Vector3 nextPos = transform.position + rb.velocity * 0.5f;
+                    Vector3 nextPos = transform.position + rb.velocity * 1.0f;
                     float dY = nextPos.y - nextGroundAlt;
                     if (dY < minAltitude)
-                        rb.AddForce(Vector3.up * dY, ForceMode.VelocityChange);
+                        rb.AddForce(Vector3.up * (minAltitude - dY), ForceMode.VelocityChange);
                 }
             }
         }
