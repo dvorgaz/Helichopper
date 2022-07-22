@@ -28,7 +28,7 @@ public class PlayerInputHandler : MonoBehaviour
         if(heli != null)
         {
 #if UNITY_EDITOR
-            if (Input.GetMouseButtonDown(1))
+            if (Input.GetMouseButtonDown(2))
             {
                 SetCyclicControl(!controllingCyclic);
             }
@@ -67,7 +67,7 @@ public class PlayerInputHandler : MonoBehaviour
                 heli.Horizontal -= 1.0f;
             }
 
-            heli.StabilizeAim = Input.GetMouseButton(0);
+            heli.StabilizeAim = Input.GetMouseButton(0) || Input.GetMouseButton(1);
         }
 
         if (wpn != null)
@@ -77,10 +77,12 @@ public class PlayerInputHandler : MonoBehaviour
                 wpn.FireSelectedWeapon();
             }
 
+#if UNITY_EDITOR
             if (Input.GetKeyDown(KeyCode.R))
             {
                 wpn.Rearm();
             }
+#endif
 
             if (Input.GetKeyDown(KeyCode.F))
             {

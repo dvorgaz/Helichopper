@@ -87,6 +87,12 @@ public class TargetingLine : MonoBehaviour
 
     private void DrawTargetingLine2()
     {
+        if(!Input.GetMouseButton(1))
+        {
+            lineRenderer.positionCount = 0;
+            return;
+        }
+
         Vector3 dir = Vector3.ProjectOnPlane(player.transform.forward, Vector3.up).normalized;
         Vector3 pos = player.transform.position;
         

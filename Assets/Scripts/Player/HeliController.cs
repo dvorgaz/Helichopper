@@ -21,7 +21,10 @@ public class HeliController : MonoBehaviour
     [SerializeField] private float maxRotorTilt;
     [SerializeField] private float tiltSmooth;
     [SerializeField] private bool useSmoothing;
+    [SerializeField] private float stabilizedAngularDragMultiplier;
+    [SerializeField] private float stabilizedTurnRateMultiplier;
     private Vector3 worldTiltDir;
+    private float origAngularDrag;
 
     public float Horizontal { get; set; } = 0.0f;
     public float Vertical { get; set; } = 0.0f;
@@ -35,6 +38,7 @@ public class HeliController : MonoBehaviour
     [SerializeField] private float tailDrag;
     [SerializeField] private float landingHeight;
     [SerializeField] private float maxAltitude;
+    [SerializeField] private bool useAltitudeFromGround;
 
     private bool thrustEnabled = true;
     private bool controlEnabled = true;
@@ -64,6 +68,7 @@ public class HeliController : MonoBehaviour
         rb = GetComponent<Rigidbody>();
         rb.centerOfMass = Vector3.zero;
         rb.maxAngularVelocity = 70;
+        origAngularDrag = rb.angularDrag;
         cameraTransform = Camera.main.transform;
         Fuel = maxFuel;
         lastTakeoffTime = Time.time;
@@ -110,10 +115,12 @@ public class HeliController : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if(!Landing)
+        bool hadFuel = Fuel > 0.0f;
+
+        if (!Landing)
             Fuel -= fuelBurnRate * Time.fixedDeltaTime;
 
-        if(Fuel < 0.0f)
+        if(hadFuel && Fuel < 0.0f)
         {
             ShutDown();
             onOutOfFuel.Invoke(gameObject);
@@ -184,7 +191,18 @@ public class HeliController : MonoBehaviour
             }
         }
 
-        if (thrustEnabled && transform.position.y < maxAltitude)
+        float altitudeThreshold = maxAltitude;
+
+        if(useAltitudeFromGround)
+        {
+            RaycastHit hit;
+            if (Physics.Raycast(transform.position, -Vector3.up, out hit, 200.0f, LayerMask.GetMask("Default"), QueryTriggerInteraction.Ignore))
+            {
+                altitudeThreshold = maxAltitude + hit.point.y;
+            }
+        }
+
+        if (thrustEnabled && transform.position.y < altitudeThreshold)
         {
             rb.AddForce(rb.mass * -Physics.gravity + vThrust, ForceMode.Force);
         }
@@ -199,7 +217,7 @@ public class HeliController : MonoBehaviour
         {
             Vector3 hThrust = tailOffset.right * turnRate * Horizontal;
             if (StabilizeAim)
-                hThrust *= 0.3f;
+                hThrust *= stabilizedTurnRateMultiplier;
 
             rb.AddForceAtPosition(hThrust, tailOffset.position, ForceMode.Force);
         }
@@ -210,6 +228,8 @@ public class HeliController : MonoBehaviour
             float tailDragForce = Vector3.Dot(tailOffset.right, flow) * tailDrag * rb.velocity.sqrMagnitude;
             rb.AddForceAtPosition(tailOffset.right * tailDragForce, tailOffset.position, ForceMode.Force);
         }
+
+        rb.angularDrag = origAngularDrag * (StabilizeAim ? stabilizedAngularDragMultiplier : 1.0f);
     }
 
     private void CheckLanding()

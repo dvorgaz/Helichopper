@@ -17,6 +17,9 @@ public class GameController : MonoBehaviour
     [SerializeField] private int lives = 3;
     private bool playerWasKilled = false;
     private bool campaignCompleted = false;
+    private Bounds mapBounds;
+    public Bounds MapBounds { get { return mapBounds; } }
+
     private void Awake()
     {
         if(Instance != null && Instance != this)
@@ -30,6 +33,18 @@ public class GameController : MonoBehaviour
         }
 
         GameUI = Instantiate(gameUIPrefab).GetComponent<GameUI>();
+
+        mapBounds = new Bounds();
+        Terrain[] terrains = FindObjectsOfType<Terrain>();
+        if(terrains != null)
+        {
+            foreach(Terrain terrain in terrains)
+            {
+                Bounds b = terrain.terrainData.bounds;
+                mapBounds.Encapsulate(b.min + terrain.transform.position);
+                mapBounds.Encapsulate(b.max + terrain.transform.position);
+            }
+        }
     }
 
     // Start is called before the first frame update
@@ -74,6 +89,19 @@ public class GameController : MonoBehaviour
             screenFader.Fade(1, () => SceneManager.LoadScene("VictoryScene"));
         }
 #endif
+    }
+
+    private void FixedUpdate()
+    {
+        if(Player != null)
+        {
+            Vector3 playerPos = Player.transform.position;
+            Rigidbody rb = Player.GetComponent<Rigidbody>();
+
+            static float GetDelta(float a, float min, float max) { return a < min ? min - a : (a > max ? max - a : 0.0f); }
+            Vector3 delta = new Vector3(GetDelta(playerPos.x, mapBounds.min.x, mapBounds.max.x), 0.0f, GetDelta(playerPos.z, mapBounds.min.z, mapBounds.max.z));
+            rb.AddForce(delta, ForceMode.VelocityChange);
+        }
     }
 
     public void SpawnPlayer()

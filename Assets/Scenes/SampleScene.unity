@@ -411,7 +411,7 @@ GameObject:
   - component: {fileID: 144373239}
   - component: {fileID: 144373238}
   m_Layer: 0
-  m_Name: CameraNode
+  m_Name: CameraRig
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -432,6 +432,12 @@ MonoBehaviour:
   target: {fileID: 810898684}
   offset: 27
   smoothParam: 2
+  mapBounds:
+    m_Center: {x: 0, y: 0, z: 0}
+    m_Extent: {x: 0, y: 0, z: 0}
+  topOffset: 150
+  bottomOffset: 70
+  horizontalOffset: 90
 --- !u!4 &144373239
 Transform:
   m_ObjectHideFlags: 0
@@ -440,7 +446,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 144373237}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 255.4, y: 27.03, z: 41.4}
+  m_LocalPosition: {x: 79.8, y: 27.03, z: 54.4}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -3477,11 +3483,11 @@ Camera:
     y: 0
     width: 1
     height: 1
-  near clip plane: 0.3
-  far clip plane: 1000
-  field of view: 30
+  near clip plane: 150
+  far clip plane: 500
+  field of view: 15
   orthographic: 0
-  orthographic size: 5
+  orthographic size: 50
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -3505,7 +3511,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 963194225}
   m_LocalRotation: {x: 0.39049006, y: 0, z: 0, w: 0.92060715}
-  m_LocalPosition: {x: 0, y: 73.23, z: -77.35}
+  m_LocalPosition: {x: 0, y: 188.5, z: -188.8}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -5496,7 +5502,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1516356527}
   m_LocalRotation: {x: 0.39049006, y: 0, z: 0, w: 0.92060715}
-  m_LocalPosition: {x: 0, y: 73.23, z: -77.35}
+  m_LocalPosition: {x: 0, y: 188.5, z: -188.79999}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -5526,11 +5532,11 @@ Camera:
     y: 0
     width: 1
     height: 1
-  near clip plane: 0.3
-  far clip plane: 1000
-  field of view: 30
+  near clip plane: 150
+  far clip plane: 500
+  field of view: 15
   orthographic: 0
-  orthographic size: 5
+  orthographic size: 50
   m_Depth: 0
   m_CullingMask:
     serializedVersion: 2
@@ -8210,6 +8216,22 @@ PrefabInstance:
     - target: {fileID: 3856494494415502110, guid: 33202d7934620b74d9ae4bd110bddad0, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3856494494415502111, guid: 33202d7934620b74d9ae4bd110bddad0, type: 3}
+      propertyPath: maxAltitude
+      value: 30
+      objectReference: {fileID: 0}
+    - target: {fileID: 3856494494415502111, guid: 33202d7934620b74d9ae4bd110bddad0, type: 3}
+      propertyPath: useAltitudeFromGround
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3856494494415502111, guid: 33202d7934620b74d9ae4bd110bddad0, type: 3}
+      propertyPath: stabilizedTurnRateMultiplier
+      value: 0.6
+      objectReference: {fileID: 0}
+    - target: {fileID: 3856494494415502111, guid: 33202d7934620b74d9ae4bd110bddad0, type: 3}
+      propertyPath: stabilizedAngularDragMultiplier
+      value: 3
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 33202d7934620b74d9ae4bd110bddad0, type: 3}
