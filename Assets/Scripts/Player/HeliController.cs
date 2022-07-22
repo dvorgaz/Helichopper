@@ -39,6 +39,8 @@ public class HeliController : MonoBehaviour
     [SerializeField] private float landingHeight;
     [SerializeField] private float maxAltitude;
     [SerializeField] private bool useAltitudeFromGround;
+    [SerializeField] private float minAltitude;
+    [SerializeField] private bool useMinAltitude;
 
     private bool thrustEnabled = true;
     private bool controlEnabled = true;
@@ -205,6 +207,25 @@ public class HeliController : MonoBehaviour
         if (thrustEnabled && transform.position.y < altitudeThreshold)
         {
             rb.AddForce(rb.mass * -Physics.gravity + vThrust, ForceMode.Force);
+
+            if (useMinAltitude && !Landing)
+            {
+                float nextGroundAlt = 0;
+
+                RaycastHit hit2;
+                if (Physics.Raycast(transform.position + rb.velocity * 0.5f, -Vector3.up, out hit2, 200.0f, LayerMask.GetMask("Default"), QueryTriggerInteraction.Ignore))
+                {
+                    nextGroundAlt = hit2.point.y;
+                }
+
+                if (nextGroundAlt > 0)
+                {
+                    Vector3 nextPos = transform.position + rb.velocity * 0.5f;
+                    float dY = nextPos.y - nextGroundAlt;
+                    if (dY < minAltitude)
+                        rb.AddForce(Vector3.up * dY, ForceMode.VelocityChange);
+                }
+            }
         }
 
         if(!ignoreLanding)
