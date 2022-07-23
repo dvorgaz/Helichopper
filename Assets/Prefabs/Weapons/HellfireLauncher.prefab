@@ -53,6 +53,7 @@ MonoBehaviour:
   burstLength: 0
   shotsMax: 0
   range: 150
+  ammoItem: {fileID: 11400000, guid: e10b775471f88fe4f8a5947cb5e46269, type: 2}
 --- !u!1 &7158312112252728201
 GameObject:
   m_ObjectHideFlags: 0

@@ -286,8 +286,11 @@ public class HeliController : MonoBehaviour
 
     public void OnItemPickedUp(Pickup pickup)
     {
-        Refuel();
-        GetComponent<Health>().Heal();
+        if (pickup.content.type.name == "FuelDrum")
+            Refuel();
+
+        if (pickup.content.type.name == "ArmorRefill")
+            GetComponent<Health>().Heal();
     }
 
     private void OnTriggerEnter(Collider other)

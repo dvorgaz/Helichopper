@@ -53,6 +53,7 @@ MonoBehaviour:
   burstLength: 0
   shotsMax: 0
   range: 100
+  ammoItem: {fileID: 11400000, guid: 1b54a3e5660b09f4b9d409d09ef74741, type: 2}
 --- !u!82 &614814328935376274
 AudioSource:
   m_ObjectHideFlags: 0

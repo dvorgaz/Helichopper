@@ -8,6 +8,8 @@ public class Pickup : MonoBehaviour
     [SerializeField] private float attachOffsetY;
     private Rigidbody rb;
 
+    public InventoryItem content;
+
     public Vector3 AttachOffset
     {
         get { return transform.up * attachOffsetY; }

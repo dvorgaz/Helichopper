@@ -17,7 +17,9 @@ public class WeaponLauncher : MonoBehaviour
     [SerializeField] private int burstLength;
     [SerializeField] private int shotsMax = 0;
     [SerializeField] private float range;
-    public int ShotsLeft { get; private set; }
+    [SerializeField] private ItemType ammoItem;
+    public ItemType AmmoItem { get { return ammoItem; } }
+    public int ShotsLeft { get; set; }
     public float Range { get { return range; } }
 
     private GameObject weaponModel;
@@ -52,14 +54,15 @@ public class WeaponLauncher : MonoBehaviour
         Transform tr = transform.Find("WeaponModel");
         if(tr != null)
             weaponModel = tr.gameObject;
+
+        Reload();
     }
 
     // Start is called before the first frame update
     void Start()
     {
         particleSystems = transform.GetComponentsInChildren<ParticleSystem>();
-        audioSrc = GetComponent<AudioSource>();
-        Reload();
+        audioSrc = GetComponent<AudioSource>();        
     }
 
     // Update is called once per frame

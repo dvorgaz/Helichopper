@@ -41,8 +41,7 @@ public class WeaponController : MonoBehaviour
         return idx < weapons.Count ? weapons[idx] : null;
     }
 
-    // Start is called before the first frame update
-    void Start()
+    private void Awake()
     {
         rb = GetComponent<Rigidbody>();
 
@@ -54,11 +53,11 @@ public class WeaponController : MonoBehaviour
 
         flareLaunchers = new List<Transform>();
         Transform fl = transform.Find("FlareLaunchers");
-        if(fl != null)
+        if (fl != null)
         {
-            foreach(Transform tr in fl)
+            foreach (Transform tr in fl)
             {
-                if(tr.gameObject.activeSelf)
+                if (tr.gameObject.activeSelf)
                     flareLaunchers.Add(tr);
             }
         }
@@ -68,6 +67,12 @@ public class WeaponController : MonoBehaviour
         }
 
         Flares = maxFlareAmount;
+    }
+
+    // Start is called before the first frame update
+    void Start()
+    {
+
     }
 
     // Update is called once per frame
@@ -218,7 +223,33 @@ public class WeaponController : MonoBehaviour
 
     public void OnItemPickedUp(Pickup pickup)
     {
-        Rearm();
-        Debug.Log("Item processed: " + pickup.gameObject.name);
+        if(pickup.content.type.name == "AmmoRefill")
+            Rearm();
+    }
+
+    public Dictionary<ItemType, int> GetRemainingAmmo()
+    {
+        Dictionary<ItemType, int> result = new Dictionary<ItemType, int>();
+        foreach (WeaponLauncher weapon in weapons)
+        {
+            result.Add(weapon.AmmoItem, weapon.ShotsLeft);
+        }
+
+        return result;
+    }
+
+    public void SetRemainingAmmo(Dictionary<ItemType, int> remainingAmmo)
+    {
+        foreach (WeaponLauncher weapon in weapons)
+        {
+            if (remainingAmmo.ContainsKey(weapon.AmmoItem))
+            {
+                weapon.ShotsLeft = remainingAmmo[weapon.AmmoItem];
+            }
+            else
+            {
+                weapon.ShotsLeft = 0;
+            }
+        }
     }
 }

@@ -20,6 +20,8 @@ public class GameController : MonoBehaviour
     private Bounds mapBounds;
     public Bounds MapBounds { get { return mapBounds; } }
 
+    private Dictionary<ItemType, int> playerRemainingAmmo;
+
     private void Awake()
     {
         if(Instance != null && Instance != this)
@@ -112,8 +114,13 @@ public class GameController : MonoBehaviour
             Player = null;
         }
 
-        Player = Instantiate(playerTemplate);
+        Player = Instantiate(playerTemplate);       
         Player.SetActive(true);
+
+        if (playerRemainingAmmo != null)
+        {
+            Player.GetComponent<WeaponController>().SetRemainingAmmo(playerRemainingAmmo);
+        }
     }
 
     public void SetPlayerInputEnable(bool enable)
@@ -180,6 +187,7 @@ public class GameController : MonoBehaviour
         {
             lives--;
             playerWasKilled = true;
+            playerRemainingAmmo = Player.GetComponent<WeaponController>().GetRemainingAmmo();
             //ShowCursor(true);
             //GameUI.ShowRetryButton(true);
         }
