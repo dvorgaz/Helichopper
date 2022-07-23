@@ -156,11 +156,12 @@ public class ShootingAI : MonoBehaviour
     {
         Vector3 looTo = Vector3.ProjectOnPlane(pos - transform.position, Vector3.up).normalized;
         Quaternion newRot = Quaternion.LookRotation(looTo, Vector3.up);
-        transform.rotation = Quaternion.Slerp(transform.rotation, newRot, Time.deltaTime * 20.0f);
+        transform.rotation = Quaternion.Slerp(transform.rotation, newRot, Time.deltaTime * 10.0f);
     }
 
     public void OnDeath()
     {
         StopAllCoroutines();
+        enabled = false;
     }
 }

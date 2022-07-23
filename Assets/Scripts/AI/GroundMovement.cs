@@ -28,7 +28,8 @@ public abstract class GroundMovement : MonoBehaviour
         set
         {
             destination = value;
-            agent.SetDestination(destination);
+            if(destination != Vector3.zero)
+                agent.SetDestination(destination);
         }
     }
 
@@ -43,6 +44,7 @@ public abstract class GroundMovement : MonoBehaviour
 
             if (inRangeHorizontal && inRangeVertical)
             {
+                destination = Vector3.zero;
                 onDestinationReached.Invoke();
             }
         }
