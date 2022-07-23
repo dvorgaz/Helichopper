@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public enum DamageType
 {
@@ -15,6 +16,7 @@ public class DamageParams
     public uint damageID;
     public DamageType type;
     public RaycastHit hitInfo;
+    public UnityAction<Rigidbody> damageCallback;
 
     public DamageParams(DamageType type, int damage, uint damageID, RaycastHit hitInfo)
     {

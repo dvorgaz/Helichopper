@@ -39,6 +39,13 @@ public class Health : MonoBehaviour
             {
                 Kill();
             }
+
+            if(dp.damageCallback != null)
+            {
+                Rigidbody rb = GetComponent<Rigidbody>();
+                if (rb != null)
+                    dp.damageCallback.Invoke(rb);
+            }
         }
     }
 

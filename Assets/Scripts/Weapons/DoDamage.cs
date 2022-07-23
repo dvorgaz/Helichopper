@@ -11,6 +11,7 @@ public class DoDamage : MonoBehaviour
     [SerializeField] private bool splashDamage;
     [SerializeField] private float blastRadius;
     [SerializeField] private float blastForce;
+    [SerializeField] private float blastOffset;
 
     static uint damageID = 0;
 
@@ -22,13 +23,12 @@ public class DoDamage : MonoBehaviour
 
         if (splashDamage)
         {
+            dmgParams.damageCallback = (Rigidbody rb) => { rb.AddExplosionForce(blastForce, transform.position, blastRadius, blastOffset); };
+
             Collider[] colliders = Physics.OverlapSphere(transform.position, blastRadius, LayerMask.GetMask("Default", "Vehicle"));
             foreach (Collider coll in colliders)
             {                
                 coll.gameObject.SendMessageUpwards("Damage", dmgParams, SendMessageOptions.DontRequireReceiver);
-
-                Rigidbody rb = coll.gameObject.GetComponent<Rigidbody>();
-                if (rb != null) rb.AddExplosionForce(blastForce, transform.position, blastRadius, 4);
             }
         }
         else

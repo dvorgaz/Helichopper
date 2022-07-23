@@ -32,7 +32,7 @@ public class InfantryMovement : GroundMovement
         enabled = false;
         agent.enabled = false;
         rb.isKinematic = false;
-        rb.angularVelocity = Random.insideUnitSphere * 20.0f;
+        rb.angularVelocity = Random.onUnitSphere * 20.0f;
 
         if (anim != null)
         {

@@ -14556,6 +14556,7 @@ MonoBehaviour:
   splashDamage: 1
   blastRadius: 5
   blastForce: 1000000
+  blastOffset: 4
 --- !u!114 &8766491538481804809
 MonoBehaviour:
   m_ObjectHideFlags: 0
