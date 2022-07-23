@@ -55,9 +55,15 @@ public class MissionController : MonoBehaviour
     public void CheckMissionsCompleted()
     {
         bool allCompleted = true;
-        foreach(Mission mission in missions)
+        for(int i = 0; i < missions.Length; ++i)
         {
-            allCompleted &= mission.CheckCompleted();
+            bool wasCompleted = missions[i].completed;
+            allCompleted &= missions[i].CheckCompleted();
+
+            if(!wasCompleted && missions[i].completed)
+            {
+                GameController.Instance.ShowNotification(string.Format("Mission {0} completed", (i + 1).ToString()));
+            }
         }
 
         if(allCompleted)

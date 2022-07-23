@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(Health))]
-public class EnemyAI : MonoBehaviour
+public class ShootingAI : MonoBehaviour
 {
     private Health health;    
     private WeaponLauncher weapon;

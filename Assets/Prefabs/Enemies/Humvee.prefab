@@ -201,6 +201,7 @@ GameObject:
   - component: {fileID: 1062751719020503921}
   - component: {fileID: 6618610823074843831}
   - component: {fileID: 4830643628421659533}
+  - component: {fileID: 2531148764426636295}
   - component: {fileID: 3948792590781238218}
   m_Layer: 9
   m_Name: Humvee
@@ -337,6 +338,21 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   patrolRoute: {fileID: 0}
+--- !u!114 &2531148764426636295
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5311080604931683873}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 64255ce7e78a05f4dbb1f92b5c52afec, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  onDestinationReached:
+    m_PersistentCalls:
+      m_Calls: []
   tiltDampTime: 0.1
   turnDampTime: 0.4
 --- !u!195 &3948792590781238218

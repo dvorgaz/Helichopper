@@ -5,16 +5,8 @@ using UnityEngine.AI;
 
 [RequireComponent(typeof(NavMeshAgent))]
 [RequireComponent(typeof(Rigidbody))]
-public class GroundMoveAI : MonoBehaviour
+public class VehicleMovement : GroundMovement
 {
-    private NavMeshAgent agent;
-    private Rigidbody rb;
-
-    [SerializeField] private PatrolRoute patrolRoute;
-    private PatrolRoute.Tracker patrol;
-
-    private bool moveEnabled = true;
-
     private Transform[] wheelOffsets;
     private Vector3 tiltVelocity = Vector3.zero;
     private Vector3 turnVelocity = Vector3.zero;
@@ -22,8 +14,10 @@ public class GroundMoveAI : MonoBehaviour
     [SerializeField] private float tiltDampTime;
     [SerializeField] private float turnDampTime;
 
-    private void Awake()
+    protected override void Awake()
     {
+        base.Awake();
+
         Transform wheelOffsetFront = transform.Find("WheelOffsetFront");
         Transform wheelOffsetRear = transform.Find("WheelOffsetRear");
 
@@ -37,64 +31,37 @@ public class GroundMoveAI : MonoBehaviour
         }
     }
 
-    // Start is called before the first frame update
-    void Start()
-    {        
-        rb = GetComponent<Rigidbody>();
-        rb.isKinematic = true;
-
-        agent = GetComponent<NavMeshAgent>();
-        agent.updateRotation = false;
-        agent.updatePosition = false;
-        agent.updateUpAxis = false;
-
-        if (patrolRoute != null)
-        {
-            patrol = patrolRoute.GetTracker();
-            agent.SetDestination(patrol.SteerPoint);
-        }
-    }
-
     // Update is called once per frame
     void Update()
     {
-        if (!moveEnabled)
-            return;
-
-        if (patrolRoute != null && agent.isActiveAndEnabled)
+        if (destination != Vector3.zero && agent.isActiveAndEnabled)
         {
-            Vector3 dist = patrol.SteerPoint - transform.position;
+            Vector3 dist = destination - transform.position;
             bool inRangeHorizontal = Vector3.ProjectOnPlane(dist, Vector3.up).sqrMagnitude < agent.stoppingDistance * agent.stoppingDistance;
             bool inRangeVertical = Mathf.Abs(dist.y) < agent.stoppingDistance * 4;
 
             if (inRangeHorizontal && inRangeVertical)
             {
-                patrol.Next();
-                agent.SetDestination(patrol.SteerPoint);
+                onDestinationReached.Invoke();
             }
         }
     }
 
     private void FixedUpdate()
     {
-        if (!moveEnabled)
-            return;
-
         Vector3 vel = transform.forward * agent.desiredVelocity.magnitude;
         Vector3 newPos = transform.position + vel * Time.fixedDeltaTime;
         Vector3 newUp = Vector3.up;
 
-        if(wheelOffsets != null)
+        if (wheelOffsets != null)
         {
             const float yOffset = 4.0f;
             const float maxDist = 20.0f;
             int mask = LayerMask.GetMask("Default");
 
-            RaycastHit hit1;
-            if (Physics.Raycast(wheelOffsets[0].position + Vector3.up * yOffset, -Vector3.up, out hit1, maxDist, mask, QueryTriggerInteraction.Ignore))
+            if (Physics.Raycast(wheelOffsets[0].position + Vector3.up * yOffset, -Vector3.up, out RaycastHit hit1, maxDist, mask, QueryTriggerInteraction.Ignore))
             {
-                RaycastHit hit2;
-                if (Physics.Raycast(wheelOffsets[1].position + Vector3.up * yOffset, -Vector3.up, out hit2, maxDist, mask, QueryTriggerInteraction.Ignore))
+                if (Physics.Raycast(wheelOffsets[1].position + Vector3.up * yOffset, -Vector3.up, out RaycastHit hit2, maxDist, mask, QueryTriggerInteraction.Ignore))
                 {
                     Vector3 axis = (hit1.point - hit2.point).normalized;
 
@@ -117,7 +84,7 @@ public class GroundMoveAI : MonoBehaviour
 
     public void OnDeath()
     {
-        moveEnabled = false;
+        enabled = false;
         agent.enabled = false;
         rb.isKinematic = false;
     }
