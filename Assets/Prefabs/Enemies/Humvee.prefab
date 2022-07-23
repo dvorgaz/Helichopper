@@ -319,12 +319,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ff10f873e74875647a370e9174107b2e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  anim: {fileID: 0}
+  stopToShoot: 0
+  turnToShoot: 0
   detectionRange: 100
   losRangeOffset: 2
   losSizeOffset: 20
   tickDelayRange: {x: 1, y: 1}
   attackDelayRange: {x: 2, y: 4}
   attackAxisLength: 60
+  attackDuration: 2
 --- !u!114 &4830643628421659533
 MonoBehaviour:
   m_ObjectHideFlags: 0

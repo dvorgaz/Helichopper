@@ -105,14 +105,17 @@ public class WeaponLauncher : MonoBehaviour
         }
     }
 
-    public void Fire(Vector3 targetPoint, Transform lockedTarget = null, Rigidbody launchPlatform = null)
+    public bool Fire(Vector3 targetPoint, Transform lockedTarget = null, Rigidbody launchPlatform = null)
     {
         isFiring = true;
 
         if (CanFire())
         {           
             FireProjectile(targetPoint, lockedTarget, launchPlatform);
+            return true;
         }
+
+        return false;
     }
 
     public void Fire(Rigidbody launchPlatform = null)

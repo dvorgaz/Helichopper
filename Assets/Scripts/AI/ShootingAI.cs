@@ -12,6 +12,10 @@ public class ShootingAI : MonoBehaviour
     private Health targetHealth;
     private bool isTargetInLOS = false;
 
+    [SerializeField] private Animator anim;
+    [SerializeField] private bool stopToShoot;
+    [SerializeField] private bool turnToShoot;
+
     public bool IsTargetValid
     {
         get { return target != null && target.activeInHierarchy && isTargetInLOS; }
@@ -23,6 +27,7 @@ public class ShootingAI : MonoBehaviour
     [SerializeField] private Vector2 tickDelayRange = new Vector2(1, 1);
     [SerializeField] private Vector2 attackDelayRange = new Vector2(1, 1);
     [SerializeField] private float attackAxisLength;
+    [SerializeField] private float attackDuration;
 
     private bool isAttacking = false;
     private bool horizontalAttack;
@@ -109,6 +114,10 @@ public class ShootingAI : MonoBehaviour
     {
         isAttacking = true;
 
+        GroundMovement move = GetComponent<GroundMovement>();
+        if (move != null && stopToShoot)
+            move.Pause();        
+
         Vector3 toTarget = targetPoint - transform.position;
 
         Vector3 crossAxis = horizontalAttack ? Vector3.up : Vector3.Cross(toTarget, Vector3.up);
@@ -120,19 +129,34 @@ public class ShootingAI : MonoBehaviour
         //Vector3 startPoint = targetPoint + attackAxis;
         //Vector3 endPoint = targetPoint - attackAxis;
 
-        float attackDuration = 2.0f;
-
         for(float t = 0; t < attackDuration; t += Time.deltaTime)
         {
             Vector3 startPoint = target.transform.position + attackAxis;
             Vector3 endPoint = target.transform.position - attackAxis;
-            weapon.Fire(Vector3.Lerp(startPoint, endPoint, t / attackDuration));
+            Vector3 shootPoint = Vector3.Lerp(startPoint, endPoint, t / attackDuration);
+            bool playAnim = weapon.Fire(shootPoint);
+            if (playAnim && anim != null)
+                anim.SetTrigger("Shoot");
+
+            if (turnToShoot)
+                TurnTowardPosition(shootPoint);
+
             yield return null;
         }
 
-        yield return new WaitForSeconds(Random.Range(attackDelayRange.x, attackDelayRange.y));
+        if (move != null && stopToShoot)
+            move.Resume();
 
+        yield return new WaitForSeconds(Random.Range(attackDelayRange.x, attackDelayRange.y));
+        
         isAttacking = false;
+    }
+
+    private void TurnTowardPosition(Vector3 pos)
+    {
+        Vector3 looTo = Vector3.ProjectOnPlane(pos - transform.position, Vector3.up).normalized;
+        Quaternion newRot = Quaternion.LookRotation(looTo, Vector3.up);
+        transform.rotation = Quaternion.Slerp(transform.rotation, newRot, Time.deltaTime * 20.0f);
     }
 
     public void OnDeath()

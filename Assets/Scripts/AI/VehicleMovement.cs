@@ -18,6 +18,10 @@ public class VehicleMovement : GroundMovement
     {
         base.Awake();
 
+        agent.updateRotation = false;
+        agent.updatePosition = false;
+        agent.updateUpAxis = false;
+
         Transform wheelOffsetFront = transform.Find("WheelOffsetFront");
         Transform wheelOffsetRear = transform.Find("WheelOffsetRear");
 
@@ -29,23 +33,7 @@ public class VehicleMovement : GroundMovement
         {
             Debug.LogError("Object: " + gameObject.name + " missing WheelOffset nodes");
         }
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        if (destination != Vector3.zero && agent.isActiveAndEnabled)
-        {
-            Vector3 dist = destination - transform.position;
-            bool inRangeHorizontal = Vector3.ProjectOnPlane(dist, Vector3.up).sqrMagnitude < agent.stoppingDistance * agent.stoppingDistance;
-            bool inRangeVertical = Mathf.Abs(dist.y) < agent.stoppingDistance * 4;
-
-            if (inRangeHorizontal && inRangeVertical)
-            {
-                onDestinationReached.Invoke();
-            }
-        }
-    }
+    }    
 
     private void FixedUpdate()
     {
