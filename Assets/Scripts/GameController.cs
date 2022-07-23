@@ -133,6 +133,9 @@ public class GameController : MonoBehaviour
 
     public void OnLandedOnBase(GameObject landingZone)
     {
+        if (landingZone == null)
+            return;
+
         LandingZone lz = landingZone.GetComponent<LandingZone>();
         if (lz != null && lz.type == LandingZone.Type.HomeBase)
         {

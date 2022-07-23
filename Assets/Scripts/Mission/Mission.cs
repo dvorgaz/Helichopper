@@ -13,7 +13,7 @@ public class Mission : MonoBehaviour
 
     private void Awake()
     {
-        tasks = GetComponentsInChildren<Task>();
+        tasks = GetComponentsInChildren<Task>(true);
 
 #if UNITY_EDITOR
         if(title.Length > 0) name = title;
@@ -48,7 +48,7 @@ public class Mission : MonoBehaviour
 
         foreach(Task task in tasks)
         {
-            if (task.taskSubject != null && !task.completed)
+            if (task.taskSubject != null && !task.completed && task.gameObject.activeSelf)
             {
                 markers.Add(task.taskSubject.transform.position);
             }

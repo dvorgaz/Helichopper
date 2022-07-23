@@ -22,7 +22,7 @@ public class MissionController : MonoBehaviour
             Instance = this;
         }
 
-        missions = GetComponentsInChildren<Mission>();
+        missions = GetComponentsInChildren<Mission>(true);
     }
 
     // Start is called before the first frame update

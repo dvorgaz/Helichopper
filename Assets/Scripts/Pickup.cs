@@ -5,8 +5,8 @@ using UnityEngine;
 [RequireComponent(typeof(Rigidbody))]
 public class Pickup : MonoBehaviour
 {
-    [SerializeField] private float attachOffsetY;
-    private Rigidbody rb;
+    [SerializeField] protected float attachOffsetY;    
+    protected Rigidbody rb;
 
     public InventoryItem content;
 
@@ -16,18 +16,12 @@ public class Pickup : MonoBehaviour
     }
 
     // Start is called before the first frame update
-    void Start()
+    protected virtual void Start()
     {
         rb = GetComponent<Rigidbody>();
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
-    public void OnHooked()
+    public virtual void OnHooked()
     {
         rb.isKinematic = true;
     }

@@ -63,7 +63,8 @@ public class Winch : MonoBehaviour
     {
         rope.PickupConstraint = item.transform.position + item.AttachOffset;
         pickedItem = item;
-        pickedItem.transform.position = hookNode.position - item.AttachOffset;
+        pickedItem.transform.position = hookNode.position - item.AttachOffset;        
+        pickedItem.transform.rotation = Quaternion.FromToRotation(pickedItem.transform.up, hookNode.up) * pickedItem.transform.rotation;
         pickedItem.transform.parent = hookNode;
         pickedItem.OnHooked();
         Debug.Log("Item: " + pickedItem.gameObject.name + " picked up");
@@ -99,7 +100,9 @@ public class Winch : MonoBehaviour
 
         if (pickedItem != null)
         {
-            SendMessageUpwards("OnItemPickedUp", pickedItem);
+            if(pickedItem.content.type != null)
+                SendMessageUpwards("OnItemPickedUp", pickedItem);
+
             Destroy(pickedItem.gameObject);
             pickedItem = null;
 
