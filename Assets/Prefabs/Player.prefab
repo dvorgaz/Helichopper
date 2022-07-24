@@ -2126,6 +2126,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6143022479097744385, guid: a92ca98691ead83418ffedfb8330095e, type: 3}
+      propertyPath: spread
+      value: 0.035
+      objectReference: {fileID: 0}
+    - target: {fileID: 6143022479097744385, guid: a92ca98691ead83418ffedfb8330095e, type: 3}
       propertyPath: shotsMax
       value: 1200
       objectReference: {fileID: 0}

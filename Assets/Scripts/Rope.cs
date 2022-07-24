@@ -59,7 +59,7 @@ public class Rope : MonoBehaviour
         for (int i = 0; i < numSegments; i++)
         {
             ropeSegments.Add(new RopeSegment(ropeStartPoint));
-            ropeStartPoint.y -= segmentLength;
+            //ropeStartPoint.y -= segmentLength;
         }
 
         ropeEndNode.position = ropeSegments[ropeSegments.Count - 1].position;

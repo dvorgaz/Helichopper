@@ -5228,6 +5228,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 68b13c5b1d5baf448a175f9467a5b8e2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  minArmDistance: 0
   onImpact:
     m_PersistentCalls:
       m_Calls: []
@@ -5264,7 +5265,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   acceleration: 0
   impulse: 6000
-  turnTowardsVelocity: 0
+  turnTowardsVelocity: 1
+  gravityMultiplier: 10
 --- !u!114 &3711656556843740283
 MonoBehaviour:
   m_ObjectHideFlags: 0

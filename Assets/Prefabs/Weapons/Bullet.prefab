@@ -384,6 +384,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 68b13c5b1d5baf448a175f9467a5b8e2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  minArmDistance: 0
+  onImpact:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!114 &1127340602109801002
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -402,6 +406,7 @@ MonoBehaviour:
   splashDamage: 0
   blastRadius: 0
   blastForce: 0
+  blastOffset: 0
 --- !u!54 &2819757603154544036
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -433,6 +438,7 @@ MonoBehaviour:
   acceleration: 0
   impulse: 60
   turnTowardsVelocity: 1
+  gravityMultiplier: 15
 --- !u!114 &6184432
 MonoBehaviour:
   m_ObjectHideFlags: 0

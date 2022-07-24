@@ -139,6 +139,14 @@ public class WeaponLauncher : MonoBehaviour
             weaponModel.SetActive(false);
 
         Vector3 dir = (targetPoint - transform.position).normalized;
+
+        MoveProjectile mp = weaponPrefab.GetComponent<MoveProjectile>();
+        if (mp.gravityMultiplier > 1.0f)
+        {
+            float vel = mp.impulse / weaponPrefab.GetComponent<Rigidbody>().mass;
+            dir = GetLaunchAngle(vel, transform.position, targetPoint, Physics.gravity.magnitude * mp.gravityMultiplier);
+        }
+
         dir += Vector3.ProjectOnPlane(Random.insideUnitSphere * spread, dir);
         Quaternion rot = Quaternion.LookRotation(dir, Vector3.up);
         GameObject obj = Instantiate(weaponPrefab, transform.position, rot);
@@ -169,5 +177,23 @@ public class WeaponLauncher : MonoBehaviour
         {
             ps.Emit(1);
         }
+    }
+    private Vector3 GetLaunchAngle(float speed, Vector3 launchPos, Vector3 targetPos, float gravity)
+    {
+        Vector3 toTarget = targetPos - launchPos;
+        Vector3 launchAngle = transform.forward;
+        Vector3 gravVector = -Vector3.up * gravity;
+        float gSquared = gravity * gravity;
+        float b = speed * speed + Vector3.Dot(toTarget, gravVector);
+        float discriminant = b * b - gSquared * toTarget.sqrMagnitude;
+        if (discriminant >= 0)
+        {
+            float discRoot = Mathf.Sqrt(discriminant);
+            //float tMax = Mathf.Sqrt((b + discRoot) * 2 / gSquared);
+            float tMin = Mathf.Sqrt((b - discRoot) * 2 / gSquared);
+            float time = tMin;
+            launchAngle = (toTarget / time - gravVector * time / 2).normalized;
+        }
+        return launchAngle;
     }
 }
