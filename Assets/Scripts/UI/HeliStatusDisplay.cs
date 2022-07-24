@@ -23,6 +23,8 @@ public class HeliStatusDisplay : MonoBehaviour
     [SerializeField]
     private TextMeshProUGUI[] texts;
 
+    [SerializeField] private GameObject targetingCamera;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -41,14 +43,19 @@ public class HeliStatusDisplay : MonoBehaviour
             SetUIText(UIElement.Fuel, Mathf.RoundToInt(heliController.Fuel));
             SetUIText(UIElement.Flares, weaponController.Flares);
 
-            for(int i = 0; i < 3; ++i)
+            WeaponLauncher selected = weaponController.Weapon;
+
+            for (int i = 0; i < 3; ++i)
             {
                 WeaponLauncher wpn = weaponController.GetWeapon(i);
                 if (wpn == null)
                     break;
 
-                SetUIText(UIElement.Weapon1 + i, wpn.ShotsLeft, wpn.displayName.ToUpper());
+                SetUIText(UIElement.Weapon1 + i, wpn.ShotsLeft, string.Format("{0}{1}", wpn == selected ? "> " : "", wpn.displayName.ToUpper()));
             }
+
+            bool showCamera = selected.showOnCamera && (weaponController.Aiming || weaponController.CameraImageValid);
+            targetingCamera.SetActive(showCamera);
         }
     }
 

@@ -27,25 +27,25 @@ public class Health : MonoBehaviour
 
     public void Damage(DamageParams dp)
     {
-        if (!Alive)
-            return;
-
         if (lastDamageID < dp.damageID)
         {
+            if (dp.damageCallback != null)
+            {
+                Rigidbody rb = GetComponent<Rigidbody>();
+                if (rb != null)
+                    dp.damageCallback.Invoke(rb);
+            }
+
+            if (!Alive)
+                return;
+
             lastDamageID = dp.damageID;
             Hp -= dp.damage;
 
             if (Hp <= 0)
             {
                 Kill();
-            }
-
-            if(dp.damageCallback != null)
-            {
-                Rigidbody rb = GetComponent<Rigidbody>();
-                if (rb != null)
-                    dp.damageCallback.Invoke(rb);
-            }
+            }            
         }
     }
 

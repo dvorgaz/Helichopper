@@ -20,13 +20,14 @@ public class TargetingCamera : MonoBehaviour
     // Update is called once per frame
     void LateUpdate()
     {        
-        if (weaponController.Target != null)
+        if (weaponController.LaunchTarget != null)
         {
-            tgt = weaponController.Target.position;
+            tgt = weaponController.LaunchTarget.position;
             lastValidTargetTime = Time.time;
         }
         else if(Time.time - lastValidTargetTime > 2.0f)
         {
+            weaponController.CameraImageValid = false;
             tgt = weaponController.TargetPoint;
         }
         

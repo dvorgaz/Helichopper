@@ -77,6 +77,8 @@ public class PlayerInputHandler : MonoBehaviour
                 wpn.FireSelectedWeapon();
             }
 
+            wpn.Aiming = Input.GetMouseButton(1);
+
 #if UNITY_EDITOR
             if (Input.GetKeyDown(KeyCode.R))
             {
@@ -100,6 +102,11 @@ public class PlayerInputHandler : MonoBehaviour
             if (Input.GetKeyDown(KeyCode.Alpha3))
             {
                 wpn.SelectWeapon(2);
+            }
+
+            if(Input.mouseScrollDelta.y != 0)
+            {
+                wpn.CycleWeapon(Mathf.RoundToInt(-Input.mouseScrollDelta.y));
             }
         }
     }

@@ -87,7 +87,7 @@ public class TargetingLine : MonoBehaviour
 
     private void DrawTargetingLine2()
     {
-        if(!Input.GetMouseButton(1))
+        if(!weapon.Aiming)
         {
             lineRenderer.positionCount = 0;
             return;

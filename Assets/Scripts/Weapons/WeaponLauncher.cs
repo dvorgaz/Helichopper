@@ -18,6 +18,8 @@ public class WeaponLauncher : MonoBehaviour
     [SerializeField] private int shotsMax = 0;
     [SerializeField] private float range;
     [SerializeField] private ItemType ammoItem;
+    public bool showOnCamera;
+
     public ItemType AmmoItem { get { return ammoItem; } }
     public int ShotsLeft { get; set; }
     public float Range { get { return range; } }

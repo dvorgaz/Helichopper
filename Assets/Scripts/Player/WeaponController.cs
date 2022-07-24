@@ -17,6 +17,8 @@ public class WeaponController : MonoBehaviour
     public Vector3 TargetPoint { get { return adjustedTargetingPoint; } }
     public bool ShowCrosshair { get; private set; } = false;
 
+    public bool Aiming { get; set; } = false;
+
     private List<Transform> flareLaunchers;
     [SerializeField] private GameObject flarePrefab;
     [SerializeField] private int flareBurstCount;
@@ -24,12 +26,20 @@ public class WeaponController : MonoBehaviour
     [SerializeField] private int maxFlareAmount;
     public int Flares { get; private set; }
 
-    private Health closestTarget; 
+    private Health closestTarget;
+    private Health lastLaunchTarget;
 
     public Transform Target
     {
         get { return closestTarget != null ? closestTarget.transform : null; }
     }
+
+    public Transform LaunchTarget
+    {
+        get { return lastLaunchTarget != null ? lastLaunchTarget.transform : null; }
+    }
+
+    public bool CameraImageValid { get; set; }
 
     public WeaponLauncher Weapon
     {
@@ -167,13 +177,25 @@ public class WeaponController : MonoBehaviour
         if (targetingPoint != Vector3.zero)
         {
             if (Weapon)
-                Weapon.Fire(adjustedTargetingPoint, closestTarget != null ? closestTarget.transform : null);
+            {
+                bool launched = Weapon.Fire(adjustedTargetingPoint, closestTarget != null ? closestTarget.transform : null);
+                if(launched && Weapon.showOnCamera && closestTarget != null)
+                {
+                    lastLaunchTarget = closestTarget;
+                    CameraImageValid = true;
+                }
+            }
         }
         else
         {
             if (Weapon)
                 Weapon.Fire();
         }
+    }
+
+    public void OnLaunchHit(GameObject obj)
+    {
+        lastLaunchTarget = null;
     }
 
     public void Rearm()
@@ -189,6 +211,12 @@ public class WeaponController : MonoBehaviour
     public void SelectWeapon(int idx)
     {
         currWeaponIdx = Mathf.Clamp(idx, 0, weapons.Count - 1);
+    }
+
+    public void CycleWeapon(int dir)
+    {
+        dir = Mathf.RoundToInt(Mathf.Sign(dir));
+        currWeaponIdx = Mathf.Clamp(currWeaponIdx + dir, 0, weapons.Count - 1);
     }
 
     public void LaunchFlares()
