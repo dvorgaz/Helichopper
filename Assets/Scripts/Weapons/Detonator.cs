@@ -7,6 +7,9 @@ using UnityEngine.Events;
 public class Detonator : MonoBehaviour
 {
     private Rigidbody rb;
+    private bool armed = false;
+    private Vector3 launchPos;
+    [SerializeField] private float minArmDistance;
 
     public UnityEvent<GameObject> onImpact;
 
@@ -14,21 +17,29 @@ public class Detonator : MonoBehaviour
     void Start()
     {
         rb = GetComponent<Rigidbody>();
+        launchPos = transform.position;
+        armed = minArmDistance < 0.01f;
     }
 
     // Update is called once per frame
     void FixedUpdate()
     {
-        float d = rb.velocity.magnitude * Time.fixedDeltaTime;
-        Vector3 dir = rb.velocity.normalized;
+        if(!armed)
+            armed = Vector3.Magnitude(transform.position - launchPos) > minArmDistance;
 
-        RaycastHit hitInfo;
-        if(Physics.Raycast(transform.position - dir * d, dir, out hitInfo, d * 2.0f, LayerMask.GetMask("Default", "Vehicle"), QueryTriggerInteraction.Ignore))
+        if (armed)
         {
-            onImpact.Invoke(gameObject);
-            gameObject.SendMessage("TriggerDamage", hitInfo);
-            gameObject.BroadcastMessage("OnDeath", SendMessageOptions.DontRequireReceiver);
-            Destroy(gameObject);
+            float d = rb.velocity.magnitude * Time.fixedDeltaTime;
+            Vector3 dir = rb.velocity.normalized;
+
+            RaycastHit hitInfo;
+            if (Physics.Raycast(transform.position - dir * d, dir, out hitInfo, d * 2.0f, LayerMask.GetMask("Default", "Vehicle"), QueryTriggerInteraction.Ignore))
+            {
+                onImpact.Invoke(gameObject);
+                gameObject.SendMessage("TriggerDamage", hitInfo);
+                gameObject.BroadcastMessage("OnDeath", SendMessageOptions.DontRequireReceiver);
+                Destroy(gameObject);
+            }
         }
     }
 }

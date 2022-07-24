@@ -14539,6 +14539,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 68b13c5b1d5baf448a175f9467a5b8e2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  minArmDistance: 2
   onImpact:
     m_PersistentCalls:
       m_Calls:

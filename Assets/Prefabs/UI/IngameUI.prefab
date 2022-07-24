@@ -1864,6 +1864,7 @@ MonoBehaviour:
   retryButton: {fileID: 4046802479008409350}
   menuPrefab: {fileID: 2486870082616877472, guid: 9b4fd663071c59748b8a7cd77204c5dc, type: 3}
   notificationPrefab: {fileID: 1664680092826078248, guid: fed0f9f12034b354d816b2603bce94fe, type: 3}
+  helpScreenPrefab: {fileID: 2791447637770455803, guid: 9c73a8958628801478723c8df3d98065, type: 3}
 --- !u!114 &4997984817731398188
 MonoBehaviour:
   m_ObjectHideFlags: 0

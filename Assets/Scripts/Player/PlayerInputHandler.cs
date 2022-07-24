@@ -25,8 +25,12 @@ public class PlayerInputHandler : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        bool isLanding = false;
+
         if(heli != null)
         {
+            isLanding = heli.Landing;
+
 #if UNITY_EDITOR
             if (Input.GetMouseButtonDown(2))
             {
@@ -72,7 +76,7 @@ public class PlayerInputHandler : MonoBehaviour
 
         if (wpn != null)
         {
-            if (Input.GetMouseButton(0))
+            if (Input.GetMouseButton(0) && !isLanding)
             {
                 wpn.FireSelectedWeapon();
             }

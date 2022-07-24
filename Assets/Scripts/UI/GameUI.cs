@@ -13,7 +13,9 @@ public class GameUI : MonoBehaviour
     [SerializeField] private GameObject retryButton;
     [SerializeField] private GameObject menuPrefab;
     [SerializeField] private GameObject notificationPrefab;
+    [SerializeField] private GameObject helpScreenPrefab;
     private GameObject menu;
+    private GameObject help;
     private WeaponController weaponController;
     private Camera mainCamera;
     private Queue<UnityAction> notificationQueue = new Queue<UnityAction>();
@@ -31,6 +33,8 @@ public class GameUI : MonoBehaviour
         mainCamera = Camera.main;
         menu = Instantiate(menuPrefab, hudContainer.parent);
         menu.SetActive(false);
+        help = Instantiate(helpScreenPrefab, hudContainer.parent);
+        help.SetActive(false);
     }
 
     // Update is called once per frame
@@ -50,6 +54,11 @@ public class GameUI : MonoBehaviour
         {
             Crosshair.gameObject.SetActive(weaponController.ShowCrosshair);
             Crosshair.position = mainCamera.WorldToScreenPoint(weaponController.TargetPoint);
+        }
+
+        if (Input.GetKeyDown(KeyCode.F1))
+        {
+            help.SetActive(!help.activeSelf);
         }
     }
 

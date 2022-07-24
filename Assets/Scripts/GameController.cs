@@ -79,7 +79,7 @@ public class GameController : MonoBehaviour
         }
 
 #if UNITY_EDITOR
-        if (Input.GetKeyDown(KeyCode.F1))
+        if (Input.GetKeyDown(KeyCode.F5))
         {
             Retry();
         }
@@ -204,8 +204,9 @@ public class GameController : MonoBehaviour
         yield return new WaitForSeconds(1.0f);
         
         SetPlayerInputEnable(true);
+        ShowNotification("Press [F1] to show help");
 
-        while(lives > 0)
+        while (lives > 0)
         {
             if(playerWasKilled)
             {
