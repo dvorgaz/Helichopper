@@ -40,7 +40,7 @@ public class PlayerInputHandler : MonoBehaviour
                 heli.SetRotorTiltDelta(mouseDelta * mouseRate);
             }
 
-            if (Input.GetKeyDown(KeyCode.Space))
+            if (Input.GetKeyDown(KeyCode.LeftShift))
             {
                 heli.SetRotorTilt(Vector3.zero);
             }

@@ -48,7 +48,7 @@ public class TargetingLine : MonoBehaviour
         switch(symbology)
         {
             case Symbol.TargetingLine:
-                DrawTargetingLine2();
+                if (weapon.UseAngledMinDistance) DrawTargetingLine2(); else DrawTargetingLine();
                 break;
             case Symbol.GroundPosition:
                 DrawGroundPosition();
@@ -61,15 +61,23 @@ public class TargetingLine : MonoBehaviour
 
     private void DrawTargetingLine()
     {
+        if (!weapon.Aiming)
+        {
+            lineRenderer.positionCount = 0;
+            return;
+        }
+
+        startDist = weapon.MinRange;
+        endDist = weapon.Range;
+
         Vector3 dir = Vector3.ProjectOnPlane(player.transform.forward, Vector3.up).normalized;
-        Vector3 pos = player.transform.position + dir * startDist;
+        Vector3 pos = player.transform.position + dir * startDist;        
         float segLength = (endDist - startDist) / (numSegments - 1);
 
         Vector3[] positions = new Vector3[numSegments];
         for (int i = 0; i < numSegments; i++)
         {
-            RaycastHit hit;
-            if (Physics.Raycast(pos + Vector3.up * 100.0f, -Vector3.up, out hit, 200.0f, LayerMask.GetMask("Default"), QueryTriggerInteraction.Ignore))
+            if (Physics.Raycast(pos + Vector3.up * 100.0f, -Vector3.up, out RaycastHit hit, 200.0f, LayerMask.GetMask("Default"), QueryTriggerInteraction.Ignore))
             {
                 positions[i] = hit.point;
             }
@@ -96,21 +104,20 @@ public class TargetingLine : MonoBehaviour
         Vector3 dir = Vector3.ProjectOnPlane(player.transform.forward, Vector3.up).normalized;
         Vector3 pos = player.transform.position;
         
-        Vector3 idleDir = Quaternion.AngleAxis(45.0f, Vector3.Cross(Vector3.up, dir)) * dir;
-        RaycastHit hit_;
-        if (Physics.Raycast(pos, idleDir, out hit_, 200.0f, LayerMask.GetMask("Default"), QueryTriggerInteraction.Ignore))
+        Vector3 idleDir = Quaternion.AngleAxis(weapon.MinRangeAngle, Vector3.Cross(Vector3.up, dir)) * dir;
+        if (Physics.Raycast(pos, idleDir, out RaycastHit hit_, 200.0f, LayerMask.GetMask("Default"), QueryTriggerInteraction.Ignore))
         {
             pos = new Vector3(hit_.point.x, pos.y, hit_.point.z);
             startDist = (player.transform.position - pos).magnitude;
         }
 
+        endDist = weapon.Range;
         float segLength = (endDist - startDist) / (numSegments - 1);
 
         Vector3[] positions = new Vector3[numSegments];
         for (int i = 0; i < numSegments; i++)
         {
-            RaycastHit hit;
-            if (Physics.Raycast(pos + Vector3.up * 100.0f, -Vector3.up, out hit, 200.0f, LayerMask.GetMask("Default"), QueryTriggerInteraction.Ignore))
+            if (Physics.Raycast(pos + Vector3.up * 100.0f, -Vector3.up, out RaycastHit hit, 200.0f, LayerMask.GetMask("Default"), QueryTriggerInteraction.Ignore))
             {
                 positions[i] = hit.point;
             }
@@ -130,12 +137,11 @@ public class TargetingLine : MonoBehaviour
     {
         Vector3 pos = player.transform.position;
 
-        RaycastHit hit;
-        if (Physics.Raycast(pos, -Vector3.up, out hit, 200.0f, LayerMask.GetMask("Default"), QueryTriggerInteraction.Ignore))
+        if (Physics.Raycast(pos, -Vector3.up, out RaycastHit hit, 200.0f, LayerMask.GetMask("Default"), QueryTriggerInteraction.Ignore))
         {
             pos = hit.point;
         }
-        
+
         float deltaAngle = (360.0f / numSegments) * Mathf.Deg2Rad;
         float angle = 0.0f;
 
@@ -156,8 +162,7 @@ public class TargetingLine : MonoBehaviour
     {
         Vector3 pos = player.transform.position;
 
-        RaycastHit hit;
-        if (Physics.Raycast(pos + Vector3.up * 100.0f, -Vector3.up, out hit, 200.0f, LayerMask.GetMask("Default"), QueryTriggerInteraction.Ignore))
+        if (Physics.Raycast(pos + Vector3.up * 100.0f, -Vector3.up, out RaycastHit hit, 200.0f, LayerMask.GetMask("Default"), QueryTriggerInteraction.Ignore))
         {
             //pos = hit.point;           
         }

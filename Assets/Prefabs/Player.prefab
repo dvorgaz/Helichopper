@@ -714,7 +714,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   targetingRange: 100
+  minRange: 20
   targetingAngle: 20
+  useAngledMinDistance: 1
+  minRangeAngle: 60
   flarePrefab: {fileID: 7883236679921625398, guid: ea6184a6d39028d4e939745bea49049b, type: 3}
   flareBurstCount: 4
   flareBurstInterval: 0.2

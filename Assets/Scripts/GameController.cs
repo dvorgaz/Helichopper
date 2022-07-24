@@ -215,7 +215,7 @@ public class GameController : MonoBehaviour
                 SpawnPlayer();
             }
 
-            if(Input.GetKeyDown(KeyCode.Tab))
+            if(Input.GetKeyDown(KeyCode.Tab) || Input.GetKeyDown(KeyCode.Space))
             {
                 ShowIngameMenu(!GameUI.IsIngameMenuOpen());
             }

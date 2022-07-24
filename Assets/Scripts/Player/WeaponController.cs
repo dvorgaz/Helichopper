@@ -8,12 +8,18 @@ public class WeaponController : MonoBehaviour
     private Rigidbody rb;
 
     [SerializeField] private float targetingRange;
+    [SerializeField] private float minRange;
     [SerializeField] private float targetingAngle;
+    [SerializeField] private bool useAngledMinDistance;
+    [SerializeField] private float minRangeAngle;
     private List<WeaponLauncher> weapons;
     private int currWeaponIdx = 0;
     private Vector3 targetingPoint = Vector3.zero;
     private Vector3 adjustedTargetingPoint = Vector3.zero;
 
+    public float MinRange { get { return minRange; } }
+    public float MinRangeAngle { get { return minRangeAngle; } }
+    public bool UseAngledMinDistance { get { return useAngledMinDistance; } }
     public Vector3 TargetPoint { get { return adjustedTargetingPoint; } }
     public bool ShowCrosshair { get; private set; } = false;
 
@@ -23,7 +29,7 @@ public class WeaponController : MonoBehaviour
     [SerializeField] private GameObject flarePrefab;
     [SerializeField] private int flareBurstCount;
     [SerializeField] private float flareBurstInterval;
-    [SerializeField] private int maxFlareAmount;
+    [SerializeField] private int maxFlareAmount;    
     public int Flares { get; private set; }
 
     private Health closestTarget;
@@ -40,6 +46,8 @@ public class WeaponController : MonoBehaviour
     }
 
     public bool CameraImageValid { get; set; }
+
+    public float Range { get { return Weapon != null ? Weapon.Range : targetingRange; } }
 
     public WeaponLauncher Weapon
     {
@@ -107,15 +115,19 @@ public class WeaponController : MonoBehaviour
     private void FixedUpdate()
     {
         Vector3 dir = Vector3.ProjectOnPlane(transform.forward, Vector3.up).normalized;
+        Vector3 right = Vector3.Cross(Vector3.up, dir);
         Vector3 dirSideR = Quaternion.AngleAxis(targetingAngle / 2.0f, Vector3.up) * dir;
         Vector3 dirSideL = Quaternion.AngleAxis(targetingAngle / 2.0f, -Vector3.up) * dir;
+        Vector3 dirSideBottom = Quaternion.AngleAxis(MinRangeAngle, right) * dir;
 
         Vector3 planeR = Vector3.Cross(dirSideR, Vector3.up);
         Vector3 planeL = Vector3.Cross(Vector3.up, dirSideL);
+        Vector3 planeBottom = Vector3.Cross(dirSideBottom, right);
 
+        float threshold = 3.0f;
         float closestDist = float.MaxValue;
+        bool closesWithinThreshold = false;
         closestTarget = null;
-        float range = Weapon != null ? Weapon.Range : targetingRange;
 
         foreach (Health target in FindObjectsOfType<Health>())
         {
@@ -133,13 +145,37 @@ public class WeaponController : MonoBehaviour
             if (Vector3.Dot(planeL, pos) < 0)
                 continue;
 
-            float dist = Vector3.Magnitude(target.transform.position - transform.position);
+            float dist = Vector3.ProjectOnPlane(target.transform.position - transform.position, Vector3.up).magnitude;
 
-            if (dist > range)
+            if (dist > Range)
                 continue;
 
-            if (dist < closestDist)
+            if (useAngledMinDistance)
             {
+                if (Vector3.Dot(planeBottom, pos) < 0)
+                    continue;
+            }
+            else
+            {
+                if (dist < minRange)
+                    continue;
+            }
+
+            bool foundBetterTarget = false;
+            bool withinThreshold = Mathf.Abs(Vector3.Dot(right, pos)) < threshold;
+
+            if(withinThreshold == closesWithinThreshold)
+            {
+                foundBetterTarget = dist < closestDist;
+            }
+            else
+            {
+                foundBetterTarget = withinThreshold && !closesWithinThreshold;
+            }
+
+            if (foundBetterTarget)
+            {
+                closesWithinThreshold = withinThreshold;
                 closestDist = dist;
                 closestTarget = target;
             }
