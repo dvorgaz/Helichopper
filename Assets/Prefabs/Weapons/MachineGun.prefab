@@ -53,6 +53,7 @@ MonoBehaviour:
   burstLength: 0
   shotsMax: 0
   range: 100
+  soundPitchRange: 0.1
   ammoItem: {fileID: 11400000, guid: 1b54a3e5660b09f4b9d409d09ef74741, type: 2}
   showOnCamera: 0
 --- !u!82 &614814328935376274
@@ -65,7 +66,7 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: 1716cd09e49581e49943c569e0ddf12b, type: 3}
+  m_audioClip: {fileID: 8300000, guid: 724a7870186d6354d8890089d8a120af, type: 3}
   m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1

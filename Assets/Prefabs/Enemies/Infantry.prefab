@@ -97,7 +97,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6de36ecd6c250794b937416d9fac71da, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHealth: 2
+  maxHealth: 1
   deathEffectPrefab: {fileID: 0}
   smokeEffectPrefab: {fileID: 0}
   onDeath:
@@ -634,6 +634,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 8624016216969597694}
     m_Modifications:
+    - target: {fileID: 614814328935376274, guid: a92ca98691ead83418ffedfb8330095e, type: 3}
+      propertyPath: m_audioClip
+      value: 
+      objectReference: {fileID: 8300000, guid: c38bada62f81a2e44b72d9e3637de9d5, type: 3}
     - target: {fileID: 6143022479097744384, guid: a92ca98691ead83418ffedfb8330095e, type: 3}
       propertyPath: m_RootOrder
       value: 1

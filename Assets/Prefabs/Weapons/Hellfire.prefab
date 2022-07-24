@@ -14608,6 +14608,7 @@ MonoBehaviour:
   acceleration: 70
   impulse: 0
   turnTowardsVelocity: 1
+  gravityMultiplier: 0
 --- !u!114 &3711656556843740283
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -14668,7 +14669,7 @@ AudioSource:
   Mute: 0
   Spatialize: 0
   SpatializePostEffects: 0
-  Priority: 130
+  Priority: 140
   DopplerLevel: 1
   MinDistance: 5
   MaxDistance: 500

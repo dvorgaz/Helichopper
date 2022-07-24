@@ -17,8 +17,10 @@ public class WeaponLauncher : MonoBehaviour
     [SerializeField] private int burstLength;
     [SerializeField] private int shotsMax = 0;
     [SerializeField] private float range;
+    [SerializeField] private float soundPitchRange = 0.1f;
     [SerializeField] private ItemType ammoItem;
     public bool showOnCamera;
+    private float origPitch;
 
     public ItemType AmmoItem { get { return ammoItem; } }
     public int ShotsLeft { get; set; }
@@ -64,7 +66,11 @@ public class WeaponLauncher : MonoBehaviour
     void Start()
     {
         particleSystems = transform.GetComponentsInChildren<ParticleSystem>();
-        audioSrc = GetComponent<AudioSource>();        
+        audioSrc = GetComponent<AudioSource>();    
+        if(audioSrc != null)
+        {
+            origPitch = audioSrc.pitch;
+        }
     }
 
     // Update is called once per frame
@@ -171,7 +177,10 @@ public class WeaponLauncher : MonoBehaviour
         }
 
         if (audioSrc)
+        {
+            audioSrc.pitch = origPitch + Random.Range(-soundPitchRange, soundPitchRange);
             audioSrc.Play();
+        }
 
         foreach (ParticleSystem ps in particleSystems)
         {

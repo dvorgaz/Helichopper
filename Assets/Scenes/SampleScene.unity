@@ -11309,6 +11309,10 @@ PrefabInstance:
       propertyPath: stabilizedAngularDragMultiplier
       value: 3
       objectReference: {fileID: 0}
+    - target: {fileID: 9111716053456804890, guid: 33202d7934620b74d9ae4bd110bddad0, type: 3}
+      propertyPath: soundPitchRange
+      value: 0.1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 33202d7934620b74d9ae4bd110bddad0, type: 3}
 --- !u!1 &4059856336462283892
