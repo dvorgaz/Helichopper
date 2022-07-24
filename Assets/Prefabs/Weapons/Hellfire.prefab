@@ -14470,6 +14470,7 @@ GameObject:
   - component: {fileID: 9053976646686663815}
   - component: {fileID: 3711656556843740283}
   - component: {fileID: 2192223518280479642}
+  - component: {fileID: 1256355534355804117}
   - component: {fileID: 8758779631481544437}
   m_Layer: 6
   m_Name: Hellfire
@@ -14635,6 +14636,19 @@ MonoBehaviour:
   addRigidBody: 0
   mass: 0
   force: 0
+--- !u!114 &1256355534355804117
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6226923990949560321}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 642b123441e2b5f4d940e57e920fd7df, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  delay: 0.2
 --- !u!82 &8758779631481544437
 AudioSource:
   m_ObjectHideFlags: 0
@@ -14646,14 +14660,14 @@ AudioSource:
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: 73fd878fd005d114291371b9671e69d1, type: 3}
-  m_PlayOnAwake: 1
+  m_PlayOnAwake: 0
   m_Volume: 1
-  m_Pitch: 1
+  m_Pitch: 0.89
   Loop: 1
   Mute: 0
   Spatialize: 0
   SpatializePostEffects: 0
-  Priority: 128
+  Priority: 130
   DopplerLevel: 1
   MinDistance: 5
   MaxDistance: 500

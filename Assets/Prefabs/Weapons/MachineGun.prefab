@@ -54,6 +54,7 @@ MonoBehaviour:
   shotsMax: 0
   range: 100
   ammoItem: {fileID: 11400000, guid: 1b54a3e5660b09f4b9d409d09ef74741, type: 2}
+  showOnCamera: 0
 --- !u!82 &614814328935376274
 AudioSource:
   m_ObjectHideFlags: 0
@@ -72,7 +73,7 @@ AudioSource:
   Mute: 0
   Spatialize: 0
   SpatializePostEffects: 0
-  Priority: 128
+  Priority: 130
   DopplerLevel: 1
   MinDistance: 5
   MaxDistance: 500
