@@ -214,7 +214,7 @@ public class WeaponController : MonoBehaviour
         {
             if (Weapon)
             {
-                bool launched = Weapon.Fire(adjustedTargetingPoint, closestTarget != null ? closestTarget.transform : null);
+                bool launched = Weapon.Fire(adjustedTargetingPoint, closestTarget != null ? closestTarget.transform : null, rb);
                 if(launched && Weapon.showOnCamera && closestTarget != null)
                 {
                     lastLaunchTarget = closestTarget;
@@ -225,7 +225,7 @@ public class WeaponController : MonoBehaviour
         else
         {
             if (Weapon)
-                Weapon.Fire();
+                Weapon.Fire(rb);
         }
     }
 

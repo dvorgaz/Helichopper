@@ -19,6 +19,7 @@ public class WeaponLauncher : MonoBehaviour
     [SerializeField] private float range;
     [SerializeField] private float soundPitchRange = 0.1f;
     [SerializeField] private ItemType ammoItem;
+    [SerializeField] private bool inheritVelocity;
     public bool showOnCamera;
     private float origPitch;
     private int shotsLeft;
@@ -56,7 +57,7 @@ public class WeaponLauncher : MonoBehaviour
                     firingPoints[i].Reload(i >= firingPoints.Length - shotsLeft);
                 }
 
-                firingPointIdx = (firingPoints.Length - shotsLeft) % firingPoints.Length;
+                firingPointIdx = (shotsMax - shotsLeft) % firingPoints.Length;
             }
         }
     }
@@ -203,14 +204,10 @@ public class WeaponLauncher : MonoBehaviour
         Quaternion rot = Quaternion.LookRotation(dir, Vector3.up);
         GameObject obj = Instantiate(weaponPrefab, _transform.position, rot);
 
-        if (launchPlatform != null)
-        {
-            Rigidbody rb = obj.GetComponent<Rigidbody>();
-            if (rb != null)
-            {
-                rb.velocity = Vector3.ProjectOnPlane(launchPlatform.velocity, obj.transform.forward);
-            }
-        }
+        //if (launchPlatform != null && inheritVelocity)
+        //{
+        //    obj.GetComponent<MoveProjectile>().inheritedVelocity = Vector3.ProjectOnPlane(launchPlatform.velocity, obj.transform.forward);
+        //}
 
         if(lockedTarget != null)
         {

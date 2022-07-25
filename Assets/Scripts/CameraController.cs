@@ -7,11 +7,13 @@ public class CameraController : MonoBehaviour
     public Transform target;
     public float offset;
     public float smoothParam;
-    public Bounds mapBounds;
+    private Bounds mapBounds;
 
     public float topOffset;
     public float bottomOffset;
     public float horizontalOffset;
+    public Camera attachedCamera;
+    public bool useHack;
 
     // Start is called before the first frame update
     void Start()
@@ -31,10 +33,31 @@ public class CameraController : MonoBehaviour
 
     private Vector3 TargetPosition()
     {
-        RaycastHit hit;
-        if (Physics.Raycast(target.position, -Vector3.up, out hit, 200.0f, LayerMask.GetMask("Default"), QueryTriggerInteraction.Ignore))
+        if (Physics.Raycast(target.position, -Vector3.up, out RaycastHit hit, 200.0f, LayerMask.GetMask("Default"), QueryTriggerInteraction.Ignore))
         {
-            return Vector3.Lerp(target.position, hit.point, 0.5f);
+            Vector3 pos = Vector3.Lerp(target.position, hit.point, 0.5f);
+
+            if(useHack)
+            {
+                Vector3 dir = target.forward;
+                dir.y = 0;
+                Vector3 offsetPos = target.position + dir.normalized * offset;
+                Vector3 camToOffsetPos = offsetPos - attachedCamera.transform.position;
+
+                Vector3 camToPos = transform.position - attachedCamera.transform.position;
+                Vector3 upperLimitDir = Quaternion.AngleAxis(attachedCamera.fieldOfView / 2.0f, -attachedCamera.transform.right) * camToPos;
+                upperLimitDir /= Vector3.ProjectOnPlane(upperLimitDir, Vector3.up).magnitude;
+
+                float d = Vector3.ProjectOnPlane(camToOffsetPos, Vector3.up).magnitude;
+                float maxH = -camToOffsetPos.y - (d * -upperLimitDir.y) - 15.0f;
+
+                if ((target.position.y - pos.y) > maxH)
+                {
+                    pos.y = target.position.y - maxH;
+                }
+            }
+
+            return pos;
         }
 
         return target.position;
