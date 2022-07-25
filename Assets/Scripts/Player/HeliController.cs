@@ -12,6 +12,7 @@ public class HeliController : MonoBehaviour
     [SerializeField] private float maxVerticalThrust;
     [SerializeField] private float turnRate;
     [SerializeField] private float maxFuel;
+    [SerializeField] private float lowFuelLevel;
     [SerializeField] private float fuelBurnRate;
     public float Fuel { get; private set; }
 
@@ -50,6 +51,7 @@ public class HeliController : MonoBehaviour
     private float lastTakeoffTime = 0.0f;
     [SerializeField] private UnityEvent<GameObject> onLanding;
     [SerializeField] private UnityEvent<GameObject> onOutOfFuel;
+    [SerializeField] private UnityEvent<GameObject> onFuelLow;
     private GameObject landingZone;
 
     public bool Landing { get { return isInLandingZone > 0; } }
@@ -118,12 +120,15 @@ public class HeliController : MonoBehaviour
 
     private void FixedUpdate()
     {
-        bool hadFuel = Fuel > 0.0f;
+        float prevFuel = Fuel;
 
         if (!Landing)
             Fuel -= fuelBurnRate * Time.fixedDeltaTime;
 
-        if(hadFuel && Fuel < 0.0f)
+        if (prevFuel > lowFuelLevel && Fuel < lowFuelLevel)
+            onFuelLow.Invoke(gameObject);
+
+        if(prevFuel > 0.0f && Fuel < 0.0f)
         {
             ShutDown();
             onOutOfFuel.Invoke(gameObject);

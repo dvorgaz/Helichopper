@@ -69,7 +69,7 @@ public class MissionController : MonoBehaviour
         if(allCompleted)
         {
             GameController.Instance.OnAllMissionsCompleted();
-            GameController.Instance.ShowNotification("Return to Base");
+            GameController.Instance.ShowNotification("Return to base");
         }
     }
 }
