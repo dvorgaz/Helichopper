@@ -21,14 +21,51 @@ public class WeaponLauncher : MonoBehaviour
     [SerializeField] private ItemType ammoItem;
     public bool showOnCamera;
     private float origPitch;
+    private int shotsLeft;
+
+    [SerializeField] private FiringPoint[] firingPoints;
+    int firingPointIdx;
+
+    private Transform _transform
+    {
+        get
+        {
+            if (firingPoints == null || firingPoints.Length == 0)
+                return transform;
+
+            return firingPoints[firingPointIdx].transform;
+        }
+    }
 
     public ItemType AmmoItem { get { return ammoItem; } }
-    public int ShotsLeft { get; set; }
+    public int ShotsLeft
+    {
+        get
+        {
+            return shotsLeft;
+        }
+
+        set
+        {
+            shotsLeft = value;
+
+            if (shotsMax != 0)
+            {
+                for (int i = 0; i < firingPoints.Length; ++i)
+                {
+                    firingPoints[i].Reload(i >= firingPoints.Length - shotsLeft);
+                }
+
+                firingPointIdx = (firingPoints.Length - shotsLeft) % firingPoints.Length;
+            }
+        }
+    }
     public float Range { get { return range; } }
 
-    private GameObject weaponModel;
-    private ParticleSystem[] particleSystems;
     private AudioSource audioSrc;
+    [SerializeField] private bool useDualAudio;
+    private AudioSource[] audioBank;
+    private int audioIdx;
 
     public float ShotInterval
     {
@@ -55,9 +92,12 @@ public class WeaponLauncher : MonoBehaviour
 
     private void Awake()
     {
-        Transform tr = transform.Find("WeaponModel");
-        if(tr != null)
-            weaponModel = tr.gameObject;
+        if(firingPoints == null || firingPoints.Length == 0)
+        {
+            FiringPoint fp = gameObject.AddComponent<FiringPoint>();
+            firingPoints = new FiringPoint[1];
+            firingPoints[0] = fp;
+        }
 
         Reload();
     }
@@ -65,11 +105,26 @@ public class WeaponLauncher : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        particleSystems = transform.GetComponentsInChildren<ParticleSystem>();
         audioSrc = GetComponent<AudioSource>();    
         if(audioSrc != null)
         {
             origPitch = audioSrc.pitch;
+
+            if (useDualAudio)
+            {
+                AudioSource copy = gameObject.AddComponent<AudioSource>();
+                copy.clip = audioSrc.clip;
+                copy.spatialBlend = audioSrc.spatialBlend;
+                copy.minDistance = audioSrc.minDistance;
+                copy.pitch = origPitch;
+                copy.playOnAwake = audioSrc.playOnAwake;
+                copy.volume = audioSrc.volume;
+                copy.priority = audioSrc.priority;
+
+                audioBank = new AudioSource[2];
+                audioBank[0] = audioSrc;
+                audioBank[1] = copy;
+            }
         }
     }
 
@@ -93,8 +148,8 @@ public class WeaponLauncher : MonoBehaviour
 
     public void Reload()
     {
-        if(weaponModel != null)
-            weaponModel.SetActive(true);
+        foreach (FiringPoint fp in firingPoints)
+            fp.Reload();
 
         ShotsLeft = shotsMax;
         ResetBurstCounter();
@@ -128,34 +183,25 @@ public class WeaponLauncher : MonoBehaviour
 
     public void Fire(Rigidbody launchPlatform = null)
     {
-        Fire(transform.position + transform.forward, null, launchPlatform);
+        Fire(_transform.position + transform.forward, null, launchPlatform);
     }
 
     private void FireProjectile(Vector3 targetPoint, Transform lockedTarget, Rigidbody launchPlatform)
     {
-        lastShotTime = Time.time;
+        lastShotTime = Time.time;        
 
-        if (shotsMax != 0)
-            ShotsLeft--;
-
-        if (burstCounter > 0)
-            burstCounter--;
-
-        if (weaponModel != null)
-            weaponModel.SetActive(false);
-
-        Vector3 dir = (targetPoint - transform.position).normalized;
+        Vector3 dir = (targetPoint - _transform.position).normalized;
 
         MoveProjectile mp = weaponPrefab.GetComponent<MoveProjectile>();
         if (mp.gravityMultiplier > 1.0f)
         {
             float vel = mp.impulse / weaponPrefab.GetComponent<Rigidbody>().mass;
-            dir = GetLaunchAngle(vel, transform.position, targetPoint, Physics.gravity.magnitude * mp.gravityMultiplier);
+            dir = GetLaunchAngle(vel, _transform.position, targetPoint, Physics.gravity.magnitude * mp.gravityMultiplier);
         }
 
         dir += Vector3.ProjectOnPlane(Random.insideUnitSphere * spread, dir);
         Quaternion rot = Quaternion.LookRotation(dir, Vector3.up);
-        GameObject obj = Instantiate(weaponPrefab, transform.position, rot);
+        GameObject obj = Instantiate(weaponPrefab, _transform.position, rot);
 
         if (launchPlatform != null)
         {
@@ -172,25 +218,42 @@ public class WeaponLauncher : MonoBehaviour
             if (homing != null)
             {
                 homing.target = lockedTarget;
-                obj.transform.rotation = transform.rotation;
+                obj.transform.rotation = _transform.rotation;
             }
         }
 
         if (audioSrc)
         {
-            audioSrc.pitch = origPitch + Random.Range(-soundPitchRange, soundPitchRange);
-            audioSrc.Play();
+            if (useDualAudio)
+            {                
+                audioBank[audioIdx].pitch = origPitch + Random.Range(-soundPitchRange, soundPitchRange);
+                audioBank[audioIdx].Play();
+                audioIdx = (audioIdx + 1) % 2;
+            }
+            else
+            {
+                audioSrc.pitch = origPitch + Random.Range(-soundPitchRange, soundPitchRange);
+                audioSrc.Play();
+            }
         }
 
-        foreach (ParticleSystem ps in particleSystems)
+        firingPoints[firingPointIdx].Fire();
+
+        if (firingPoints != null && firingPoints.Length > 0)
         {
-            ps.Emit(1);
+            firingPointIdx = (firingPointIdx + 1) % firingPoints.Length;
         }
+
+        if (shotsMax != 0)
+            ShotsLeft--;
+
+        if (burstCounter > 0)
+            burstCounter--;
     }
     private Vector3 GetLaunchAngle(float speed, Vector3 launchPos, Vector3 targetPos, float gravity)
     {
         Vector3 toTarget = targetPos - launchPos;
-        Vector3 launchAngle = transform.forward;
+        Vector3 launchAngle = _transform.forward;
         Vector3 gravVector = -Vector3.up * gravity;
         float gSquared = gravity * gravity;
         float b = speed * speed + Vector3.Dot(toTarget, gravVector);

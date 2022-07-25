@@ -11285,30 +11285,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 3856494494415502111, guid: 33202d7934620b74d9ae4bd110bddad0, type: 3}
-      propertyPath: maxAltitude
-      value: 30
-      objectReference: {fileID: 0}
-    - target: {fileID: 3856494494415502111, guid: 33202d7934620b74d9ae4bd110bddad0, type: 3}
-      propertyPath: minAltitude
-      value: 10
-      objectReference: {fileID: 0}
-    - target: {fileID: 3856494494415502111, guid: 33202d7934620b74d9ae4bd110bddad0, type: 3}
-      propertyPath: useMinAltitude
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3856494494415502111, guid: 33202d7934620b74d9ae4bd110bddad0, type: 3}
-      propertyPath: useAltitudeFromGround
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3856494494415502111, guid: 33202d7934620b74d9ae4bd110bddad0, type: 3}
-      propertyPath: stabilizedTurnRateMultiplier
-      value: 0.6
-      objectReference: {fileID: 0}
-    - target: {fileID: 3856494494415502111, guid: 33202d7934620b74d9ae4bd110bddad0, type: 3}
-      propertyPath: stabilizedAngularDragMultiplier
-      value: 3
-      objectReference: {fileID: 0}
     - target: {fileID: 9111716053456804890, guid: 33202d7934620b74d9ae4bd110bddad0, type: 3}
       propertyPath: soundPitchRange
       value: 0.1

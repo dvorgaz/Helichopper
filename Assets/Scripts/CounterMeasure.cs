@@ -15,6 +15,10 @@ public class CounterMeasure : MonoBehaviour
         Rigidbody rb = GetComponent<Rigidbody>();
         rb.AddRelativeForce((Vector3.forward + Random.insideUnitSphere * launchSpread) * launchForce, ForceMode.Impulse);
 
+        AudioSource sfx = GetComponent<AudioSource>();
+        if (sfx != null)
+            sfx.pitch = sfx.pitch + Random.Range(-0.2f, 0.2f);
+
         TargetHoming[] missiles = GameObject.FindObjectsOfType<TargetHoming>();
         foreach (TargetHoming missile in missiles)
         {

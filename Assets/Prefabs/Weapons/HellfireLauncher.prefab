@@ -1,5 +1,50 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &117710113761275151
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2398810325647994859}
+  - component: {fileID: 1937885385218513150}
+  m_Layer: 0
+  m_Name: FiringPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2398810325647994859
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 117710113761275151}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 1725915641992138597}
+  m_Father: {fileID: 7901879363373883155}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1937885385218513150
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 117710113761275151}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c72390497a4fa4140a66d1177cfcca75, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &861582365266140286
 GameObject:
   m_ObjectHideFlags: 0
@@ -30,7 +75,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 1725915641992138597}
+  - {fileID: 2398810325647994859}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -54,8 +99,13 @@ MonoBehaviour:
   burstLength: 0
   shotsMax: 0
   range: 150
+  soundPitchRange: 0.1
   ammoItem: {fileID: 11400000, guid: e10b775471f88fe4f8a5947cb5e46269, type: 2}
+  inheritVelocity: 0
   showOnCamera: 1
+  firingPoints:
+  - {fileID: 1937885385218513150}
+  useDualAudio: 0
 --- !u!82 &2018621538508221269
 AudioSource:
   m_ObjectHideFlags: 0
@@ -74,7 +124,7 @@ AudioSource:
   Mute: 0
   Spatialize: 0
   SpatializePostEffects: 0
-  Priority: 128
+  Priority: 120
   DopplerLevel: 1
   MinDistance: 5
   MaxDistance: 500
@@ -182,7 +232,7 @@ Transform:
   m_LocalScale: {x: 0.66, y: 0.66, z: 0.66}
   m_ConstrainProportionsScale: 1
   m_Children: []
-  m_Father: {fileID: 7901879363373883155}
+  m_Father: {fileID: 2398810325647994859}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 45}
 --- !u!33 &4331730692777534439

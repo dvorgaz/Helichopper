@@ -16,7 +16,7 @@ public class MoveProjectile : MonoBehaviour
     void Start()
     {
         rb = GetComponent<Rigidbody>();
-        rb.AddForce(transform.forward * impulse, ForceMode.Impulse);
+        rb.AddForce(transform.forward * impulse, ForceMode.Impulse);        
     }
 
     // Update is called once per frame

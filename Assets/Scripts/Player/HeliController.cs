@@ -41,6 +41,7 @@ public class HeliController : MonoBehaviour
     [SerializeField] private bool useAltitudeFromGround;
     [SerializeField] private float minAltitude;
     [SerializeField] private bool useMinAltitude;
+    [SerializeField] private float downForce;
 
     private bool thrustEnabled = true;
     private bool controlEnabled = true;
@@ -211,7 +212,13 @@ public class HeliController : MonoBehaviour
             Vector3 totalLift = Vector3.zero;
 
             if (transform.position.y < altitudeThreshold)
+            {
                 totalLift += rb.mass * -Physics.gravity;
+            }
+            else if (transform.position.y > altitudeThreshold + 20.0f)
+            {
+                totalLift += downForce * rb.mass * Physics.gravity;
+            }
 
             if (transform.position.y < altitudeThreshold || vThrust.y < 0)
                 totalLift += vThrust;

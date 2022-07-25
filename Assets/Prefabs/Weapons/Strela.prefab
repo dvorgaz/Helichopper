@@ -14538,6 +14538,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 68b13c5b1d5baf448a175f9467a5b8e2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  minArmDistance: 0
+  onImpact:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!114 &2166344052473589525
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -14556,6 +14560,7 @@ MonoBehaviour:
   splashDamage: 1
   blastRadius: 5
   blastForce: 1000000
+  blastOffset: 0
 --- !u!114 &8077480786116055191
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -14571,6 +14576,10 @@ MonoBehaviour:
   target: {fileID: 0}
   turnRate: 45
   fov: 30
+  loftTrajectory: 0
+  climbRatio: 0
+  climbHeight: 0
+  climbTurnRate: 0
 --- !u!114 &5007687386395165005
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -14586,6 +14595,7 @@ MonoBehaviour:
   acceleration: 40
   impulse: 0
   turnTowardsVelocity: 0
+  gravityMultiplier: 0
 --- !u!114 &818174184589003185
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -14633,7 +14643,7 @@ AudioSource:
   Mute: 0
   Spatialize: 0
   SpatializePostEffects: 0
-  Priority: 128
+  Priority: 150
   DopplerLevel: 1
   MinDistance: 5
   MaxDistance: 500

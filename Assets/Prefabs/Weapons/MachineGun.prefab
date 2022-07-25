@@ -56,6 +56,8 @@ MonoBehaviour:
   soundPitchRange: 0.1
   ammoItem: {fileID: 11400000, guid: 1b54a3e5660b09f4b9d409d09ef74741, type: 2}
   showOnCamera: 0
+  firingPoints: []
+  useDualAudio: 1
 --- !u!82 &614814328935376274
 AudioSource:
   m_ObjectHideFlags: 0
