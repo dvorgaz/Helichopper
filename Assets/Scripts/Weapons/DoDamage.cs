@@ -23,7 +23,7 @@ public class DoDamage : MonoBehaviour
 
         if (splashDamage)
         {
-            dmgParams.damageCallback = (Rigidbody rb) => { rb.AddExplosionForce(blastForce, transform.position, blastRadius, blastOffset); };
+            dmgParams.damageCallback = (Rigidbody rb) => { rb.AddExplosionForce(blastForce, transform.position + Vector3.ProjectOnPlane(Random.insideUnitSphere, Vector3.up) * 2, blastRadius, blastOffset); };
 
             Collider[] colliders = Physics.OverlapSphere(transform.position, blastRadius, LayerMask.GetMask("Default", "Vehicle"));
             foreach (Collider coll in colliders)
